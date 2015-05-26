@@ -154,6 +154,11 @@
             </div>
           </div>
           <!-- Navbar inner for Washer service edit page-->
+          <div data-page="washer_service_add" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Добавление услуги</div>
+          </div>
+          <!-- Navbar inner for Washer service edit page-->
           <div data-page="washer_bids" class="navbar-inner cached">
             <!-- We have home navbar without left link-->
             <div class="center sliding">Заявки</div>
@@ -1002,10 +1007,9 @@
             <div class="page-content">
               <div class="content-block-title">Бокс 1</div>
               <div class="content-block">
-                <div class="buttons-row">
+                <!-- <div class="buttons-row"> -->
                   <a href="#washer_single_box" class="button">Блокировать</a>
-                  <a href="#washer_single_box" class="button">Бокс 4</a>
-                </div>
+                <!-- </div> -->
               </div>
               <div class="content-block-title">14:45:55</div>
               <div class="card">
@@ -1100,88 +1104,140 @@
           <div data-page="washer_service_edit" class="page cached">
             <div class="page-content">
               <div class="content-block">
-                <a href="#" class="button">+Добавить услугу</a>
+                <a href="#washer_service_add" class="button">+Добавить услугу</a>
               </div>
               <div class="content-block-title">Список услуг</div>
               <div class="list-block media-list">
                 <ul>
-                  <li><a href="#washer_choice" class="item-link item-content">
+                  <li><a href="#washer_choice" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
-                          <div class="item-title orange">Minimal</div>
-                          <div class="item-after">~1000тг</div>
+                          <div class="item-title orange">Салон</div>
+                          <div class="item-after">1000 1200 1300</div>
                         </div>
-                        <div class="item-subtitle">Только кузов</div>
-                        <div class="item-text">Длительность: 15-20 минут</div>
+                        <div class="item-subtitle">Чистка уборка</div>
+                        <div class="item-text">Длительность: 20 минут</div>
                       </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
+                  <li><a href="#washer_choice" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
-                          <div class="item-title orange">Standart</div>
-                          <div class="item-after">~2000тг</div>
+                          <div class="item-title orange">Кузов</div>
+                          <div class="item-after">1000 1000 1200</div>
                         </div>
-                        <div class="item-subtitle">Кузов+Салон</div>
-                        <div class="item-text">Длительность: 30-40 минут</div>
+                        <div class="item-subtitle">Безконтактная мойка</div>
+                        <div class="item-text">Длительность: 30 минут</div>
                       </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
+                  <li><a href="#washer_choice" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
-                          <div class="item-title orange">Standart+</div>
-                          <div class="item-after">~2500тг</div>
+                          <div class="item-title">Кузов</div>
+                          <div class="item-after">1000 1100 1200</div>
                         </div>
-                        <div class="item-subtitle">Кузов+Салон+Багажник</div>
-                        <div class="item-text">Длительность:40-50 минут</div>
+                        <div class="item-subtitle">Ручная мойка</div>
+                        <div class="item-text">Длительность:40 минут</div>
                       </div></a></li>
-                  <li>
-                      <div class="item-inner">
-                        <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
-                      </div></li>
                 </ul>
               </div>
+            </div>
+          </div>
+          <!-- Waser service add Page -->
+          <div data-page="washer_service_add" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные</div>
               <div class="list-block">
                 <ul>
+                  <li><a href="#service_list" class="item-link"> 
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-title">Услуги</div>
+                        </div>
+                      </div></a></li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 1 15:00 Nissan Skyline</a>
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="fruits">
+                              <option value="nocheked">Не выбрано</option>
+                              <option value="mitsubishi" >Mitsubishi</option>
+                              <option value="toyota">Toyota</option>
+                              <option value="mersedes">Mersedes Bens</option>
+                              <option value="bmw">BMW</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Услуга</div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 2 13:00 Mersedes Benz AMG C63 -</a>
+                        <div class="item-title label">Цена 1 группы</div>
+                        <div class="item-input">
+                          <input type="number" placeholder="Цена">
+                        </div>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 1 25.05.15 15:00 Lada Kalina -</a>
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="models">
+                              <option value="nochaked">Не выбрано</option>
+                              <option value="galant" >Galant</option>
+                              <option value="z3">Z3</option>
+                              <option value="x5">X5</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Модель</div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 4 15:00 Nissan Qashqai</a>
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="fruits">
+                              <option value="apple" selected="selected">Легковая</option>
+                              <option value="pineapple">Внедорожник или пикап</option>
+                              <option value="pear">Минивен или микроавтобус</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Тип кузова</div>
+                              <div class="item-after">Легковая</div></div>
+                            </div>
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </li> 
+                  </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 3 15:00 Subaru Legacy -</a>
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Добавить</a>
+                        </div>
                       </div>
                     </div>
                   </li>
                 </ul>
-              </div>
+              </div>    
             </div>
           </div>
         </div>
