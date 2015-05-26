@@ -1,0 +1,143 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FineCarPivot.Pages.FinishPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:cust="clr-namespace:FineCarPivot.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Style="{StaticResource LineHeader}" Grid.Row="0">
+            <Image Margin="0,5,0,15" RenderTransformOrigin="0.012,0.093" Source="/Assets/Images/logotip.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+
+        <Border Style="{StaticResource LineAuth}" Grid.Row="1">
+            <cust:AuthLineControl />
+        </Border>
+
+        <ScrollViewer  Grid.Row="2">
+            <StackPanel Margin="0,0,0,0">
+                <Border Style="{StaticResource LineContentHeader}">
+                    <TextBlock Text="Выбранные услуги" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                </Border>
+                <Grid Name="carcass" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Кузов" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="trunk"  Margin="20,0,0,0" Visibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Багажник" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="salon" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Салон" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="wax" Margin="20,0,0,0" Visibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Воск" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="blackened" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Начернение колес" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="spot" Margin="20,0,0,0" Visibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Оттирание пятен (битиум и др.)" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="1" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Grid Name="other" Margin="20,0,0,0" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="85" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="55" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Другое" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <TextBox IsReadOnly="True" Name="otherTextEnd"  Grid.Column="1"/>
+                    <Image Margin="0,5,0,15" Height="30" RenderTransformOrigin="0.012,0.093" Grid.Column="2" Grid.Row="0" Source="/Assets/Images/checkbox-on.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <Border  Style="{StaticResource LineContent}">
+
+                    <Grid Height="Auto" Margin="20,0,0,0" Name="timeGrid" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="110"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="" Grid.Row="0" Name="organizationNameText" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                        <Button Name="selectTime" Grid.Row="1" Grid.Column="0" Style="{StaticResource ButtonDarkGrayChecked}" />
+                        <TextBlock Text=" - выбранное время" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    </Grid>
+                </Border>
+                <Border Margin="0,0,0,0"  Style="{StaticResource LineContent}"/>
+                
+                <Grid Margin="20,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Image Margin="0,5,0,15" Height="130" RenderTransformOrigin="0.012,0.093" Grid.Column="0" Grid.RowSpan="2" Source="/Assets/Images/img-quarCod.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Спасибо!" Margin="30,0,0,0" VerticalAlignment="Bottom" Grid.Row="0" Grid.Column="1"/>
+                    <Button Content="Завершить" Margin="20,0,0,0" VerticalAlignment="Top" Height="62" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" Width="150" Visibility="Visible" Click="btnEnd_Click_1" Name="btnEnd" Style="{StaticResource ButtonDarkGrayChecked}" />
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+
+</phone:PhoneApplicationPage>

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>FineCar App</title>
+    <!-- Path to Framework7 Library CSS-->
+    <link rel="stylesheet" href="dist/css/framework7.css">
+    <link rel="stylesheet" href="css/framework7.themes.css">
+    <!-- Path to your custom app styles-->
+    <link rel="stylesheet" href="css/my-app.css">
+  </head>
+  <body class="layout-dark theme-orange">
+    <!-- Status bar overlay for fullscreen mode-->
+    <div class="statusbar-overlay"></div>
+    <!-- Panels overlay-->
+    <div class="panel-overlay"></div>
+    <!-- Left panel with reveal effect-->
+    <div class="panel panel-left panel-cover">
+      <div class="content-block-title">Меню FineCar</div>
+        <div class="list-block">
+          <ul>
+            <li><a href="#home" class="item-link item-content">
+                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Профайл</div>
+                </div></a></li>
+            <li><a href="#home" class="item-link item-content">
+                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Бонусы и скидки</div>
+                </div></a></li>
+            <li><a href="#home" class="item-link item-content">
+                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Акции</div>
+                </div></a></li>
+            <li><a href="#home" class="item-link item-content">
+                <div class="item-media"><i class="icon icon-conference"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Отзывы</div>
+                </div></a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Right panel with cover effect-->
+    <div class="panel panel-right panel-reveal">
+       <div class="content-block-title">Меню FineCar</div>
+        <div class="list-block">
+          <ul>
+            <li><a href="#washer_bids" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Заявки</div>
+                </div></a></li>
+            <li><a href="#washer_home" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Боксы</div>
+                </div></a></li>
+            <li><a href="#washer_home" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Мойщики</div>
+                </div></a></li>
+            <li><a href="#washer_service_edit" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-conference"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Услуги</div>
+                </div></a></li>
+            <li><a href="#washer_home" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Профайл</div>
+                </div></a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- Views-->
+    <div class="views">
+      <!-- Your main view, should have "view-main" class-->
+      <div class="view view-main">
+        <!-- Top Navbar-->
+        <div class="navbar">
+          <!-- Navbar inner for Index page-->
+          <div data-page="index" class="navbar-inner">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">FineCar</div>
+          </div>
+          <!-- Navbar inner for Home page-->
+          <div data-page="home" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">FineCar</div>
+            <div class="right">
+              <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for Washer home page-->
+          <div data-page="washer_home" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">FineCar</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for User registration page-->
+          <div data-page="user_registration" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Назад</span></a></div>
+            <div class="center sliding">Регистрация водителя</div>
+          </div>
+          <!-- Navbar inner for Washer registration page-->
+          <div data-page="washer_registration" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Назад</span></a></div>
+            <div class="center sliding">Регистрация автомойки</div>
+          </div>
+          <!-- Navbar inner for Auto registration page-->
+          <div data-page="auto_registration" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Добавление Авто</div>
+          </div>
+          <!-- Navbar inner for Choice service page-->
+          <div data-page="choice_service" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Выбор услуг</div>
+          </div>
+          <!-- Navbar inner for Shape service page-->
+          <div data-page="shape_service" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Формирование услуг</div>
+          </div>
+          <!-- Navbar inner for Washer choice page-->
+          <div data-page="washer_choice" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Выбор Автомойки</div>
+          </div>
+          <!-- Navbar inner for Time choice page-->
+          <div data-page="time_choice" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Выбор Сеанса</div>
+          </div>
+          <!-- Navbar inner for Send tiket page-->
+          <div data-page="send_tiket" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Отправить заявку</div>
+          </div>
+          <!-- Navbar inner for Washer service edit page-->
+          <div data-page="washer_service_edit" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">Редактирование услуг</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for Washer service edit page-->
+          <div data-page="washer_bids" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">Заявки</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for Washer service edit page-->
+          <div data-page="washer_single_box" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Назад</span></a></div>
+            <div class="center sliding">Детализация бокса</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+        </div>
+        <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+        <div class="pages navbar-through toolbar-through">
+          <!-- Index Page-->
+          <div data-page="index" class="page">
+            <!-- Scrollable page content-->
+            <div class="page-content">
+              <div class="content-block-title">Добро пожаловать!</div>
+              <div class="content-block">
+                <div class="content-block-inner">
+                  <p>FineCar поможет легко и быстро помыть Ваш автомобиль!</p>
+                  <p>Все автомойки Вашего города в одном приложении.</p>
+                </div>
+              </div>
+              <div class="content-block-title">Вход в систему</div>
+              <div class="list-block inset">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Ваш телефон" class="">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="password" placeholder="Пароль" class="">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <div class="buttons-row">
+                            <a href="#home" class="button">Водитель</a>
+                            <a href="#washer_home" class="button">Автомойка</a>
+                          </div>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button">Восстановить пароль</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block-title">Регистрация</div>
+              <div class="list-block inset">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#user_registration" class="button">Как водитель</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#washer_registration" class="button">Как автомойка</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- User registration Page -->
+          <div data-page="user_registration" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Ваше имя">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-email"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="email" placeholder="E-mail">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-password"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="password" placeholder="Пароль">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="tel" placeholder="Мобильный телефон">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-gender"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <select>
+                            <option>Мужчина</option>
+                            <option>Женщина</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-building"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <select>
+                            <option>Усть-Каменогорск</option>
+                            <option>Алматы</option>
+                            <option>Астана</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#home" class="button active">Зарегестрироваться</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>    
+            </div>
+          </div>
+          <!-- Washer registration Page -->
+          <div data-page="washer_registration" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Наименование">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="tel" placeholder="Телефон">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-password"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="password" placeholder="Пароль">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-building"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Адрес укажите на карте">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" name="ks-media-checkbox" value="1">
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">Уровни загрязнения</div>
+                        </div>
+                        <div class="item-text">Цена зависит от степени загрязенния.</div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <a href="#home" class="button button-big active">Зарегестрироваться</a>
+              </div>
+            </div>
+          </div>
+          <!-- Auto registration Page -->
+          <div data-page="auto_registration" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Гос номер">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="fruits">
+                              <option value="nocheked">Не выбрано</option>
+                              <option value="mitsubishi" >Mitsubishi</option>
+                              <option value="toyota">Toyota</option>
+                              <option value="mersedes">Mersedes Bens</option>
+                              <option value="bmw">BMW</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Марка</div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="models">
+                              <option value="nochaked">Не выбрано</option>
+                              <option value="galant" >Galant</option>
+                              <option value="z3">Z3</option>
+                              <option value="x5">X5</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Модель</div>
+                              </div>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="item-link smart-select">
+                            <select name="fruits">
+                              <option value="apple" selected="selected">Легковая</option>
+                              <option value="pineapple">Внедорожник или пикап</option>
+                              <option value="pear">Минивен или микроавтобус</option>
+                            </select>
+                            <div class="item-content">
+                              <div class="item-inner">
+                                <div class="item-title">Тип кузова</div>
+                              <div class="item-after">Легковая</div></div>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Добавить</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>    
+            </div>
+          </div>
+          <!-- Choice service Page -->
+          <div data-page="choice_service" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Выберите комплекс услуг</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Minimal</div>
+                          <div class="item-after">~1000тг</div>
+                        </div>
+                        <div class="item-subtitle">Только кузов</div>
+                        <div class="item-text">Длительность: 15-20 минут</div>
+                      </div></a></li>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Standart</div>
+                          <div class="item-after">~2000тг</div>
+                        </div>
+                        <div class="item-subtitle">Кузов+Салон</div>
+                        <div class="item-text">Длительность: 30-40 минут</div>
+                      </div></a></li>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Standart+</div>
+                          <div class="item-after">~2500тг</div>
+                        </div>
+                        <div class="item-subtitle">Кузов+Салон+Багажник</div>
+                        <div class="item-text">Длительность:40-50 минут</div>
+                      </div></a></li>
+                  <li>
+                      <div class="item-inner">
+                        <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                      </div></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Shape service Page -->
+          <div data-page="shape_service" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Выберите услуги</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" name="ks-media-checkbox" value="1">
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Кузов</div>
+                          <div class="item-after">1000тг</div>
+                        </div>
+                        <div class="item-subtitle">Длительность: 20-30 минут</div>
+                        <div class="item-text">Мытье кузова специальными водными растворами. </div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" name="ks-media-checkbox" value="2">
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Салон</div>
+                          <div class="item-after">~1000тг</div>
+                        </div>
+                        <div class="item-subtitle">Длительность: 15-20 минут</div>
+                        <div class="item-text">Чистка, мытье салона. Мытье ковриков. Сухая чистка сидений.</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" name="ks-media-checkbox" value="3">
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Багажник</div>
+                          <div class="item-after">~500тг</div>
+                        </div>
+                        <div class="item-subtitle">Длительность: 10-15 минут</div>
+                        <div class="item-text">Сухая и влажная чиства багажника.</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-checkbox item-content">
+                      <input type="checkbox" name="ks-media-checkbox" value="4">
+                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Полировка</div>
+                          <div class="item-after">~1000тг</div>
+                        </div>
+                        <div class="item-subtitle">Длительность: 15-20 минут</div>
+                        <div class="item-text">Полировка кузова специальными средствами.</div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div> 
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Наименование комплекса услуг">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Сформировать</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>     
+            </div>
+          </div>
+          <!-- Washer choice Page -->
+          <div data-page="washer_choice" class="page cached">
+            <div class="page-content">
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <a href="#" class="button button-round">Мое местоположение</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block-title">Выберите Автомойку</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="buttons-row">
+                          <a href="#" class="button button-round active">км</a>
+                          <a href="#" class="button button-round">цена</a>
+                          <a href="#" class="button button-round">сеанс</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li><a href="#time_choice" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title orange">Cупер Мойка</div>
+                        <div class="item-after">2000тг</div>
+                      </div>
+                      <div class="item-subtitle">пр.Сатпаева 1/1 - 0,2км.</div>
+                      <div class="item-text">Кузов+Салон. Сеансы: 11:00,14:00,16:00.</div>
+                    </div></a></li>
+                  <li><a href="#time_choice" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title orange">Мега Мойка</div>
+                        <div class="item-after">1850тг</div>
+                      </div>
+                      <div class="item-subtitle">ул. Казахстан 64/2 - 0,5км</div>
+                      <div class="item-text">Кузов+Салон. Сеансы: 12:00,13:30,14:00.</div>
+                    </div></a></li>
+                  <li><a href="#time_choice" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title orange">Мойдодыр</div>
+                        <div class="item-after">2200тг</div>
+                      </div>
+                      <div class="item-subtitle">ул. Кабанбай-Батыра 41 - 2,5км</div>
+                      <div class="item-text">Кузов+Салон. Сеансы: 10:00.</div>
+                    </div></a></li>
+                </ul>
+              </div>
+            </div> 
+          </div>
+          <!-- Time choice Page -->
+          <div data-page="time_choice" class="page cached">
+            <div class="page-content">  
+              <div class="card">
+                <div class="card-header orange">Cупер Мойка</div>
+                <div class="card-content"> 
+                  <div class="card-content-inner">
+                  <i class="icon icon-form-garage"></i>
+                  <p>пр.Сатпаева 1/1 - 0,2км.</p>
+                  <p>Кузов+Салон=2000тг.</p>
+                  <p>BMW X5 - F001AAA</p>
+                  </div>
+                </div>
+                <div class="list-block">
+                  <div class="list-group">
+                    <ul>
+                      <li class="item-content orange">Сегодня</li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">11:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">13:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">16:00</div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="list-group">
+                    <ul>
+                      <li class="item-content orange">Завтра</li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">10:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">11:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">15:00</div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="list-group">
+                    <ul>
+                      <li class="item-content orange">24.05.2015</li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">14:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">15:00</div>
+                          </div>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#send_tiket" class="item-link item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">20:00</div>
+                          </div>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>                  
+                </div>
+              </div>
+            </div> 
+          </div>
+          <!-- Send tiket Page -->
+          <div data-page="send_tiket" class="page cached">
+            <div class="page-content">  
+              <div class="card">
+                <div class="card-header orange">Cупер Мойка</div>
+                <div class="card-content"> 
+                  <div class="card-content-inner">
+                    <i class="icon icon-form-garage"></i>
+                    <p>пр.Сатпаева 1/1 - 0,2км.</p>
+                    <p>Кузов+Салон=2000тг.</p>
+                    <p>BMW X5 - F001AAA</p>
+                    <p>Сегодня - 15:00</p>
+                    <p>Бокс №1</p>
+                    <p><a href="#home" class="button button-big">Отправить заявку</a></p>
+                  </div>
+                </div>
+              </div>
+            </div> 
+          </div>
+          <!-- Home Page-->
+          <div data-page="home" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Помыть авто</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#choice_service" class="button">Mitsubishi Galant</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#choice_service" class="button">BMW X5</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#auto_registration" class="button">+ Добавить авто</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block-title">Ваши заявки</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">BMW X5 - Сегоня в 15:00</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Washer home Page-->
+          <div data-page="washer_home" class="page cached">
+            <div class="page-content">
+              <div class="content-block">
+                <div class="buttons-row">
+                  <a href="#washer_single_box" class="button">Бокс 1</a>
+                  <a href="#washer_single_box" class="button active">Бокс 2</a>
+                  <a href="#washer_single_box" class="button">Бокс 3</a>
+                  <a href="#washer_single_box" class="button active">Бокс 4</a>
+                </div>
+              </div>
+              <div class="content-block-title"><span id="realtime">14:25:30</span></div>
+              <div class="content-block">
+                <div class="row no-gutter">
+                  <div class="col-25">
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">14:30 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h30">15:00 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">15:30 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">16:00 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h30">16:30 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h15">17:00 15м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h120">17:15 2ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">19:15 30м</div>
+                    </a>
+                  </div>
+                  <div class="col-25">
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h60">14:30 1ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h60">15:30 1ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">16:30 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h30">17:00 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h15">17:30 15м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h120">17:45 2ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">19:45 30м</div>
+                    </a>
+                  </div>
+                  <div class="col-25">
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h120">14:30 2ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h120">16:30 2ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">18:30 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h30">19:00 30м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h15">19:30 15м</div>
+                    </a>
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h120">19:45 2ч</div>
+                    </a>
+                    <a href="#" data-picker=".picker-1" class="open-picker">
+                      <div class="background_orange h30">21:45 30м</div>
+                    </a>
+                  </div>
+                  <div class="col-25">
+                    <a href="#" data-picker=".picker-2" class="open-picker">
+                      <div class="background_gray h1440">14:30 24ч </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="content-block"> -->
+                <!-- Picker -->
+                <div class="picker-modal picker-1">
+                  <div class="toolbar">
+                    <div class="toolbar-inner">
+                      <div class="left"></div>
+                      <div class="right"><a href="#" class="close-picker">Готово</a></div>
+                    </div>
+                  </div>
+                  <div class="picker-modal-inner">
+                    <div class="content-block">
+                      <h3 class="orange">13:50-14:20 30 минут</h3>
+                      <p>Subaru Outback F457RDE</p>
+                      <div class="content-block">
+                        <div class="buttons-row">
+                          <a href="#" class="button button-round">Отмена</a>
+                          <a href="#" class="button button-round">Время</a>
+                          <a href="#" class="button button-round">Бокс</a>
+                        </div>
+                        <br/>
+                        <div class="buttons-row">
+                          <a href="#" class="button button-round">Запустить</a>
+                          <a href="#" class="button button-round">Завершить</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="picker-modal picker-2">
+                  <div class="toolbar">
+                    <div class="toolbar-inner">
+                      <div class="left"></div>
+                      <div class="right"><a href="#" class="close-picker">Готово</a></div>
+                    </div>
+                  </div>
+                  <div class="picker-modal-inner">
+                    <div class="content-block">
+                      <h3>13:50-14:20 30 минут</h3>
+                      <p>Свободно</p>
+                      <!-- <div class="buttons-row"> -->
+                        <a href="#" class="button">Создать</a>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+          <!-- Washer single box Page-->
+          <div data-page="washer_single_box" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Бокс 1</div>
+              <div class="content-block">
+                <div class="buttons-row">
+                  <a href="#washer_single_box" class="button">Блокировать</a>
+                  <a href="#washer_single_box" class="button">Бокс 4</a>
+                </div>
+              </div>
+              <div class="content-block-title">14:45:55</div>
+              <div class="card">
+                <div class="card-header orange">14:30-15:00 30м</div>
+                <div class="card-content"> 
+                  <div class="card-content-inner">Subaru Legacy F789QWE<br/> Бокс 1 <br/>Мойщики: №№№ №№№</div>
+                </div>
+                <div class="card-footer "><a href="#washer_single_box" class="button">Завершить</a></div>
+              </div>
+              <div class="content-block-title">Заявки</div>
+              <div class="content-block">
+                <div class="background_orange h30">14:30-15:00 30м Mitsubishi Montero Sport </div>
+                <div class="background_gray h30">15:00-15:30 30м</div>
+                <div class="background_orange h15">15:30-15:15 15м Audi B4</div>
+                <div class="background_gray h120">15:15-17:15 2ч</div>
+                <div class="background_orange h30">17:15-17:45 30м Hummer H4</div>
+              </div>
+            </div>
+          </div>
+          <!-- Washer bids Page-->
+          <div data-page="washer_bids" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Новые заявки</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <span>13:00</span> <a href="#send_tiket" class="button">Бокс 1 15:00 BMW X5</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <span>12:50</span> <a href="#send_tiket" class="button">Бокс 2 14:00 Аudi A6</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block-title">Подтвержденные заявки</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 1 15:00 Nissan Skyline</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 2 13:00 Mersedes Benz AMG C63 -</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 1 25.05.15 15:00 Lada Kalina -</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 4 15:00 Nissan Qashqai</a>
+                      </div>
+                    </div>
+                  </li> 
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 3 15:00 Subaru Legacy -</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Washer service edit Page-->
+          <div data-page="washer_service_edit" class="page cached">
+            <div class="page-content">
+              <div class="content-block">
+                <a href="#" class="button">+Добавить услугу</a>
+              </div>
+              <div class="content-block-title">Список услуг</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Minimal</div>
+                          <div class="item-after">~1000тг</div>
+                        </div>
+                        <div class="item-subtitle">Только кузов</div>
+                        <div class="item-text">Длительность: 15-20 минут</div>
+                      </div></a></li>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Standart</div>
+                          <div class="item-after">~2000тг</div>
+                        </div>
+                        <div class="item-subtitle">Кузов+Салон</div>
+                        <div class="item-text">Длительность: 30-40 минут</div>
+                      </div></a></li>
+                  <li><a href="#washer_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Standart+</div>
+                          <div class="item-after">~2500тг</div>
+                        </div>
+                        <div class="item-subtitle">Кузов+Салон+Багажник</div>
+                        <div class="item-text">Длительность:40-50 минут</div>
+                      </div></a></li>
+                  <li>
+                      <div class="item-inner">
+                        <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                      </div></li>
+                </ul>
+              </div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 1 15:00 Nissan Skyline</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 2 13:00 Mersedes Benz AMG C63 -</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 1 25.05.15 15:00 Lada Kalina -</a>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 4 15:00 Nissan Qashqai</a>
+                      </div>
+                    </div>
+                  </li> 
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">Бокс 3 15:00 Subaru Legacy -</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Path to Framework7 Library JS-->
+    <script type="text/javascript" src="dist/js/framework7.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <!-- Path to your app js-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+  </body>
+</html>

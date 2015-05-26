@@ -1,0 +1,181 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="GlyphColor">Red</Color>
+
+    <Style x:Name="LayoutRoot" TargetType="Grid">
+        <Setter Property="Background" Value="#2A2A2A" />
+    </Style>
+
+    <Style x:Key="LineHeader" TargetType="Border" >
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#333" Offset="0"/>
+                    <GradientStop Color="#010" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#0097FE"/>
+        <Setter Property="BorderThickness" Value="0 0 0 4"/>
+    </Style>
+
+    <Style x:Key="LineAuth" TargetType="Border" >
+        <Setter Property="Background" Value="#2A2A2A" />
+        <Setter Property="BorderBrush" Value="#999"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+    </Style>
+
+
+    <Style x:Key="LinePageHeader" TargetType="Border" >
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#333" Offset="0"/>
+                    <GradientStop Color="#010" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="#999"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+    </Style>
+
+
+    <Style x:Key="LineContent" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#999"/>
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+    <Style x:Key="LineContentHeader" TargetType="Border" BasedOn="{StaticResource LineContent}">
+        <Setter Property="Background" Value="#666"/>
+        <Setter Property="Padding" Value="10 20"/>
+    </Style>
+
+    <Style TargetType="TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap"></Setter>
+    </Style>
+
+
+
+    <Style x:Key="Header1" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="28"/>
+        <Setter Property="Foreground" Value="#DDD"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="Header2" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="Foreground" Value="#DDD"/>
+    </Style>
+
+
+    
+
+
+
+
+
+    <Style x:Key="Custom" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FFF"/>
+    </Style>
+
+    <Style x:Key="CustomButton" TargetType="Button">
+        <Setter Property="Margin" Value="-5"/>
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="BorderThickness" Value="0" />
+
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#000" Offset="0"/>
+                    <GradientStop Color="#FFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonAction"  BasedOn="{StaticResource CustomButton}" TargetType="Button">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#A6DBFB" Offset="0"/>
+                    <GradientStop Color="#07A0FF" Offset="0.1"/>
+                    <GradientStop Color="#07A0FF" Offset="0.9"/>
+                    <GradientStop Color="#0065A0" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonGray"  BasedOn="{StaticResource CustomButton}" TargetType="Button">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#676767" Offset="0"/>
+                    <GradientStop Color="#262626" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonDarkGray" BasedOn="{StaticResource CustomButton}" TargetType="Button">           
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#4B4B4B" Offset="0"/>
+                    <GradientStop Color="#000" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonDarkGrayChecked" BasedOn="{StaticResource CustomButton}" TargetType="Button">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#53BDFB" Offset="0"/>
+                    <GradientStop Color="#059AFE" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
+    
+
+    <Style x:Key="ButtonTime" TargetType="Border">
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="#C3C4BE"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#4A4A4A" Offset="0"/>
+                    <GradientStop Color="#010101" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonTimeChecked" BasedOn="{StaticResource ButtonTime}" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#53BDFB" Offset="0"/>
+                    <GradientStop Color="#059AFE" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ButtonTimeEngaged" BasedOn="{StaticResource ButtonTime}" TargetType="Border">
+    </Style>
+
+
+
+
+
+</ResourceDictionary>

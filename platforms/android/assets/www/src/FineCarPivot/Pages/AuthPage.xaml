@@ -1,0 +1,127 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FineCarPivot.Pages.AuthPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="62" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="64" />
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+        <Border Style="{StaticResource LineHeader}" Grid.Column="0" Grid.Row="0">
+            <Image Margin="0,5,0,15" RenderTransformOrigin="0.012,0.093" Source="/Assets/Images/logotip.png" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Border>
+
+        <Border Style="{StaticResource LinePageHeader}" Grid.Column="0" Grid.Row="2">
+            <TextBlock Style="{StaticResource Header1}" Text="Авторизация" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+        </Border>
+
+
+        <ScrollViewer Grid.Row="3" >
+            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Orientation="Vertical">
+                <!-- Вход через аккуант в соцсетях -->
+                <Border Style="{StaticResource LineContent}" Grid.Row="3" Grid.Column="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".5*"/>
+                            <ColumnDefinition Width=".5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock TextWrapping="Wrap" Text="Вход через аккуант в соцсетях:" Grid.Column="0" Margin="15"/>
+                        <Image Source="/Assets/Images/social-vk.png" Grid.Column="1" HorizontalAlignment="Left" Height="84" Margin="15" VerticalAlignment="center" />
+                        <Image Source="/Assets/Images/social-facebook.png" Grid.Column="1" HorizontalAlignment="Left" Height="84" Margin="105 0 0 0" VerticalAlignment="center" />
+
+                    </Grid>
+                </Border>
+
+                <!-- Для зарегистрированных пользователей -->
+                <Border Style="{StaticResource LineContent}" Grid.Row="3" Grid.Column="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".5*"/>
+                            <ColumnDefinition Width=".5*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock TextWrapping="Wrap" Text="Для зарегистрированных пользователей:" Grid.Column="0" Margin="15"/>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch"  Margin="0">
+                            <TextBox Name="authLogin" ></TextBox>
+                            <TextBox Name="authPass" ></TextBox>
+                            <Button  Style="{StaticResource ButtonAction}" Width="150" HorizontalAlignment="Left" Content="Вход" Click="ButtonLogOn"></Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Регистрация -->
+                <Border Style="{StaticResource LineContent}" Grid.Row="3" Grid.Column="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width=".4*"/>
+                            <ColumnDefinition Width=".6*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Stretch"  Margin="0">
+                            <TextBlock Style="{StaticResource Header1}" Text="Регистрация" Margin="15"></TextBlock>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch"  Margin="0">
+                            <TextBlock Text="Вы здесь впервые?"></TextBlock>
+                            <TextBlock Text="После регистрации мы Вам пришлем смс с Вашими данными." TextWrapping="Wrap"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width=".5*" />
+                        <ColumnDefinition Width=".5*" />
+                    </Grid.ColumnDefinitions>
+
+
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0"/>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="*" Foreground="red" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 15 0"/>
+                    <TextBox Grid.Column="1" Grid.Row="0"></TextBox>
+
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Категория вашего автомобиля:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="*" Foreground="red" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 15 0"/>
+                    <TextBox Grid.Column="1" Grid.Row="1"></TextBox>
+
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Гос.номер:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0"  TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="*" Foreground="red" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 15 0"/>
+                    <TextBox Grid.Column="1" Grid.Row="2"></TextBox>
+
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Цвет автомобиля:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0"  TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="*" Foreground="red" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 15 0"/>
+                    <TextBox Grid.Column="1" Grid.Row="3"></TextBox>
+
+                    <TextBlock Grid.Column="0" Grid.Row="4" Text="Фото вашего автомобиля:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0"  TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="1" Grid.Row="4"></TextBox>
+
+                    <TextBlock Grid.Column="0" Grid.Row="5" Text="Предпочтительный район:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 25 0"  TextWrapping="Wrap"/>
+                    <TextBox Grid.Column="1" Grid.Row="5"></TextBox>
+                </Grid>
+
+                <Button  Style="{StaticResource ButtonAction}" Width="Auto" HorizontalAlignment="Left" Content="Зарегистрироваться" Click="ButtonLogOn" Grid.ColumnSpan="2" VerticalAlignment="Center" ></Button>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+
+</phone:PhoneApplicationPage>
