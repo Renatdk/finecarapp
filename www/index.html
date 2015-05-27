@@ -50,25 +50,25 @@
        <div class="content-block-title">Меню FineCar</div>
         <div class="list-block">
           <ul>
-            <li><a href="#washer_bids" class="close-panel item-link item-content">
-                <div class="item-media"><i class="icon icon-form-garage"></i></div>
-                <div class="item-inner"> 
-                  <div class="item-title">Заявки</div>
-                </div></a></li>
             <li><a href="#washer_home" class="close-panel item-link item-content">
-                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+                <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Боксы</div>
                 </div></a></li>
-            <li><a href="#washer_home" class="close-panel item-link item-content">
-                <div class="item-media"><i class="icon icon-receive-cash"></i></div>
+            <li><a href="#washer_bids" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-form-list"></i></div>
                 <div class="item-inner"> 
-                  <div class="item-title">Мойщики</div>
+                  <div class="item-title">Заявки</div>
                 </div></a></li>
             <li><a href="#washer_service_edit" class="close-panel item-link item-content">
-                <div class="item-media"><i class="icon icon-conference"></i></div>
+                <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Услуги</div>
+                </div></a></li>
+            <li><a href="#washermans_edit" class="close-panel item-link item-content">
+                <div class="item-media"><i class="icon icon-form-name"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Мойщики</div>
                 </div></a></li>
             <li><a href="#washer_home" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-name"></i></div>
@@ -145,6 +145,24 @@
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Отправить заявку</div>
           </div>
+          <!-- Navbar inner for Washermans edit page-->
+          <div data-page="washermans_edit" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">Редактирование мойщиков</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for Washerman add page-->
+          <div data-page="washerman_add" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Добавление мойщика</div>
+          </div>
+          <!-- Navbar inner for Washerman edit page-->
+          <div data-page="washerman_edit" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Редактирование мойщика</div>
+          </div>
           <!-- Navbar inner for Washer service edit page-->
           <div data-page="washer_service_edit" class="navbar-inner cached">
             <!-- We have home navbar without left link-->
@@ -153,10 +171,25 @@
               <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
             </div>
           </div>
-          <!-- Navbar inner for Washer service edit page-->
+          <!-- Navbar inner for Washer service add page-->
           <div data-page="washer_service_add" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Добавление услуги</div>
+          </div>
+          <!-- Navbar inner for Washer service add list page-->
+          <div data-page="washer_service_add_list" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Список услуг</div>
+          </div>
+          <!-- Navbar inner for Washer service add helper page-->
+          <div data-page="washer_service_add_helper" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Пояснения по вводу</div>
+          </div>
+          <!-- Navbar inner for Washer service add page-->
+          <div data-page="washer_single_service_edit" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Редактирование услуги</div>
           </div>
           <!-- Navbar inner for Washer service edit page-->
           <div data-page="washer_bids" class="navbar-inner cached">
@@ -861,7 +894,7 @@
               </div>
             </div>
           </div>
-          <!-- Washer home Page-->
+          <!-- Washer home Boxes Page-->
           <div data-page="washer_home" class="page cached">
             <div class="page-content">
               <div class="content-block">
@@ -956,7 +989,7 @@
               </div>
               <!-- <div class="content-block"> -->
                 <!-- Picker -->
-                <div class="picker-modal picker-1">
+                <div id="picker-modal" class="picker-modal picker-1">
                   <div class="toolbar">
                     <div class="toolbar-inner">
                       <div class="left"></div>
@@ -966,7 +999,7 @@
                   <div class="picker-modal-inner">
                     <div class="content-block">
                       <h3 class="orange">13:50-14:20 30 минут</h3>
-                      <p>Subaru Outback F457RDE</p>
+                      <p>Subaru Outback F457RDE - Кузов - Салон</p>
                       <div class="content-block">
                         <div class="buttons-row">
                           <a href="#" class="button button-round">Отмена</a>
@@ -1015,7 +1048,7 @@
               <div class="card">
                 <div class="card-header orange">14:30-15:00 30м</div>
                 <div class="card-content"> 
-                  <div class="card-content-inner">Subaru Legacy F789QWE<br/> Бокс 1 <br/>Мойщики: №№№ №№№</div>
+                  <div class="card-content-inner">Subaru Legacy F789QWE<br/> Бокс 1 <br/>Мойщики: Иванов Иван, Сидоров Сидор</div>
                 </div>
                 <div class="card-footer "><a href="#washer_single_box" class="button">Завершить</a></div>
               </div>
@@ -1100,7 +1133,7 @@
               </div>
             </div>
           </div>
-          <!-- Washer service edit Page-->
+          <!-- Washer services edit Page-->
           <div data-page="washer_service_edit" class="page cached">
             <div class="page-content">
               <div class="content-block">
@@ -1109,7 +1142,7 @@
               <div class="content-block-title">Список услуг</div>
               <div class="list-block media-list">
                 <ul>
-                  <li><a href="#washer_choice" class="item-content">
+                  <li><a href="#washer_single_service_edit" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
                           <div class="item-title orange">Салон</div>
@@ -1118,7 +1151,7 @@
                         <div class="item-subtitle">Чистка уборка</div>
                         <div class="item-text">Длительность: 20 минут</div>
                       </div></a></li>
-                  <li><a href="#washer_choice" class="item-content">
+                  <li><a href="#washer_single_service_edit" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
                           <div class="item-title orange">Кузов</div>
@@ -1127,7 +1160,7 @@
                         <div class="item-subtitle">Безконтактная мойка</div>
                         <div class="item-text">Длительность: 30 минут</div>
                       </div></a></li>
-                  <li><a href="#washer_choice" class="item-content">
+                  <li><a href="#washer_single_service_edit" class="item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
                           <div class="item-title">Кузов</div>
@@ -1146,30 +1179,18 @@
               <div class="content-block-title">Введите данные</div>
               <div class="list-block">
                 <ul>
-                  <li><a href="#service_list" class="item-link"> 
+                  <li><a href="#washer_service_add_list" class="item-link"> 
                       <div class="item-content">
                         <div class="item-inner"> 
-                          <div class="item-title">Услуги</div>
+                          <div class="item-title">Услуга</div>
                         </div>
                       </div></a></li>
                   <li>
                     <div class="item-content">
                       <div class="item-inner"> 
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">1гр*</a></div>
                         <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="nocheked">Не выбрано</option>
-                              <option value="mitsubishi" >Mitsubishi</option>
-                              <option value="toyota">Toyota</option>
-                              <option value="mersedes">Mersedes Bens</option>
-                              <option value="bmw">BMW</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Услуга</div>
-                              </div>
-                            </div>
-                          </a>
+                          <input type="number"  placeholder="* *** тг" min="0" step="100">
                         </div>
                       </div>
                     </div>
@@ -1177,52 +1198,29 @@
                   <li>
                     <div class="item-content">
                       <div class="item-inner"> 
-                        <div class="item-title label">Цена 1 группы</div>
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">2гр*</a></div>
                         <div class="item-input">
-                          <input type="number" placeholder="Цена">
+                          <input type="number"  placeholder="* *** тг" min="0" step="100">
                         </div>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">3гр*</a></div>
                         <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="models">
-                              <option value="nochaked">Не выбрано</option>
-                              <option value="galant" >Galant</option>
-                              <option value="z3">Z3</option>
-                              <option value="x5">X5</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Модель</div>
-                              </div>
-                            </div>
-                          </a>
+                          <input type="number"  placeholder="* *** тг" min="0" step="100">
                         </div>
                       </div>
                     </div>
                   </li>
                   <li>
                     <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
+                        <div class="item-title label">Время <a href="#washer_service_add_helper">мин*</a></div>
                         <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="apple" selected="selected">Легковая</option>
-                              <option value="pineapple">Внедорожник или пикап</option>
-                              <option value="pear">Минивен или микроавтобус</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Тип кузова</div>
-                              <div class="item-after">Легковая</div></div>
-                            </div>
-                          </a>
+                          <input type="number"  placeholder="*** минут" min="0" step="100">
                         </div>
                       </div>
                     </div>
@@ -1238,6 +1236,417 @@
                   </li>
                 </ul>
               </div>    
+            </div>
+          </div>
+          <!-- Waser service add -> service list Page -->
+          <div data-page="washer_service_add_list" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Выберите из списка</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Кузов</div>
+                        </div>
+                        <div class="item-subtitle orange">Ручная мойка</div>
+                        <div class="item-text">Ручная мойка кузова шампунем и протирака, коврики пороги</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Кузов</div>
+                        </div>
+                        <div class="item-subtitle orange">Бесконтактная мойка</div>
+                        <div class="item-text">Бесконтактная мойка кузова автомобиля, коврики пороги</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Кузов</div>
+                        </div>
+                        <div class="item-subtitle orange">Ручная мойка</div>
+                        <div class="item-text">Ручная мойка кузова шампунем и протирака, коврики пороги</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Салон</div>
+                        </div>
+                        <div class="item-subtitle orange">Чистка салона</div>
+                        <div class="item-text">Ручная мойка кузова шампунем и протирка, коврики пороги</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Стекла</div>
+                        </div>
+                        <div class="item-subtitle orange">Чистка стекол изнутри</div>
+                        <div class="item-text">Чистка стекол изнутри химическими средствами</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Салон</div>
+                        </div>
+                        <div class="item-subtitle orange">Полировка салона</div>
+                        <div class="item-text">Полировка пластмассовых деталей салона химическими средствами</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Багажник</div>
+                        </div>
+                        <div class="item-subtitle orange">Чистка багажника</div>
+                        <div class="item-text">Чистка багажника(пылисос и влажная уборка)</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Двигатель</div>
+                        </div>
+                        <div class="item-subtitle orange">Мойка двигателя</div>
+                        <div class="item-text">Мойка двигателя и моторного отсека, продувка</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="label-radio item-content">
+                      <input type="radio" name="ks-media-radio" value="1" checked="checked">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Сидения</div>
+                        </div>
+                        <div class="item-subtitle orange">Кондиционер сидений</div>
+                        <div class="item-text">Кондиционер кожных сидений</div>
+                      </div>
+                    </label>
+                  </li>
+                </ul>
+              </div> 
+            </div>
+          </div>
+          <!-- Waser service add -> service helper Page -->
+          <div data-page="washer_service_add_helper" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Пояснения</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li>
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">Цена 1гр*</div>
+                        </div>
+                        <div class="item-subtitle">Укажите цену для типа кузова:</div>
+                        <div class="item-text">Легковая</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title ">Цена 2гр*</div>
+                        </div>
+                        <div class="item-subtitle">Укажите цену для типа кузова:</div>
+                        <div class="item-text">Внедорожник или пикап</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">Цена 3гр*</div>
+                        </div>
+                        <div class="item-subtitle">Укажите цену для типа кузова:</div>
+                        <div class="item-text">Минивен или микроавтобус</div>
+                      </div>
+                    </label>
+                  </li>
+                  <li>
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title">Время мин*</div>
+                        </div>
+                        <div class="item-subtitle">Длительность мойки</div>
+                        <div class="item-text">Укажите длительность мойки данной услуги в мин.</div>
+                      </div>
+                    </label>
+                  </li>                 
+                </ul>
+              </div> 
+            </div>
+          </div>
+          <!-- Waser service edit -> single service edit Page -->
+          <div data-page="washer_single_service_edit" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Редактирование услуги</div>
+              <div class="list-block media-list">
+                <ul>
+                  <li><a href="#washer_service_add_list" class="item-link"> 
+                    <label class="item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">Кузов</div>
+                        </div>
+                        <div class="item-subtitle orange">Ручная мойка</div>
+                        <div class="item-text">Ручная мойка кузова шампунем и протирака, коврики пороги</div>
+                      </div>
+                    </label></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">1гр*</a></div>
+                        <div class="item-input">
+                          <input type="number"  placeholder="* *** тг" min="0" step="100" value="1000">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">2гр*</a></div>
+                        <div class="item-input">
+                          <input type="number"  placeholder="0 000 тг" min="0" step="100" value="1200">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title label">Цена <a href="#washer_service_add_helper">3гр*</a></div>
+                        <div class="item-input">
+                          <input type="number"  placeholder="* *** тг" min="0" step="100" value="1300">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title label">Время <a href="#washer_service_add_helper">мин*</a></div>
+                        <div class="item-input">
+                          <input type="number"  placeholder="*** минут" min="0" step="100" value="30">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Сохранить</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>    
+              <div class="content-block">
+                <div class="buttons-row">
+                  <a href="#" class="button button-round">Блокировать</a>
+                  <a href="#" class="button button-round">Удалить</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Washermans edit Page-->
+          <div data-page="washermans_edit" class="page cached">
+            <div class="page-content">
+              <div class="content-block">
+                <a href="#washerman_add" class="button">+Добавить мойщика</a>
+              </div>
+              <div class="content-block-title">Список мойщиков</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-divider">Активные</div>
+                  </li>
+                  <li><a href="#washerman_edit" class="item-link item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title">Петр Иванов</div>
+                      </div></a></li>
+                  <li><a href="#washerman_edit" class="item-link item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title">Джон До</div>
+                      </div></a></li>
+                  <li>
+                    <div class="item-divider">Блокированные</div>
+                  </li>
+                  <li><a href="#washerman_edit" class="item-link item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title">Сидор Сидоров</div>
+                      </div></a></li>
+                  <li><a href="#washerman_edit" class="item-link item-content">
+                      <div class="item-inner"> 
+                        <div class="item-title">Жанна Смит</div>
+                      </div></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Washerman add Page -->
+          <div data-page="washerman_add" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные мойщика</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Имя">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Отчество">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Фамилия">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="tel" placeholder="Мобильный телефон">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Добавить</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>    
+            </div>
+          </div>
+          <!-- Washerman edit Page -->
+          <div data-page="washerman_edit" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Введите данные мойщика</div>
+              <div class="list-block">
+                <ul>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Имя" value="Сидор">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Отчество" value="Сидорович">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-name"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Фамилия" value="Сидоров">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="tel" placeholder="Мобильный телефон" value="87771112233">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <a href="#" class="button active back link">Сохранить</a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div> 
+              <div class="content-block">
+                <div class="buttons-row">
+                  <a href="#" class="button button-round">Блокировать</a>
+                  <a href="#" class="button button-round">Удалить</a>
+                </div>
+              </div>   
             </div>
           </div>
         </div>

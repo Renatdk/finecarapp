@@ -14,3 +14,10 @@ var mainView = myApp.addView('.view-main', {
     domCache: true
 });
 
+
+while(true){
+  setTimeout(function () {
+    console.log($$(window).scrollTop());
+  }, 1000);
+}
+

@@ -14,3 +14,18 @@ var mainView = myApp.addView('.view-main', {
     domCache: true
 });
 
+
+// имитируем position: fixed;
+var pickerModal = document.getElementById('picker-modal');
+
+// обрабатываем события touch и scroll
+window.ontouchstart = function(e) {
+    if (event.target !== pickerModal){
+        pickerModal.style = "";
+    }
+}
+
+window.onscroll = function(){
+    var scrollTop = window.scrollY;
+    pickerModal.style.bottom = (scrollTop + windowHeight - 260) + 'px';
+};

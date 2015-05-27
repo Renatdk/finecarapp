@@ -1889,6 +1889,11 @@ i.icon.icon-conference {
   height: 29px;
   background-image: url("../img/i-conference.png");
 }
+i.icon.icon-form-list {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-list.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;
