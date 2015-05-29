@@ -89,20 +89,20 @@
             <!-- We have home navbar without left link-->
             <div class="center sliding">FineCar</div>
           </div>
-          <!-- Navbar inner for Home page-->
-          <div data-page="home" class="navbar-inner cached">
-            <!-- We have home navbar without left link-->
-            <div class="center sliding">FineCar</div>
-            <div class="right">
-              <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
-            </div>
-          </div>
           <!-- Navbar inner for Washer home page-->
           <div data-page="washer_home" class="navbar-inner cached">
             <!-- We have home navbar without left link-->
             <div class="center sliding">FineCar</div>
             <div class="right">
               <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
+          <!-- Navbar inner for Home page-->
+          <div data-page="home" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">FineCar</div>
+            <div class="right">
+              <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
             </div>
           </div>
           <!-- Navbar inner for User registration page-->
@@ -389,7 +389,37 @@
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="text" placeholder="Наименование">
+                          <input type="text" placeholder="Наименование мойки">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Наименование юр. лица">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="text" placeholder="Фото сведетельства юр. лица">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="number" placeholder="ИИН юр. лица">
                         </div>
                       </div>
                     </div>
@@ -423,22 +453,6 @@
                         </div>
                       </div>
                     </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="1">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title">Уровни загрязнения</div>
-                        </div>
-                        <div class="item-text">Цена зависит от степени загрязенния.</div>
-                      </div>
-                    </label>
                   </li>
                 </ul>
               </div>
@@ -845,194 +859,104 @@
               </div>
             </div> 
           </div>
-          <!-- Home Page-->
-          <div data-page="home" class="page cached">
-            <div class="page-content">
-              <div class="content-block-title">Помыть авто</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <a href="#choice_service" class="button">Mitsubishi Galant</a>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <a href="#choice_service" class="button">BMW X5</a>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#auto_registration" class="button">+ Добавить авто</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="content-block-title">Ваши заявки</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
-                      <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">BMW X5 - Сегоня в 15:00</a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <!-- Washer home Boxes Page-->
           <div data-page="washer_home" class="page cached">
             <div class="page-content">
               <div class="content-block">
                 <div class="buttons-row">
-                  <a href="#washer_single_box" class="button">Бокс 1</a>
+                  <a href="#washer_single_box" class="button active">Бокс 1</a>
                   <a href="#washer_single_box" class="button active">Бокс 2</a>
-                  <a href="#washer_single_box" class="button">Бокс 3</a>
-                  <a href="#washer_single_box" class="button active">Бокс 4</a>
+                  <a href="#washer_single_box" class="button active">Бокс 3</a>
+                  <a href="#washer_single_box" class="button">Бокс 4</a>
                 </div>
               </div>
               <div class="content-block-title"><span id="realtime">14:25:30</span></div>
               <div class="content-block">
                 <div class="row no-gutter">
                   <div class="col-25">
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-3">
                       <div class="background_orange h30">14:30 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h30">15:00 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">15:30 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">16:00 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h30">16:30 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h15">17:00 15м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h120">17:15 2ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">19:15 30м</div>
                     </a>
                   </div>
                   <div class="col-25">
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-3">
                       <div class="background_orange h60">14:30 1ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h60">15:30 1ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">16:30 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h30">17:00 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h15">17:30 15м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h120">17:45 2ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">19:45 30м</div>
                     </a>
                   </div>
                   <div class="col-25">
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-3">
                       <div class="background_orange h120">14:30 2ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h120">16:30 2ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">18:30 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h30">19:00 30м</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h15">19:30 15м</div>
                     </a>
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h120">19:45 2ч</div>
                     </a>
-                    <a href="#" data-picker=".picker-1" class="open-picker">
+                    <a href="#" class="ac-4">
                       <div class="background_orange h30">21:45 30м</div>
                     </a>
                   </div>
                   <div class="col-25">
-                    <a href="#" data-picker=".picker-2" class="open-picker">
+                    <a href="#" class="ac-2">
                       <div class="background_gray h1440">14:30 24ч </div>
                     </a>
                   </div>
                 </div>
               </div>
-              <!-- <div class="content-block"> -->
-                <!-- Picker -->
-                <div id="picker-modal" class="picker-modal picker-1">
-                  <div class="toolbar">
-                    <div class="toolbar-inner">
-                      <div class="left"></div>
-                      <div class="right"><a href="#" class="close-picker">Готово</a></div>
-                    </div>
-                  </div>
-                  <div class="picker-modal-inner">
-                    <div class="content-block">
-                      <h3 class="orange">13:50-14:20 30 минут</h3>
-                      <p>Subaru Outback F457RDE - Кузов - Салон</p>
-                      <div class="content-block">
-                        <div class="buttons-row">
-                          <a href="#" class="button button-round">Отмена</a>
-                          <a href="#" class="button button-round">Время</a>
-                          <a href="#" class="button button-round">Бокс</a>
-                        </div>
-                        <br/>
-                        <div class="buttons-row">
-                          <a href="#" class="button button-round">Запустить</a>
-                          <a href="#" class="button button-round">Завершить</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="picker-modal picker-2">
-                  <div class="toolbar">
-                    <div class="toolbar-inner">
-                      <div class="left"></div>
-                      <div class="right"><a href="#" class="close-picker">Готово</a></div>
-                    </div>
-                  </div>
-                  <div class="picker-modal-inner">
-                    <div class="content-block">
-                      <h3>13:50-14:20 30 минут</h3>
-                      <p>Свободно</p>
-                      <!-- <div class="buttons-row"> -->
-                        <a href="#" class="button">Создать</a>
-                      <!-- </div> -->
-                    </div>
-                  </div>
-                </div>
-              <!-- </div> -->
+              <div class="content-block">
+                <!-- <div class="buttons-row"> -->
+                  <a href="#box_add" class="button">+Добавить Бокс</a>
+                <!-- </div> -->
+              </div>
             </div>
           </div>
           <!-- Washer single box Page-->
@@ -1054,11 +978,21 @@
               </div>
               <div class="content-block-title">Заявки</div>
               <div class="content-block">
-                <div class="background_orange h30">14:30-15:00 30м Mitsubishi Montero Sport </div>
-                <div class="background_gray h30">15:00-15:30 30м</div>
-                <div class="background_orange h15">15:30-15:15 15м Audi B4</div>
-                <div class="background_gray h120">15:15-17:15 2ч</div>
-                <div class="background_orange h30">17:15-17:45 30м Hummer H4</div>
+                <a href="#" class="ac-3">
+                  <div class="background_orange h30">14:30-15:00 30м Mitsubishi Montero Sport </div>
+                </a>
+                <a href="#" class="ac-2">
+                  <div class="background_gray h30">15:00-15:30 30м</div>
+                </a>
+                <a href="#" class="ac-4">
+                  <div class="background_orange h15">15:30-15:15 15м Audi B4</div>
+                </a>
+                <a href="#" class="ac-2">
+                  <div class="background_gray h120">15:15-17:15 2ч</div>
+                </a>
+                <a href="#" class="ac-4">
+                  <div class="background_orange h30">17:15-17:45 30м Hummer H4</div>
+                </a>
               </div>
             </div>
           </div>
@@ -1649,8 +1583,51 @@
               </div>   
             </div>
           </div>
+          <!-- Home Page-->
+          <div data-page="home" class="page cached">
+            <div class="page-content">
+              <div class="content-block-title">Помыть авто</div>
+              <div class="list-block">
+                <ul>
+                  {{#each this.cars}}
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#choice_service" class="button">{{this.car_name}} - {{this.car_number}}</a>
+                      </div>
+                    </div>
+                  </li>
+                  {{/each}}
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#auto_registration" class="button">+ Добавить авто</a>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="content-block-title">Ваши заявки</div>
+              <div class="list-block">
+                <ul>
+                  {{#each this.bids}}
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                      <div class="item-inner"> 
+                        <a href="#send_tiket" class="button">{{this.date}} {{this.time}} {{this.car_name}} {{this.car_namber}} </a>
+                      </div>
+                    </div>
+                  </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
+    </div> 
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
     <script type="text/javascript" src="cordova.js"></script>

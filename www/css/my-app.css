@@ -56,6 +56,21 @@ i.tabbar-demo-icon-4 {
   background-color: #222426;
 }
 
+.actions-modal-button{
+  background-color: #222426;
+  color: orange;
+}
+
+.actions-modal-button.color-red{
+  color:  #FF3300;
+}
+.actions-modal-label{
+  background-color: orange;
+  color:#222426;
+  font-size: 20px;
+}
+
+
 .h15{height: 14px; font-size: 11px;}
 .h30{height: 29px}
 .h40{height: 39px}

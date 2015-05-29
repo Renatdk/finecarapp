@@ -1894,6 +1894,11 @@ i.icon.icon-form-list {
   height: 29px;
   background-image: url("../img/i-list.png");
 }
+i.icon.icon-form-clock {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-form-clock.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;

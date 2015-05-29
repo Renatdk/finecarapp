@@ -1,0 +1,22 @@
+{
+   "cars": [{
+        "car_name":"Bentley VER45",
+        "car_number":"F001AAA"
+    },
+    {
+        "car_name":"Lamborghini Veneno",
+        "car_number":"F001AAB"
+    }],
+   "bids": [{
+        "car_name":"Bentley VER45",
+        "car_number":"F001AAA",
+        "date":"27.05.15",
+        "time":"14:30"
+    },
+    {
+        "car_name":"Lamborghini Veneno",
+        "car_number":"F001AAB",
+        "date":"29.05.15",
+        "time":"11:30"
+    }]
+}
