@@ -4,55 +4,11 @@ var myApp = new Framework7({
 
     template7Pages: true, //enable Template7 rendering for pages
     precompileTemplates: true,
-    // template7Data:{
-    //     "page:home":{
-    //         "cars": [{
-    //             "car_name":"Bentley VER45",
-    //             "car_number":"F001AAA"
-    //         },
-    //         {
-    //             "car_name":"Lamborghini Veneno",
-    //             "car_number":"F001AAB"
-    //         }],
-    //        "bids": [{
-    //             "car_name":"Bentley VER45",
-    //             "car_number":"F001AAA",
-    //             "date":"27.05.15",
-    //             "time":"14:30"
-    //         },
-    //         {
-    //             "car_name":"Lamborghini Veneno",
-    //             "car_number":"F001AAB",
-    //             "date":"29.05.15",
-    //             "time":"11:30"
-    //         }]
-    //     }
-    // }
 
 });
 
 // Add and init View
 var $$ = Dom7;
-
-
-myApp.onPageInit('home', function (page) {
-    myApp.showIndicator();
-    var homeTemplate = $$(page.container).html();
-    var compiledHomeTemplate = Template7.compile(homeTemplate);
-
-    $$.getJSON('json/home.json', function (json) {
-      var html=compiledHomeTemplate(json);      
-       $$(page.container).html(html);
-      myApp.hideIndicator();
-    }); 
-});   
-
-myApp.onPageInit('*', function (page) {
-  console.log(page.name + ' initialized');
-  console.log(page.container); 
-});
- 
-
 
 // Add main View
 var mainView = myApp.addView('.view-main', {
@@ -61,6 +17,7 @@ var mainView = myApp.addView('.view-main', {
     // Enable Dom Cache so we can use all inline pages
     domCache: true
 });
+
 
 //- One group, title, three buttons
 $$('.ac-2').on('click', function () {
@@ -158,3 +115,53 @@ $$('.ac-4').on('click', function () {
     myApp.actions(groups);
 });
  
+
+myApp.onPageInit('home', function (page) {
+    myApp.showIndicator();
+    var homeTemplate = $$(page.container).html();
+    var compiledHomeTemplate = Template7.compile(homeTemplate);
+
+    $$.getJSON('json/home.json', function (json) {
+      var html=compiledHomeTemplate(json);      
+       $$(page.container).html(html);
+      myApp.hideIndicator();
+    }); 
+});   
+
+
+myApp.onPageInit('choice_service', function (page) {
+    myApp.showIndicator();
+    var homeTemplate = $$(page.container).html();
+    var compiledHomeTemplate = Template7.compile(homeTemplate);
+
+    $$.getJSON('json/user_package_of_services.json', function (json) {
+      var html=compiledHomeTemplate(json);      
+       $$(page.container).html(html);
+      myApp.hideIndicator();
+    }); 
+});   
+ 
+var sort_by="km";
+
+myApp.onPageInit('washer_choice', function (page) {
+
+  if (page.query.sort_by){
+    console.log(sort_by=page.query.sort_by);
+  }
+
+  myApp.showIndicator();
+  var homeTemplate = $$(page.container).html();
+  var compiledHomeTemplate = Template7.compile(homeTemplate);
+  console.log("page.context",page.query);
+
+  $$.getJSON('json/user/washer_choice.json', function (json) {
+    washers=json;
+    washers=_.sortBy(json.washers, sort_by);
+    var html=compiledHomeTemplate({washers});      
+     $$(page.container).html(html);
+     $$(page.container).find(".buttons-row a.active").removeClass('active');
+     $$(page.container).find(".buttons-row a#"+sort_by).addClass('active');
+    myApp.hideIndicator();
+  });
+
+});   

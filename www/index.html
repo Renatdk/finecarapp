@@ -562,34 +562,17 @@
               <div class="content-block-title">Выберите комплекс услуг</div>
               <div class="list-block media-list">
                 <ul>
-                  <li><a href="#washer_choice" class="item-link item-content">
+                  {{#each this.services}}
+                    <li><a href="#washer_choice?sort_by=price" class="item-link item-content">
                       <div class="item-inner">
                         <div class="item-title-row">
-                          <div class="item-title orange">Minimal</div>
-                          <div class="item-after">~1000тг</div>
+                          <div class="item-title orange">{{this.service_name}}</div>
+                          <div class="item-after">~{{this.service_price}}тг</div>
                         </div>
-                        <div class="item-subtitle">Только кузов</div>
-                        <div class="item-text">Длительность: 15-20 минут</div>
-                      </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Standart</div>
-                          <div class="item-after">~2000тг</div>
-                        </div>
-                        <div class="item-subtitle">Кузов+Салон</div>
-                        <div class="item-text">Длительность: 30-40 минут</div>
-                      </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Standart+</div>
-                          <div class="item-after">~2500тг</div>
-                        </div>
-                        <div class="item-subtitle">Кузов+Салон+Багажник</div>
-                        <div class="item-text">Длительность:40-50 минут</div>
-                      </div></a></li>
-                  <li>
+                        <div class="item-subtitle">{{service_description}}</div>
+                        <div class="item-text">Длительность: {{service_time}}</div>
+                      </div></a></li>                  
+                  {{/each}}
                       <div class="item-inner">
                         <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
                       </div></li>
@@ -693,7 +676,7 @@
                   <li>
                     <div class="item-content">
                       <div class="item-inner"> 
-                        <a href="#" class="button button-round">Мое местоположение</a>
+                        <a  href="#" class="button button-round">Мое местоположение</a>
                       </div>
                     </div>
                   </li>
@@ -705,41 +688,25 @@
                   <li>
                     <div class="item-content">
                       <div class="item-inner"> 
-                        <div class="buttons-row">
-                          <a href="#" class="button button-round active">км</a>
-                          <a href="#" class="button button-round">цена</a>
-                          <a href="#" class="button button-round">сеанс</a>
+                        <div class="buttons-row" id="sort_washers">
+                          <a href="#washer_choice?sort_by=km"  id="km" data-reload="true" data-ignore-cache="true" class="button button-round active">км</a>
+                          <a href="#washer_choice?sort_by=price"  id="price" data-reload="true" data-ignore-cache="true" class="button button-round">цена</a>
+                          <a href="#" id="time" class=" button button-round">время</a>
                         </div>
                       </div>
                     </div>
                   </li>
+                  {{#each this.washers}}
                   <li><a href="#time_choice" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
-                        <div class="item-title orange">Cупер Мойка</div>
-                        <div class="item-after">2000тг</div>
+                        <div class="item-title orange">{{this.name}}</div>
+                        <div class="item-after">{{this.price}}тг</div>
                       </div>
-                      <div class="item-subtitle">пр.Сатпаева 1/1 - 0,2км.</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 11:00,14:00,16:00.</div>
+                      <div class="item-subtitle">{{this.address}} - {{this.km}}км.</div>
+                      <div class="item-text">{{this.service}} Время: {{this.time}}.</div>
                     </div></a></li>
-                  <li><a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">Мега Мойка</div>
-                        <div class="item-after">1850тг</div>
-                      </div>
-                      <div class="item-subtitle">ул. Казахстан 64/2 - 0,5км</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 12:00,13:30,14:00.</div>
-                    </div></a></li>
-                  <li><a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">Мойдодыр</div>
-                        <div class="item-after">2200тг</div>
-                      </div>
-                      <div class="item-subtitle">ул. Кабанбай-Батыра 41 - 2,5км</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 10:00.</div>
-                    </div></a></li>
+                  {{/each}}
                 </ul>
               </div>
             </div> 
@@ -1630,6 +1597,8 @@
     </div> 
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
+    <script type="text/javascript" src="dist/js/underscore-min.js"></script>
+    <script type="text/javascript" src="dist/js/zepto.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <!-- Path to your app js-->
     <script type="text/javascript" src="js/my-app.js"></script>
