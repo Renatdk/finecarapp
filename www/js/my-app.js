@@ -3,12 +3,15 @@ var myApp = new Framework7({
     animateNavBackIcon:true,
 
     template7Pages: true, //enable Template7 rendering for pages
-    precompileTemplates: true,
+ precompileTemplates: true,
 
 });
 
+var user_SCL={}; //user choice list
+
 // Add and init View
 var $$ = Dom7;
+
 
 // Add main View
 var mainView = myApp.addView('.view-main', {
@@ -116,52 +119,87 @@ $$('.ac-4').on('click', function () {
 });
  
 
-myApp.onPageInit('home', function (page) {
-    myApp.showIndicator();
-    var homeTemplate = $$(page.container).html();
-    var compiledHomeTemplate = Template7.compile(homeTemplate);
-
-    $$.getJSON('json/home.json', function (json) {
-      var html=compiledHomeTemplate(json);      
-       $$(page.container).html(html);
-      myApp.hideIndicator();
-    }); 
-});   
 
 
-myApp.onPageInit('choice_service', function (page) {
-    myApp.showIndicator();
-    var homeTemplate = $$(page.container).html();
-    var compiledHomeTemplate = Template7.compile(homeTemplate);
+// myApp.onPageInit('choice_service', function (page) {
+//     myApp.showIndicator();
+//     user_SCL=page.query;
+//     console.log(page.query);
+//     var homeTemplate = $$(page.container).html();
+//     var compiledHomeTemplate = Template7.compile(homeTemplate);
 
-    $$.getJSON('json/user_package_of_services.json', function (json) {
-      var html=compiledHomeTemplate(json);      
-       $$(page.container).html(html);
-      myApp.hideIndicator();
-    }); 
-});   
+//     $$.getJSON('json/user_package_of_services.json', function (json) {
+//       var html=compiledHomeTemplate(json);      
+//        $$(page.container).html(html);
+//       myApp.hideIndicator();
+//     }); 
+// });   
  
+// myApp.onPageInit('home', function (page) {
+//     myApp.showIndicator();
+//     var homeTemplate = $$(page.container).html();
+//     var compiledHomeTemplate = Template7.compile(homeTemplate);
+//     $$.getJSON('json/user/home.json', function (json) {
+//       var html=compiledHomeTemplate(json);      
+//        $$(page.container).html(html);
+//       myApp.hideIndicator();
+//     }); 
+// });   
+
+
+
 var sort_by="km";
+$$(document).on('pageInit', function (e) {
+    var page = e.detail.page;
+    
+    if(page.name ==='home'){
+      myApp.showIndicator();
+      $$.getJSON('json/user/home.json', function (json) {
+        var html=Template7.templates.homeTemplate(json);  
+        $$(page.container).html(html);
+        myApp.hideIndicator();
+      });
+    }; 
+    
+    if(page.name ==='choice_service'){
+      myApp.showIndicator();
+      $$.getJSON('json/user/choice_service.json', function (json) {
+        var html=Template7.templates.choiceServiceTemplate(json);  
+        $$(page.container).html(html);
+        myApp.hideIndicator();
+        user_SCL=page.query;
+        console.log(user_SCL);
+      });
+    }; 
+    
 
-myApp.onPageInit('washer_choice', function (page) {
-
-  if (page.query.sort_by){
-    console.log(sort_by=page.query.sort_by);
-  }
-
-  myApp.showIndicator();
-  var homeTemplate = $$(page.container).html();
-  var compiledHomeTemplate = Template7.compile(homeTemplate);
-  console.log("page.context",page.query);
-
-  $$.getJSON('json/user/washer_choice.json', function (json) {
-    washers=json;
-    washers=_.sortBy(json.washers, sort_by);
-    var html=compiledHomeTemplate({washers});      
-     $$(page.container).html(html);
-     $$(page.container).find(".buttons-row a.active").removeClass('active');
-     $$(page.container).find(".buttons-row a#"+sort_by).addClass('active');
-    myApp.hideIndicator();
-  });
-
-});   
+    if (page.name === 'washer_choice') {
+          sort_by=page.query.sort_by;
+          if(page.query.services){
+            user_SCL.services=page.query.services;  
+          }
+          console.log(user_SCL);
+          myApp.showIndicator();
+          $$.getJSON('json/user/washer_choice.json', function (json) {
+            washers=_.sortBy(json.washers, sort_by);
+            var html=Template7.templates.washerChoiceTemplate({washers});      
+             $$(page.container).html(html);
+             $$(page.container).find(".buttons-row a.active").removeClass('active');
+             $$(page.container).find(".buttons-row a#"+sort_by).addClass('active');
+            myApp.hideIndicator();
+          });
+    }
+    // Code for Services page
+    if (page.name === 'time_choice') {
+        myApp.showIndicator();
+        console.log(page.query);
+        user_SCL=$.extend(user_SCL, page.query);        
+        $$.getJSON('json/user/time_choice.json', function (json) {
+          var jsonUser= $.extend(json, user_SCL);
+          console.log(jsonUser);
+          var html=Template7.templates.timeChoiceTemplate(jsonUser);  
+          $$(page.container).html(html);
+          myApp.hideIndicator();
+        });
+      };
+});

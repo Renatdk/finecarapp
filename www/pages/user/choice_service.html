@@ -1,0 +1,29 @@
+<!-- Navbar inner for Washer service add list page-->
+<div data-page="washer_service_add_list" class="navbar-inner cached">
+  <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+  <div class="center sliding">Список услуг</div>
+</div>
+<!-- Choice service Page -->
+<div data-page="choice_service" class="page cached">
+  <div class="page-content">
+    <div class="content-block-title">Выберите комплекс услуг</div>
+    <div class="list-block media-list">
+      <ul>
+        {{#each this.services}}
+          <li><a href="pages/user/washer_choice.html?sort_by=price&services={{service_description}}" class="item-link item-content">
+            <div class="item-inner">
+              <div class="item-title-row">
+                <div class="item-title orange">{{this.service_name}}</div>
+                <div class="item-after">~{{this.service_price}}тг</div>
+              </div>
+              <div class="item-subtitle">{{service_description}}</div>
+              <div class="item-text">Длительность: {{service_time}}</div>
+            </div></a></li>                  
+        {{/each}}
+            <div class="item-inner">
+              <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+            </div></li>
+      </ul>
+    </div>
+  </div>
+</div>
