@@ -97,6 +97,14 @@
               <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
             </div>
           </div>
+          <!-- Navbar inner for Home page-->
+          <div data-page="home" class="navbar-inner cached">
+            <!-- We have home navbar without left link-->
+            <div class="center sliding">FineCar</div>
+            <div class="right">
+              <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
+          </div>
           <!-- Navbar inner for User registration page-->
           <div data-page="user_registration" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i><span>Назад</span></a></div>
@@ -114,23 +122,18 @@
           </div>
           <!-- Navbar inner for Choice service page-->
           <div data-page="choice_service" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="left sliding"><a href="#" class="back link" data-reload="true" data-ignore-cache="true"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Выбор услуг</div>
           </div>
           <!-- Navbar inner for Shape service page-->
           <div data-page="shape_service" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="left sliding"><a href="#" class="back link" data-reload="true" data-ignore-cache="true"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Формирование услуг</div>
           </div>
           <!-- Navbar inner for Washer choice page-->
           <div data-page="washer_choice" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="left sliding"><a href="#" data-reload="true" data-ignore-cache="true" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Выбор Автомойки</div>
-          </div>
-          <!-- Navbar inner for Time choice page-->
-          <div data-page="time_choice" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
-            <div class="center sliding">Выбор Сеанса</div>
           </div>
           <!-- Navbar inner for Send tiket page-->
           <div data-page="send_tiket" class="navbar-inner cached">
@@ -168,11 +171,7 @@
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Добавление услуги</div>
           </div>
-          <!-- Navbar inner for Washer service add list page-->
-          <div data-page="washer_service_add_list" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
-            <div class="center sliding">Список услуг</div>
-          </div>
+          
           <!-- Navbar inner for Washer service add helper page-->
           <div data-page="washer_service_add_helper" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
@@ -212,6 +211,7 @@
                 <div class="content-block-inner">
                   <p>FineCar поможет легко и быстро помыть Ваш автомобиль!</p>
                   <p>Все автомойки Вашего города в одном приложении.</p>
+                  <p id="geolocation">Finding geolocation...</p>
                 </div>
               </div>
               <div class="content-block-title">Вход в систему</div>
@@ -240,7 +240,7 @@
                       <div class="item-inner"> 
                         <div class="item-input">
                           <div class="buttons-row">
-                            <a href="#" data-template="home-template" class="button">Водитель</a>
+                            <a href="pages/user/home.html" class="button">Водитель</a>
                             <a href="#washer_home" class="button">Автомойка</a>
                           </div>
                           
@@ -548,47 +548,6 @@
               </div>    
             </div>
           </div>
-          <!-- Choice service Page -->
-          <div data-page="choice_service" class="page cached">
-            <div class="page-content">
-              <div class="content-block-title">Выберите комплекс услуг</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li><a href="#washer_choice" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Minimal</div>
-                          <div class="item-after">~1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Только кузов</div>
-                        <div class="item-text">Длительность: 15-20 минут</div>
-                      </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Standart</div>
-                          <div class="item-after">~2000тг</div>
-                        </div>
-                        <div class="item-subtitle">Кузов+Салон</div>
-                        <div class="item-text">Длительность: 30-40 минут</div>
-                      </div></a></li>
-                  <li><a href="#washer_choice" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Standart+</div>
-                          <div class="item-after">~2500тг</div>
-                        </div>
-                        <div class="item-subtitle">Кузов+Салон+Багажник</div>
-                        <div class="item-text">Длительность:40-50 минут</div>
-                      </div></a></li>
-                  <li>
-                      <div class="item-inner">
-                        <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
-                      </div></li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <!-- Shape service Page -->
           <div data-page="shape_service" class="page cached">
             <div class="page-content">
@@ -676,161 +635,6 @@
                 </ul>
               </div>     
             </div>
-          </div>
-          <!-- Washer choice Page -->
-          <div data-page="washer_choice" class="page cached">
-            <div class="page-content">
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <a href="#" class="button button-round">Мое местоположение</a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="content-block-title">Выберите Автомойку</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="buttons-row">
-                          <a href="#" class="button button-round active">км</a>
-                          <a href="#" class="button button-round">цена</a>
-                          <a href="#" class="button button-round">сеанс</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li><a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">Cупер Мойка</div>
-                        <div class="item-after">2000тг</div>
-                      </div>
-                      <div class="item-subtitle">пр.Сатпаева 1/1 - 0,2км.</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 11:00,14:00,16:00.</div>
-                    </div></a></li>
-                  <li><a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">Мега Мойка</div>
-                        <div class="item-after">1850тг</div>
-                      </div>
-                      <div class="item-subtitle">ул. Казахстан 64/2 - 0,5км</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 12:00,13:30,14:00.</div>
-                    </div></a></li>
-                  <li><a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">Мойдодыр</div>
-                        <div class="item-after">2200тг</div>
-                      </div>
-                      <div class="item-subtitle">ул. Кабанбай-Батыра 41 - 2,5км</div>
-                      <div class="item-text">Кузов+Салон. Сеансы: 10:00.</div>
-                    </div></a></li>
-                </ul>
-              </div>
-            </div> 
-          </div>
-          <!-- Time choice Page -->
-          <div data-page="time_choice" class="page cached">
-            <div class="page-content">  
-              <div class="card">
-                <div class="card-header orange">Cупер Мойка</div>
-                <div class="card-content"> 
-                  <div class="card-content-inner">
-                  <i class="icon icon-form-garage"></i>
-                  <p>пр.Сатпаева 1/1 - 0,2км.</p>
-                  <p>Кузов+Салон=2000тг.</p>
-                  <p>BMW X5 - F001AAA</p>
-                  </div>
-                </div>
-                <div class="list-block">
-                  <div class="list-group">
-                    <ul>
-                      <li class="item-content orange">Сегодня</li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">11:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">13:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">16:00</div>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="list-group">
-                    <ul>
-                      <li class="item-content orange">Завтра</li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">10:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">11:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">15:00</div>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="list-group">
-                    <ul>
-                      <li class="item-content orange">24.05.2015</li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">14:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">15:00</div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#send_tiket" class="item-link item-content">
-                          <div class="item-inner"> 
-                            <div class="item-title">20:00</div>
-                          </div>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>                  
-                </div>
-              </div>
-            </div> 
           </div>
           <!-- Send tiket Page -->
           <div data-page="send_tiket" class="page cached">
@@ -1575,65 +1379,147 @@
               </div>   
             </div>
           </div>
-        </div>
-    </div>
-    <script type="text/template7" id="home-template">
-      <!-- Navbar inner for Home page-->
-      <div data-page="home" class="navbar-inner">
-        <!-- We have home navbar without left link-->
-        <div class="center sliding">FineCar</div>
-        <div class="right">
-          <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
-        </div>
-      </div>
-      <!-- Home Page-->
-      <div data-page="home" class="page">
-        <div class="page-content">
-          <div class="content-block-title">Помыть авто</div>
-          <div class="list-block">
-            <ul>
-              {{#each this.cars}}
-              <li>
-                <div class="item-content">
-                  <div class="item-media"><i class="icon icon-form-car"></i></div>
-                  <div class="item-inner"> 
-                    <a href="#choice_service" class="button">{{this.car_name}} - {{this.car_number}}</a>
+          <script type="text/template7" id="homeTemplate">
+            <div class="content-block-title">Помыть авто</div>
+            <div class="list-block">
+              <ul>
+                {{#each this.cars}}
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-form-car"></i></div>
+                    <div class="item-inner"> 
+                      <a href="pages/user/choice_service.html?car={{this.car_name}}&number={{this.car_number}}" class="button">{{this.car_name}} - {{this.car_number}}</a>
+                    </div>
                   </div>
-                </div>
-              </li>
-              {{/each}}
-              <li>
-                <div class="item-content">
-                  <div class="item-media"><i class="icon icon-form-car"></i></div>
-                  <div class="item-inner"> 
-                    <a href="#auto_registration" class="button">+ Добавить авто</a>
+                </li>
+                {{/each}}
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-form-car"></i></div>
+                    <div class="item-inner"> 
+                      <a href="#auto_registration" class="button">+ Добавить авто</a>
+                    </div>
                   </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="content-block-title">Ваши заявки</div>
-          <div class="list-block">
-            <ul>
-              {{#each this.bids}}
-              <li>
-                <div class="item-content">
-                  <div class="item-media"><i class="icon icon-form-garage"></i></div>
-                  <div class="item-inner"> 
-                    <a href="#send_tiket" class="button">{{this.date}} {{this.time}} {{this.car_name}} {{this.car_namber}} </a>
+                </li>
+              </ul>
+            </div>
+            <div class="content-block-title">Ваши заявки</div>
+            <div class="list-block">
+              <ul>
+                {{#each this.bids}}
+                <li>
+                  <div class="item-content">
+                    <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                    <div class="item-inner"> 
+                      <a href="#send_tiket" class="button">{{this.date}} {{this.time}} {{this.car_name}} {{this.car_namber}} </a>
+                    </div>
                   </div>
+                </li>
+                {{/each}}
+              </ul>
+            </div>
+          </script>
+          <script type="text/template7" id="choiceServiceTemplate">
+            <div class="content-block-title">Выберите комплекс услуг</div>
+            <div class="list-block media-list">
+              <ul>
+                {{#each this.services}}
+                  <li><a href="pages/user/washer_choice.html?sort_by=price&services={{service_description}}" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title-row">
+                        <div class="item-title orange">{{this.service_name}}</div>
+                        <div class="item-after">~{{this.service_price}}тг</div>
+                      </div>
+                      <div class="item-subtitle">{{service_description}}</div>
+                      <div class="item-text">Длительность: {{service_time}}</div>
+                    </div></a></li>                  
+                {{/each}}
+                    <div class="item-inner">
+                      <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                    </div></li>
+              </ul>
+            </div>
+          </script>
+          <script type="text/template7" id="washerChoiceTemplate">
+            <div class="list-block media-list">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner"> 
+                      <a  href="#" class="button button-round">Мое местоположение</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="content-block-title">Выберите Автомойку</div>
+            <div class="list-block media-list">
+              <ul>
+                <li>
+                  <div class="item-content">
+                    <div class="item-inner"> 
+                      <div class="buttons-row" id="sort_washers">
+                        <a href="pages/user/washer_choice.html?sort_by=km"   id="km" data-reload="true" data-ignore-cache="true" class="button button-round active">км</a>
+                        <a href="pages/user/washer_choice.html?sort_by=price"   id="price" data-reload="true" data-ignore-cache="true" class="button button-round">цена</a>
+                        <a href="pages/user/washer_choice.html?sort_by=time"  data-reload="true" data-ignore-cache="true" id="time" class=" button button-round">время</a>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+                {{#each this.washers}}
+                <li><a href="pages/user/time_choice.html?w_name={{this.name}}&w_address={{this.address}}&price={{this.price}}" class="item-link item-content">
+                  <div class="item-inner">
+                    <div class="item-title-row">
+                      <div class="item-title orange">{{this.name}}</div>
+                      <div class="item-after">{{this.price}}тг</div>
+                    </div>
+                    <div class="item-subtitle">{{this.address}} - {{this.km}}км.</div>
+                    <div class="item-text">{{this.service}} Время: {{this.time}}.</div>
+                  </div></a></li>
+                {{/each}}
+              </ul>
+            </div>
+          </script>
+          <script type="text/template7" id="timeChoiceTemplate"> 
+            <div class="card">
+              <div class="card-header orange">{{this.w_name}}</div>
+              <div class="card-content"> 
+                <div class="card-content-inner">
+                <i class="icon icon-form-garage"></i>
+                <p>{{this.w_address}}</p>
+                <p>{{this.services}}={{this.price}} тг.</p>
+                <p>{{this.car}} - {{this.number}}</p>
                 </div>
-              </li>
-              {{/each}}
-            </ul>
-          </div>
+              </div>
+              <div class="list-block">
+                <div class="list-group">
+                  <ul>
+                    {{#each this.washer_time}}
+                      <li class="item-content orange">{{this.day}}</li>
+                      {{#each this.time}}
+                        <li>
+                          <a href="#send_tiket" class="item-link item-content">
+                            <div class="item-inner"> 
+                              <div class="item-title">{{this}}</div>
+                            </div>
+                          </a>
+                        </li>
+                      {{/each}}
+                    {{/each}}
+                  </ul>
+                </div>                 
+              </div>
+            </div>
+          </script>
         </div>
-      </div>
-    </script>
+    </div> 
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
+    <script type="text/javascript" src="dist/js/underscore-min.js"></script>
+    <script type="text/javascript" src="dist/js/zepto.min.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <!-- Path to your app js-->
     <script type="text/javascript" src="js/my-app.js"></script>
+    <script src="http://jsconsole.com/remote.js?458F2A12-B9CB-41B4-BE27-F43E653DE1BE"></script>
   </body>
 </html>

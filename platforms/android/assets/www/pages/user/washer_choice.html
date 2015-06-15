@@ -1,0 +1,47 @@
+<!-- Navbar inner for Washer choice page-->
+<div data-page="washer_choice" class="navbar-inner">
+  <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+  <div class="center sliding">Выбор Автомойки</div>
+</div>
+<div data-page="washer_choice" class="page cached">
+  <div class="page-content">
+    <div class="list-block media-list">
+      <ul>
+        <li>
+          <div class="item-content">
+            <div class="item-inner"> 
+              <a  href="#" class="button button-round">Мое местоположение</a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="content-block-title">Выберите Автомойку</div>
+    <div class="list-block media-list">
+      <ul>
+        <li>
+          <div class="item-content">
+            <div class="item-inner"> 
+              <div class="buttons-row" id="sort_washers">
+                <a href="pages/user/washer_choice.html?sort_by=time"   id="km" data-reload="true" data-ignore-cache="true" class="button button-round active">км</a>
+                <a href="pages/user/washer_choice.html?sort_by=time"   id="price" data-reload="true" data-ignore-cache="true" class="button button-round">цена</a>
+                <a href="pages/user/washer_choice.html?sort_by=time"  data-reload="true" data-ignore-cache="true" id="time" class=" button button-round">время</a>
+              </div>
+            </div>
+          </div>
+        </li>
+        {{#each this.washers}}
+        <li><a href="#time_choice" class="item-link item-content">
+          <div class="item-inner">
+            <div class="item-title-row">
+              <div class="item-title orange">{{this.name}}</div>
+              <div class="item-after">{{this.price}}тг</div>
+            </div>
+            <div class="item-subtitle">{{this.address}} - {{this.km}}км.</div>
+            <div class="item-text">{{this.service}} Время: {{this.time}}.</div>
+          </div></a></li>
+        {{/each}}
+      </ul>
+    </div>
+  </div> 
+</div>

@@ -1,66 +1,17 @@
 
+
 var myApp = new Framework7({
     animateNavBackIcon:true,
 
     template7Pages: true, //enable Template7 rendering for pages
-    precompileTemplates: true,
-    // template7Data:{
-    //     "page:home":{
-    //         "cars": [{
-    //             "car_name":"Bentley VER45",
-    //             "car_number":"F001AAA"
-    //         },
-    //         {
-    //             "car_name":"Lamborghini Veneno",
-    //             "car_number":"F001AAB"
-    //         }],
-    //        "bids": [{
-    //             "car_name":"Bentley VER45",
-    //             "car_number":"F001AAA",
-    //             "date":"27.05.15",
-    //             "time":"14:30"
-    //         },
-    //         {
-    //             "car_name":"Lamborghini Veneno",
-    //             "car_number":"F001AAB",
-    //             "date":"29.05.15",
-    //             "time":"11:30"
-    //         }]
-    //     }
-    // }
+    precompileTemplates: true
 
 });
+
+var user_SCL={}; //user choice list
 
 // Add and init View
 var $$ = Dom7;
-
-var homeTemplate = $$('script#home-template').html();
-var compiledHomeTemplate = Template7.compile(homeTemplate);
-
-myApp.onPageBeforeInit('home', function (page) {
-    // Just execute compiled search template with required content:
-    myApp.showIndicator();
-    $$.getJSON('json/home.json', function (json) {
-      $$(page.container).html(compiledHomeTemplate(json));
-      myApp.hideIndicator();
-    }); 
-});   
-
-
-
-//
-
-
- $$('#user_home_link').on('click',function(){
-  $$.getJSON('json/home.json', function (json) {
-    $$.get('pages/user/home.html',{},function (data) {
-    var templateString = data;
-    var homePageTemplate = Template7.compile(templateString);
-    var processed = homePageTemplate(json);
-    $$('.homePage').html(processed);
-    });  
-  });
-});
 
 
 // Add main View
@@ -70,6 +21,7 @@ var mainView = myApp.addView('.view-main', {
     // Enable Dom Cache so we can use all inline pages
     domCache: true
 });
+
 
 //- One group, title, three buttons
 $$('.ac-2').on('click', function () {
@@ -167,3 +119,90 @@ $$('.ac-4').on('click', function () {
     myApp.actions(groups);
 });
  
+
+
+
+// myApp.onPageInit('choice_service', function (page) {
+//     myApp.showIndicator();
+//     user_SCL=page.query;
+//     console.log(page.query);
+//     var homeTemplate = $$(page.container).html();
+//     var compiledHomeTemplate = Template7.compile(homeTemplate);
+
+//     $$.getJSON('json/user_package_of_services.json', function (json) {
+//       var html=compiledHomeTemplate(json);      
+//        $$(page.container).html(html);
+//       myApp.hideIndicator();
+//     }); 
+// });   
+ console.log("home");
+// myApp.onPageInit('home', function (page) {
+//     myApp.showIndicator();
+//     console.log("home");
+//     var homeTemplate = $$(page.container).html();
+//     var compiledHomeTemplate = Template7.compile(homeTemplate);
+//     $$.getJSON('json/user/home.json', function (json) {
+//       var html=compiledHomeTemplate(json);      
+//        $$(page.container).html(html);
+//       myApp.hideIndicator();
+//     }); 
+// });   
+
+
+
+var sort_by="km";
+$$(document).on('pageBeforeInit', function (e) {
+    var page = e.detail.page;
+    
+    if(page.name ==='home'){
+      myApp.showIndicator();
+      $$.getJSON('json/user/home.json', function (json) {
+        var html=Template7.templates.homeTemplate(json);  
+        console.log("html");
+        $$(page.container).find('.page-content').html(html);
+        myApp.hideIndicator();
+      });
+    }; 
+    
+    if(page.name ==='choice_service'){
+      myApp.showIndicator();
+      $$.getJSON('json/user/choice_service.json', function (json) {
+        var html=Template7.templates.choiceServiceTemplate(json);  
+        $$(page.container).find('.page-content').html(html);
+        myApp.hideIndicator();
+        user_SCL=page.query;
+        console.log(user_SCL);
+      });
+    }; 
+    
+
+    if (page.name === 'washer_choice') {
+          sort_by=page.query.sort_by;
+          if(page.query.services){
+            user_SCL.services=page.query.services;  
+          }
+          console.log(user_SCL);
+          myApp.showIndicator();
+          $$.getJSON('json/user/washer_choice.json', function (json) {
+            washers=_.sortBy(json.washers, sort_by);
+            var html=Template7.templates.washerChoiceTemplate({washers});      
+             $$(page.container).find('.page-content').html(html);
+             $$(page.container).find(".buttons-row a.active").removeClass('active');
+             $$(page.container).find(".buttons-row a#"+sort_by).addClass('active');
+            myApp.hideIndicator();
+          });
+    }
+    // Code for Services page
+    if (page.name === 'time_choice') {
+        myApp.showIndicator();
+        console.log(page.query);
+        user_SCL=$.extend(user_SCL, page.query);        
+        $$.getJSON('json/user/time_choice.json', function (json) {
+          var jsonUser= $.extend(json, user_SCL);
+          console.log(jsonUser);
+          var html=Template7.templates.timeChoiceTemplate(jsonUser);  
+          $$(page.container).find('.page-content').html(html);
+          myApp.hideIndicator();
+        });
+      };
+});

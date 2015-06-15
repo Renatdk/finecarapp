@@ -1,0 +1,20 @@
+{
+   "services": [{
+        "service_name":"Minimal",
+        "service_description":"Кузов",
+        "service_time":"15-20 минут",
+        "service_price":"1000"
+    },
+    {
+        "service_name":"Standard",
+        "service_description":"Кузов+Салон",
+        "service_time":"30-40 минут",
+        "service_price":"2000"
+    },
+    {
+        "service_name":"Standard+",
+        "service_description":"Кузов+Салон+Багажник",
+        "service_time":"40-50 минут",
+        "service_price":"2500"
+    }]
+}
