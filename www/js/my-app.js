@@ -220,12 +220,91 @@ fineCarApp.controller('homeController', function($scope, $http) {
     // create a message to display in our view
     $scope.message = 'Everyone come and see how good I look!';
 
+    $scope.getEvent=function(obj){
+     console.log(obj.target.attributes.name.value);
+     console.log(obj.target.attributes.number.value);
+    }
+
+
     myApp.onPageBeforeInit('home', function (page) {
      console.log(page.query);
     });   
-
-
 });
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('choiceServiceController', function($scope, $http) {
+    $scope.services=[];
+    $http.get('json/user/choice_service.json').success(function(data){
+      $scope.services=data.services;  
+    });
+    // create a message to display in our view
+    $scope.message = 'Everyone come and see how good I look!';
+
+    myApp.onPageBeforeInit('choice_service', function (page) {
+     console.log(page.query);
+    });   
+});
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('choiceWasherController', function($scope, $http, $cordovaGeolocation, getDastance) {
+
+    $scope.sorts='km';
+    $scope.sort_by =function (val){
+      $scope.sorts=val;
+    };
+    $scope.getClass = function(path) {
+      if ($scope.sorts == path) {
+        return "active icon-right ion-ios-arrow-thin-down"
+      } else {
+        return ""
+      }
+    };
+
+  myApp.onPageBeforeInit('washer_choice', function (page) {
+         
+    $scope.geoObject="Определение местоположения..."
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      $scope.lat  = position.coords.latitude;
+      $scope.long = position.coords.longitude;
+      $scope.geoObject="Координаты определены..."
+      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
+        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
+      });
+      $http.get('json/user/washer_choice.json').then(function(data){
+        $scope.washers=data.data.washers;
+        angular.forEach($scope.washers, function(value, key) {
+          value.km=getDastance.distance(value.lat,value.long,$scope.lat,$scope.long);
+        }, $scope.washers);
+
+      });
+    
+    }, function(err) {
+      // error
+    });
+
+   console.log(page.query);
+   console.log($scope.washers);
+  });
+});
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('choiceTimeController', function($scope, $http) {
+    $scope.days=[];
+    $http.get('json/user/time_choice.json').success(function(data){
+      $scope.days=data.washer_time;  
+    });
+    // create a message to display in our view
+    $scope.message = 'Everyone come and see how good I look!';
+
+    myApp.onPageBeforeInit('choice_service', function (page) {
+     console.log(page.query);
+    });   
+});
+
+
 
 fineCarApp.controller('aboutController', function($scope) {
     $scope.message = 'Look! I am an about page.';
