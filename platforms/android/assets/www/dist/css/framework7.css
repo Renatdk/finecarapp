@@ -1899,6 +1899,11 @@ i.icon.icon-form-clock {
   height: 29px;
   background-image: url("../img/i-form-clock.png");
 }
+i.icon.icon-map {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-map.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;

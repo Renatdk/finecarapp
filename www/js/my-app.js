@@ -211,42 +211,42 @@ var fineCarApp = angular.module('fineCarApp', ['fineCarApp.factory']);
 
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('homeController', function($scope, $http) {
+fineCarApp.controller('homeController', function($scope, $http, UserBid, UserBids) {
     $scope.cars=[];
     $http.get('json/user/home.json').success(function(data){
       $scope.cars=data.cars;  
       $scope.bids=data.bids;  
     });
-    // create a message to display in our view
-    $scope.message = 'Everyone come and see how good I look!';
-
-    $scope.getEvent=function(obj){
-     console.log(obj.target.attributes.name.value);
-     console.log(obj.target.attributes.number.value);
+    
+    $scope.getParams=function(obj){
+      UserBid.name=obj.target.attributes.name.value;
+      UserBid.number=obj.target.attributes.number.value;
+      console.log(UserBid);
+    };
+    $scope.UserBids=UserBids;
+    $scope.addCartData={};
+    $scope.doAddCar= function(){
+      console.log($scope.addCartData);
+      mainView.router.back();
     }
 
-
-    myApp.onPageBeforeInit('home', function (page) {
-     console.log(page.query);
-    });   
 });
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('choiceServiceController', function($scope, $http) {
+fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid) {
     $scope.services=[];
     $http.get('json/user/choice_service.json').success(function(data){
       $scope.services=data.services;  
     });
-    // create a message to display in our view
-    $scope.message = 'Everyone come and see how good I look!';
 
-    myApp.onPageBeforeInit('choice_service', function (page) {
-     console.log(page.query);
-    });   
+    $scope.getParams=function(obj){
+      UserBid.service=obj.service_description;
+      console.log(UserBid);
+    };    
 });
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('choiceWasherController', function($scope, $http, $cordovaGeolocation, getDastance) {
+fineCarApp.controller('choiceWasherController', function($scope, $http, $cordovaGeolocation, getDastance, UserBid) {
 
     $scope.sorts='km';
     $scope.sort_by =function (val){
@@ -259,16 +259,16 @@ fineCarApp.controller('choiceWasherController', function($scope, $http, $cordova
         return ""
       }
     };
+   $scope.geoObject="Определение местоположения..."
 
   myApp.onPageBeforeInit('washer_choice', function (page) {
          
-    $scope.geoObject="Определение местоположения..."
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation
     .getCurrentPosition(posOptions)
     .then(function (position) {
-      $scope.lat  = position.coords.latitude;
-      $scope.long = position.coords.longitude;
+      $scope.lat  = position.coords.latitude; UserBid.mlat=position.coords.latitude;
+      $scope.long = position.coords.longitude; UserBid.mlong=position.coords.longitude;
       $scope.geoObject="Координаты определены..."
       $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
         $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
@@ -284,32 +284,59 @@ fineCarApp.controller('choiceWasherController', function($scope, $http, $cordova
     }, function(err) {
       // error
     });
-
-   console.log(page.query);
-   console.log($scope.washers);
   });
+
+  $scope.getParams=function(obj){
+      UserBid.washer=obj.name;
+      UserBid.address=obj.address;
+      UserBid.price=obj.price;
+      UserBid.km=obj.km;
+      UserBid.wlat=obj.lat;
+      UserBid.wlong=obj.long;
+      console.log(UserBid);
+    }; 
+
 });
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('choiceTimeController', function($scope, $http) {
+fineCarApp.controller('choiceTimeController', function($scope, $http, UserBid) {
     $scope.days=[];
     $http.get('json/user/time_choice.json').success(function(data){
       $scope.days=data.washer_time;  
     });
-    // create a message to display in our view
-    $scope.message = 'Everyone come and see how good I look!';
+    $scope.UserBid=UserBid;
 
-    myApp.onPageBeforeInit('choice_service', function (page) {
-     console.log(page.query);
-    });   
+  $scope.getParams=function(day,time){
+      UserBid.day=day;
+      UserBid.time=time;
+      console.log(UserBid);
+    }; 
+  
 });
 
+// create the controller and inject Angular's $scope
+fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids) {
+  $scope.UserBid=UserBid;
+  
+  $scope.showMap=function(){
+    $scope.img="http://static-maps.yandex.ru/1.x/?l=map&size=250,300&pt="+UserBid.mlong+","+UserBid.mlat+",pm2am~"+UserBid.wlong+","+UserBid.wlat+",pm2bm";
+  };
 
 
-fineCarApp.controller('aboutController', function($scope) {
-    $scope.message = 'Look! I am an about page.';
-});
-
-fineCarApp.controller('contactController', function($scope) {
-    $scope.message = 'Contact us! JK. This is just a demo.';
+  $scope.pushBid=function(){
+    var x={};
+    x.name=$scope.UserBid.name;
+    x.day=$scope.UserBid.day;
+    x.time=$scope.UserBid.time;
+    x.address=$scope.UserBid.address;
+    x.km=$scope.UserBid.km;
+    x.number=$scope.UserBid.number;
+    x.price=$scope.UserBid.price;
+    x.service=$scope.UserBid.service;
+    x.time=$scope.UserBid.time;
+    x.washer=$scope.UserBid.washer;
+    UserBids.bids.push(x);
+    console.log(UserBid);
+    console.log(UserBids);
+  }
 });

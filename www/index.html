@@ -251,7 +251,7 @@
                       <div class="item-inner"> 
                         <div class="item-input">
                           <div class="buttons-row">
-                            <a href="#home?car=car" class="button">Водитель</a>
+                            <a href="#home" class="button">Водитель</a>
                             <a href="#washer_home" class="button">Автомойка</a>
                           </div>
                           
@@ -301,11 +301,11 @@
               <div class="content-block-title">Помыть авто</div>
               <div class="list-block">
                 <ul>
-                  <li ng-repeat="car in cars">
+                  <li ng-repeat="car in cars  track by $index ">
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
-                        <a href="#choice_service?car={{car.car_name}}&number={{car.car_number}}" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getEvent($event)" class="button">{{car.car_name}} - {{car.car_number}}</a>
+                        <a href="#choice_service" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams($event)" class="button">{{car.car_name}} - {{car.car_number}}</a>
                       </div>
                     </div>
                   </li>
@@ -319,14 +319,15 @@
                   </li>
                 </ul>
               </div>
-              <div class="content-block-title">Ваши заявки</div>
-              <div class="list-block">
+
+              <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
+              <div  class="list-block">
                 <ul>
-                  <li ng-repeat="bid in bids">
+                  <li ng-repeat="bid in UserBids.bids track by $index">
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">{{bid.date}} {{bid.time}} {{bid.car_name}} {{bid.car_namber}} </a>
+                        <a href="#send_bid" class="button">{{bid.day}} {{bid.time}} {{bid.name}} {{bid.namber}} </a>
                       </div>
                     </div>
                   </li>
@@ -340,9 +341,9 @@
               <div class="content-block-title">Выберите комплекс услуг</div>
               <div class="list-block media-list">
                 <ul>
-                  <li ng-repeat="service in services">
-                    <a href="#washer_choice?sort_by=price&services={{service.service_description}}" class="item-link item-content">
-                    <div class="item-inner">
+                  <li ng-repeat="service in services" ng-click="getParams(service)" >
+                    <a  href="#washer_choice" class="item-link item-content">
+                    <div class="item-inner" >
                       <div class="item-title-row">
                         <div class="item-title orange">{{service.service_name}}</div>
                         <div class="item-after">~{{service.service_price}}тг</div>
@@ -386,7 +387,7 @@
                       </div>
                     </div>
                   </li>
-                  <li ng-repeat="washer in washers | orderBy:sorts">
+                  <li ng-repeat="washer in washers | orderBy:sorts" ng-click="getParams(washer)">
                     <a href="#time_choice" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
@@ -404,21 +405,21 @@
           <div data-page="time_choice" class="page cached" ng-controller="choiceTimeController">
             <div class="page-content">  
               <div class="card">
-                <div class="card-header orange">Cупер Мойка</div>
+                <div class="card-header orange">{{UserBid.washer}}</div>
                 <div class="card-content"> 
                   <div class="card-content-inner">
                   <i class="icon icon-form-garage"></i>
-                  <p>пр.Сатпаева 1/1 - 0,2км.</p>
-                  <p>Кузов+Салон=2000тг.</p>
-                  <p>BMW X5 - F001AAA</p>
+                  <p>{{UserBid.address}} - {{UserBid.km}}км</p>
+                  <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
+                  <p>{{UserBid.name}} - {{UserBid.number}}</p>
                   </div>
                 </div>
                 <div class="list-block">
                   <div class="list-group" ng-repeat="day in days">
                     <ul>
                       <li  class="item-content orange">{{day.day}}</li>
-                      <li  ng-repeat="time_item in day.time">
-                        <a href="#send_tiket" class="item-link item-content">
+                      <li  ng-repeat="time_item in day.time" ng-click="getParams(day.day,time_item)">
+                        <a href="#send_bid" class="item-link item-content" >
                           <div class="item-inner"> 
                             <div class="item-title">{{time_item}}</div>
                           </div>
@@ -430,6 +431,36 @@
               </div>
             </div> 
           </div>
+          <!-- Send tiket Page -->
+          <div data-page="send_bid" class="page cached" ng-controller="sendBidController">
+            <div class="page-content">  
+              <div class="card">
+                <div class="card-header orange">{{UserBid.washer}}</div>
+                <div class="card-content"> 
+                  <div class="card-content-inner">
+                    <i class="icon icon-form-garage"></i>
+                    <p>{{UserBid.address}} - {{UserBid.km}}км</p>
+                    <div class="accordion-item">
+                      <a href="#" class="item-link item-content " ng-click="showMap()">
+                        <div class="item-inner">
+                          <div class="item-title"><i class="icon icon-map"></i> Карта проезда</div>
+                        </div>
+                      </a>
+                      <div class="accordion-item-content" >
+                        <div class="content-block">
+                          <div id="map" style="width:300px"> <img ng-src="{{img}}"></div>
+                        </div> 
+                      </div>
+                    </div>
+                    <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
+                    <p>{{UserBid.name}} - {{UserBid.number}}</p>
+                    <p>{{UserBid.day}} - {{UserBid.time}}</p>
+                  </div>
+                    <a href="#home" ng-click="pushBid()" class="button button-big">Отправить заявку</a></p>
+                </div>
+              </div>
+            </div> 
+          </div>     
           <!-- User registration Page -->
           <div data-page="user_registration" class="page cached">
             <div class="page-content">
@@ -600,98 +631,78 @@
             </div>
           </div>
           <!-- Auto registration Page -->
-          <div data-page="auto_registration" class="page cached">
+          <div data-page="auto_registration" class="page cached" ng-controller="homeController"> 
             <div class="page-content">
               <div class="content-block-title">Введите данные</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Гос номер">
+              <form ng-submit="doAddCar()">
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-model="addCartData.number" type="text" placeholder="Гос номер">
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="nocheked">Не выбрано</option>
-                              <option value="mitsubishi" >Mitsubishi</option>
-                              <option value="toyota">Toyota</option>
-                              <option value="mersedes">Mersedes Bens</option>
-                              <option value="bmw">BMW</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Марка</div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-model="addCartData.mark" type="text" placeholder="Марка авто">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-model="addCartData.model" type="text" placeholder="Модель авто">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <a href="#" class="item-link smart-select">
+                              <select ng-model="addCartData.car_type" name="car_type">
+                                <option value="passenger" selected>Легковая</option>
+                                <option value="pikup">Внедорожник или пикап</option>
+                                <option value="miniven">Минивен или микроавтобус</option>
+                              </select>
+                              <div class="item-content">
+                                <div class="item-inner">
+                                  <div class="item-title">Тип кузова</div>
+                                <div class="item-after">Легковая</div></div>
                               </div>
-                            </div>
-                          </a>
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="models">
-                              <option value="nochaked">Не выбрано</option>
-                              <option value="galant" >Galant</option>
-                              <option value="z3">Z3</option>
-                              <option value="x5">X5</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Модель</div>
-                              </div>
-                            </div>
-                          </a>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <br/>
+                            <input type="submit" class="button button-big" ></input>
+                            <br/>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="apple" selected="selected">Легковая</option>
-                              <option value="pineapple">Внедорожник или пикап</option>
-                              <option value="pear">Минивен или микроавтобус</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Тип кузова</div>
-                              <div class="item-after">Легковая</div></div>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Добавить</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>    
+                    </li>
+                  </ul>
+                </div>
+
+              </form>    
             </div>
           </div>
           <!-- Shape service Page -->
@@ -782,25 +793,7 @@
               </div>     
             </div>
           </div>
-          <!-- Send tiket Page -->
-          <div data-page="send_tiket" class="page cached">
-            <div class="page-content">  
-              <div class="card">
-                <div class="card-header orange">Cупер Мойка</div>
-                <div class="card-content"> 
-                  <div class="card-content-inner">
-                    <i class="icon icon-form-garage"></i>
-                    <p>пр.Сатпаева 1/1 - 0,2км.</p>
-                    <p>Кузов+Салон=2000тг.</p>
-                    <p>BMW X5 - F001AAA</p>
-                    <p>Сегодня - 15:00</p>
-                    <p>Бокс №1</p>
-                    <p><a href="#home" class="button button-big">Отправить заявку</a></p>
-                  </div>
-                </div>
-              </div>
-            </div> 
-          </div>
+
           <!-- Washer home Boxes Page-->
           <div data-page="washer_home" class="page cached">
             <div class="page-content">
@@ -1526,11 +1519,11 @@
             </div>
           </div>
         </div>
-    </div> 
+    </div>
+
+    
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
-    <script type="text/javascript" src="dist/js/underscore-min.js"></script>
-    <script type="text/javascript" src="dist/js/zepto.min.js"></script>
     <script type="text/javascript" src="dist/js/angular.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <!-- Path to your app js-->
