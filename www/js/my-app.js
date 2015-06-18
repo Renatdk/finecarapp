@@ -211,26 +211,42 @@ var fineCarApp = angular.module('fineCarApp', ['fineCarApp.factory']);
 
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('homeController', function($scope, $http, UserBid, UserBids) {
+fineCarApp.controller('homeController', function($scope, $http, UserBid, UserBids, UserCar) {
     $scope.cars=[];
     $http.get('json/user/home.json').success(function(data){
-      $scope.cars=data.cars;  
+      UserCar.cars=data.cars;  
       $scope.bids=data.bids;  
+      $scope.cars=UserCar.cars;  
     });
+      
+    $scope.cars=UserCar.cars;  
     
     $scope.getParams=function(obj){
       UserBid.name=obj.target.attributes.name.value;
       UserBid.number=obj.target.attributes.number.value;
       console.log(UserBid);
     };
+
     $scope.UserBids=UserBids;
+});
+
+fineCarApp.controller('addAutoController', function($scope, UserCar) {
+
     $scope.addCartData={};
+    $scope.addCartData.car_type="passenger";
+    
     $scope.doAddCar= function(){
-      console.log($scope.addCartData);
+      var car={};
+      car.car_name=$scope.addCartData.mark+" "+$scope.addCartData.model;
+      car.car_number=$scope.addCartData.number;
+      UserCar.cars.push(car);
+      console.log(UserCar);
       mainView.router.back();
     }
 
 });
+
+
 
 // create the controller and inject Angular's $scope
 fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid) {
@@ -242,7 +258,47 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
     $scope.getParams=function(obj){
       UserBid.service=obj.service_description;
       console.log(UserBid);
-    };    
+    };
+
+});
+
+
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('addServiceController', function($scope, $http) {
+    $scope.services=[];
+    $http.get('json/user/services.json').success(function(data){
+      $scope.services=data.services;  
+    });
+ 
+  $scope.order = {
+     services: []
+  };
+    $scope.serviceSum= function(index){
+      $scope.new_price=0;
+      $scope.new_time=0;
+      var i=0;
+      if($scope.services[index].isChecked==true){
+        var i=$scope.order.services.indexOf($scope.services[index]);
+        $scope.order.services.splice(i,1);
+        $scope.services[index].isChecked=false;
+      }else{
+        $scope.services[index].index=index;
+        $scope.order.services.push($scope.services[index]);
+        $scope.services[index].isChecked=true;
+      };
+
+      angular.forEach($scope.order.services, function(value, key) {
+        $scope.new_price +=parseFloat(value.price);
+        $scope.new_time +=parseFloat(value.time);  
+        $scope.title_sum +=parseFloat(value.name);  
+      });
+
+
+      console.log( $scope.order.services);
+    };
+
+
 });
 
 // create the controller and inject Angular's $scope

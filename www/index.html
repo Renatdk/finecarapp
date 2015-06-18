@@ -301,7 +301,7 @@
               <div class="content-block-title">Помыть авто</div>
               <div class="list-block">
                 <ul>
-                  <li ng-repeat="car in cars  track by $index ">
+                  <li ng-repeat="car in cars">
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner"> 
@@ -319,7 +319,7 @@
                   </li>
                 </ul>
               </div>
-
+              
               <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
               <div  class="list-block">
                 <ul>
@@ -334,6 +334,7 @@
                 </ul>
               </div>
             </div>
+           
           </div>
           <!-- Choice service Page -->
           <div data-page="choice_service" class="page cached" ng-controller="choiceServiceController">
@@ -431,7 +432,7 @@
               </div>
             </div> 
           </div>
-          <!-- Send tiket Page -->
+          <!-- Send bid Page -->
           <div data-page="send_bid" class="page cached" ng-controller="sendBidController">
             <div class="page-content">  
               <div class="card">
@@ -631,7 +632,7 @@
             </div>
           </div>
           <!-- Auto registration Page -->
-          <div data-page="auto_registration" class="page cached" ng-controller="homeController"> 
+          <div data-page="auto_registration" class="page cached" ng-controller="addAutoController"> 
             <div class="page-content">
               <div class="content-block-title">Введите данные</div>
               <form ng-submit="doAddCar()">
@@ -642,7 +643,7 @@
                         <div class="item-media"><i class="icon icon-form-car"></i></div>
                         <div class="item-inner"> 
                           <div class="item-input">
-                            <input ng-model="addCartData.number" type="text" placeholder="Гос номер">
+                            <input ng-change="addCartData.number=addCartData.number.toUpperCase();" ng-model="addCartData.number" type="text" placeholder="Гос номер">
                           </div>
                         </div>
                       </div>
@@ -706,91 +707,65 @@
             </div>
           </div>
           <!-- Shape service Page -->
-          <div data-page="shape_service" class="page cached">
+          <div data-page="shape_service" class="page cached" ng-controller="addServiceController">
             <div class="page-content">
               <div class="content-block-title">Выберите услуги</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="1">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Кузов</div>
-                          <div class="item-after">1000тг</div>
+              <form id="my-form2">
+                <div class="list-block media-list">
+                  <ul >
+                    <li ng-repeat="service in services" ng-click="serviceSum($index)">
+                      <label class="label-checkbox item-content" >
+                        <input type="checkbox" model="order.services" value="service">
+                        <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
+                        <div class="item-inner"  >
+                          <div class="item-title-row">
+                            <div class="item-title orange">{{service.name}}</div>
+                            <div class="item-after">{{service.price}}тг</div>
+                          </div>
+                          <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                          <div class="item-text">{{service.description}} </div>
                         </div>
-                        <div class="item-subtitle">Длительность: 20-30 минут</div>
-                        <div class="item-text">Мытье кузова специальными водными растворами. </div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="2">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Салон</div>
-                          <div class="item-after">~1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 15-20 минут</div>
-                        <div class="item-text">Чистка, мытье салона. Мытье ковриков. Сухая чистка сидений.</div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="3">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Багажник</div>
-                          <div class="item-after">~500тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 10-15 минут</div>
-                        <div class="item-text">Сухая и влажная чиства багажника.</div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="4">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Полировка</div>
-                          <div class="item-after">~1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 15-20 минут</div>
-                        <div class="item-text">Полировка кузова специальными средствами.</div>
-                      </div>
-                    </label>
-                  </li>
-                </ul>
-              </div> 
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Наименование комплекса услуг">
+                      </label>
+                    </li>
+                  </ul>
+                </div> 
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Общая цена: {{new_price}} тг</div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Сформировать</a>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner">
+                          <div class="item-title">Общее время: {{new_time}} мин</div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>     
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" placeholder="Введите наименование услуг">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <a href="#" class="button active back link">Сформировать</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </form>     
             </div>
           </div>
 
@@ -1521,7 +1496,6 @@
         </div>
     </div>
 
-    
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
     <script type="text/javascript" src="dist/js/angular.js"></script>
