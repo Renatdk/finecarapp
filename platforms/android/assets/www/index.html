@@ -319,7 +319,7 @@
                   </li>
                 </ul>
               </div>
-
+              
               <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
               <div  class="list-block">
                 <ul>
@@ -334,31 +334,101 @@
                 </ul>
               </div>
             </div>
+           
           </div>
-          <!-- Choice service Page -->
-          <div data-page="choice_service" class="page cached" ng-controller="choiceServiceController">
-            <div class="page-content">
-              <div class="content-block-title">Выберите комплекс услуг</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li ng-repeat="service in services" ng-click="getParams(service)" >
-                    <a  href="#washer_choice" class="item-link item-content">
-                    <div class="item-inner" >
-                      <div class="item-title-row">
-                        <div class="item-title orange">{{service.service_name}}</div>
-                        <div class="item-after">~{{service.service_price}}тг</div>
+
+          <div ng-controller="choiceServiceController">
+            <!-- Choice service Page -->
+            <div data-page="choice_service" class="page cached" >
+              <div class="page-content">
+                <div class="content-block-title">Выберите комплекс услуг</div>
+                <div class="list-block media-list">
+                  <ul>
+                    <li ng-repeat="service in userServices" ng-click="getParams(service)" class="swipeout">
+                      <a  href="#washer_choice" class="swipeout-content item-link item-content">
+                      <div class="item-inner" >
+                        <div class="item-title-row">
+                          <div class="item-title orange">{{service.service_name}}</div>
+                          <div class="item-after">~{{service.service_price}}тг</div>
+                        </div>
+                        <div class="item-subtitle">{{service.service_description}}</div>
+                        <div class="item-text">Длительность: {{service.service_time}}</div>
+                      </div></a>
+                      <div class="swipeout-actions-right">
+                        <a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите удалить услугу?" data-confirm-title="Удалить?">Удалить</a>
                       </div>
-                      <div class="item-subtitle">{{service.service_description}}</div>
-                      <div class="item-text">Длительность: {{service.service_time}}</div>
-                    </div></a>
-                  </li>                  
-                  <div class="item-inner">
-                    <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
-                  </div></li>
-                </ul>
+                    </li>                  
+                    <div class="item-inner">
+                      <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                    </div></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Shape service Page -->
+            <div data-page="shape_service" class="page cached">
+              <div class="page-content">
+                <div class="content-block-title">Выберите услуги</div>
+                <form id="my-form2">
+                  <div class="list-block media-list">
+                    <ul >
+                      <li ng-repeat="service in services" ng-click="serviceSum($index)">
+                        <label class="label-checkbox item-content" >
+                          <input type="checkbox" model="order.services" value="service">
+                          <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
+                          <div class="item-inner"  >
+                            <div class="item-title-row">
+                              <div class="item-title orange">{{service.name}}</div>
+                              <div class="item-after">{{service.price}}тг</div>
+                            </div>
+                            <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                            <div class="item-text">{{service.description}} </div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div> 
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="newServiceName" placeholder="Введите наименование услуг">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#"  ng-click="addService()" class="button active back link">Сформировать</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </form>     
               </div>
             </div>
           </div>
+          
           <!-- Washer choice Page -->
           <div data-page="washer_choice" class="page cached" ng-controller="choiceWasherController">
             <div class="page-content">
@@ -431,7 +501,7 @@
               </div>
             </div> 
           </div>
-          <!-- Send tiket Page -->
+          <!-- Send bid Page -->
           <div data-page="send_bid" class="page cached" ng-controller="sendBidController">
             <div class="page-content">  
               <div class="card">
@@ -446,10 +516,10 @@
                           <div class="item-title"><i class="icon icon-map"></i> Карта проезда</div>
                         </div>
                       </a>
-                      <div class="accordion-item-content" style="">
+                      <div class="accordion-item-content" >
                         <div class="content-block">
-                          <div id="map"> <img ng-src="{{img}}"></div>
-                        </div>
+                          <div id="map" style="width:300px"> <img ng-src="{{img}}"></div>
+                        </div> 
                       </div>
                     </div>
                     <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
@@ -631,188 +701,81 @@
             </div>
           </div>
           <!-- Auto registration Page -->
-          <div data-page="auto_registration" class="page cached">
+          <div data-page="auto_registration" class="page cached" ng-controller="addAutoController"> 
             <div class="page-content">
               <div class="content-block-title">Введите данные</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Гос номер">
+              <form ng-submit="doAddCar()">
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-change="addCartData.number=addCartData.number.toUpperCase();" ng-model="addCartData.number" type="text" placeholder="Гос номер">
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="nocheked">Не выбрано</option>
-                              <option value="mitsubishi" >Mitsubishi</option>
-                              <option value="toyota">Toyota</option>
-                              <option value="mersedes">Mersedes Bens</option>
-                              <option value="bmw">BMW</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Марка</div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-model="addCartData.mark" type="text" placeholder="Марка авто">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input ng-model="addCartData.model" type="text" placeholder="Модель авто">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-car"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <a href="#" class="item-link smart-select">
+                              <select ng-model="addCartData.car_type" name="car_type">
+                                <option value="passenger" selected>Легковая</option>
+                                <option value="pikup">Внедорожник или пикап</option>
+                                <option value="miniven">Минивен или микроавтобус</option>
+                              </select>
+                              <div class="item-content">
+                                <div class="item-inner">
+                                  <div class="item-title">Тип кузова</div>
+                                <div class="item-after">Легковая</div></div>
                               </div>
-                            </div>
-                          </a>
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="models">
-                              <option value="nochaked">Не выбрано</option>
-                              <option value="galant" >Galant</option>
-                              <option value="z3">Z3</option>
-                              <option value="x5">X5</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Модель</div>
-                              </div>
-                            </div>
-                          </a>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <br/>
+                            <input type="submit" class="button button-big" ></input>
+                            <br/>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="item-link smart-select">
-                            <select name="fruits">
-                              <option value="apple" selected="selected">Легковая</option>
-                              <option value="pineapple">Внедорожник или пикап</option>
-                              <option value="pear">Минивен или микроавтобус</option>
-                            </select>
-                            <div class="item-content">
-                              <div class="item-inner">
-                                <div class="item-title">Тип кузова</div>
-                              <div class="item-after">Легковая</div></div>
-                            </div>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Добавить</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>    
+                    </li>
+                  </ul>
+                </div>
+
+              </form>    
             </div>
           </div>
-          <!-- Shape service Page -->
-          <div data-page="shape_service" class="page cached">
-            <div class="page-content">
-              <div class="content-block-title">Выберите услуги</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="1">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Кузов</div>
-                          <div class="item-after">1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 20-30 минут</div>
-                        <div class="item-text">Мытье кузова специальными водными растворами. </div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="2">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Салон</div>
-                          <div class="item-after">~1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 15-20 минут</div>
-                        <div class="item-text">Чистка, мытье салона. Мытье ковриков. Сухая чистка сидений.</div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="3">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Багажник</div>
-                          <div class="item-after">~500тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 10-15 минут</div>
-                        <div class="item-text">Сухая и влажная чиства багажника.</div>
-                      </div>
-                    </label>
-                  </li>
-                  <li>
-                    <label class="label-checkbox item-content">
-                      <input type="checkbox" name="ks-media-checkbox" value="4">
-                      <div class="item-media"><i class="icon icon-form-checkbox"></i></div>
-                      <div class="item-inner">
-                        <div class="item-title-row">
-                          <div class="item-title orange">Полировка</div>
-                          <div class="item-after">~1000тг</div>
-                        </div>
-                        <div class="item-subtitle">Длительность: 15-20 минут</div>
-                        <div class="item-text">Полировка кузова специальными средствами.</div>
-                      </div>
-                    </label>
-                  </li>
-                </ul>
-              </div> 
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Наименование комплекса услуг">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Сформировать</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>     
-            </div>
-          </div>
+          
 
           <!-- Washer home Boxes Page-->
           <div data-page="washer_home" class="page cached">
@@ -1539,7 +1502,8 @@
             </div>
           </div>
         </div>
-    </div> 
+    </div>
+
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
     <script type="text/javascript" src="dist/js/angular.js"></script>

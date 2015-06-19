@@ -10,6 +10,11 @@ angular.module('fineCarApp.factory',[])
       bids : []
   };
 })
+.factory('UserCar', function() {
+  return {
+      cars : []
+  };
+})
 .factory('getDastance', function() {
   return {
       distance: function(fa,la,fb,lb){

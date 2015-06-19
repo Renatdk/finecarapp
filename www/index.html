@@ -309,6 +309,13 @@
                       </div>
                     </div>
                   </li>
+                  <li ng-repeat="car in cars">
+                    <a href="#choice_service" class="item-link item-content" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams(car)">
+                      <div class="item-media"><i class="icon icon-form-car"></i></div>
+                      <div class="item-inner">
+                      <div class="item-title orange">{{car.car_name}} - {{car.car_number}}</div>
+                      </div>
+                    </a>
                   <li>
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-car"></i></div>
@@ -336,30 +343,99 @@
             </div>
            
           </div>
-          <!-- Choice service Page -->
-          <div data-page="choice_service" class="page cached" ng-controller="choiceServiceController">
-            <div class="page-content">
-              <div class="content-block-title">Выберите комплекс услуг</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li ng-repeat="service in services" ng-click="getParams(service)" >
-                    <a  href="#washer_choice" class="item-link item-content">
-                    <div class="item-inner" >
-                      <div class="item-title-row">
-                        <div class="item-title orange">{{service.service_name}}</div>
-                        <div class="item-after">~{{service.service_price}}тг</div>
+
+          <div ng-controller="choiceServiceController">
+            <!-- Choice service Page -->
+            <div data-page="choice_service" class="page cached" >
+              <div class="page-content">
+                <div class="content-block-title">Выберите комплекс услуг</div>
+                <div class="list-block media-list">
+                  <ul>
+                    <li ng-repeat="service in userServices" ng-click="getParams(service)" class="swipeout">
+                      <a  href="#washer_choice" class="swipeout-content item-link item-content">
+                      <div class="item-inner" >
+                        <div class="item-title-row">
+                          <div class="item-title orange">{{service.service_name}}</div>
+                          <div class="item-after">~{{service.service_price}}тг</div>
+                        </div>
+                        <div class="item-subtitle">{{service.service_description}}</div>
+                        <div class="item-text">Длительность: {{service.service_time}}</div>
+                      </div></a>
+                      <div class="swipeout-actions-right">
+                        <a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите удалить услугу?" data-confirm-title="Удалить?">Удалить</a>
                       </div>
-                      <div class="item-subtitle">{{service.service_description}}</div>
-                      <div class="item-text">Длительность: {{service.service_time}}</div>
-                    </div></a>
-                  </li>                  
-                  <div class="item-inner">
-                    <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
-                  </div></li>
-                </ul>
+                    </li>                  
+                    <div class="item-inner">
+                      <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                    </div></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Shape service Page -->
+            <div data-page="shape_service" class="page cached">
+              <div class="page-content">
+                <div class="content-block-title">Выберите услуги</div>
+                <form id="my-form2">
+                  <div class="list-block media-list">
+                    <ul >
+                      <li ng-repeat="service in services" ng-click="serviceSum($index)">
+                        <label class="label-checkbox item-content" >
+                          <input type="checkbox" model="order.services" value="service">
+                          <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
+                          <div class="item-inner"  >
+                            <div class="item-title-row">
+                              <div class="item-title orange">{{service.name}}</div>
+                              <div class="item-after">{{service.price}}тг</div>
+                            </div>
+                            <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                            <div class="item-text">{{service.description}} </div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div> 
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="newServiceName" placeholder="Введите наименование услуг">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#"  ng-click="addService()" class="button active back link">Сформировать</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </form>     
               </div>
             </div>
           </div>
+          
           <!-- Washer choice Page -->
           <div data-page="washer_choice" class="page cached" ng-controller="choiceWasherController">
             <div class="page-content">
@@ -706,68 +782,7 @@
               </form>    
             </div>
           </div>
-          <!-- Shape service Page -->
-          <div data-page="shape_service" class="page cached" ng-controller="addServiceController">
-            <div class="page-content">
-              <div class="content-block-title">Выберите услуги</div>
-              <form id="my-form2">
-                <div class="list-block media-list">
-                  <ul >
-                    <li ng-repeat="service in services" ng-click="serviceSum($index)">
-                      <label class="label-checkbox item-content" >
-                        <input type="checkbox" model="order.services" value="service">
-                        <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
-                        <div class="item-inner"  >
-                          <div class="item-title-row">
-                            <div class="item-title orange">{{service.name}}</div>
-                            <div class="item-after">{{service.price}}тг</div>
-                          </div>
-                          <div class="item-subtitle">Длительность: {{service.time}} минут</div>
-                          <div class="item-text">{{service.description}} </div>
-                        </div>
-                      </label>
-                    </li>
-                  </ul>
-                </div> 
-                <div class="list-block">
-                  <ul>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Общая цена: {{new_price}} тг</div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title">Общее время: {{new_time}} мин</div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <input type="text" placeholder="Введите наименование услуг">
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <a href="#" class="button active back link">Сформировать</a>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </form>     
-            </div>
-          </div>
+          
 
           <!-- Washer home Boxes Page-->
           <div data-page="washer_home" class="page cached">

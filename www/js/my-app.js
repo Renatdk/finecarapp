@@ -222,8 +222,8 @@ fineCarApp.controller('homeController', function($scope, $http, UserBid, UserBid
     $scope.cars=UserCar.cars;  
     
     $scope.getParams=function(obj){
-      UserBid.name=obj.target.attributes.name.value;
-      UserBid.number=obj.target.attributes.number.value;
+      UserBid.name=obj.name;
+      UserBid.number=obj.number;
       console.log(UserBid);
     };
 
@@ -250,9 +250,9 @@ fineCarApp.controller('addAutoController', function($scope, UserCar) {
 
 // create the controller and inject Angular's $scope
 fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid) {
-    $scope.services=[];
+    $scope.userServices=[];
     $http.get('json/user/choice_service.json').success(function(data){
-      $scope.services=data.services;  
+      $scope.userServices=data.services;  
     });
 
     $scope.getParams=function(obj){
@@ -260,23 +260,18 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
       console.log(UserBid);
     };
 
-});
-
-
-
-// create the controller and inject Angular's $scope
-fineCarApp.controller('addServiceController', function($scope, $http) {
     $scope.services=[];
     $http.get('json/user/services.json').success(function(data){
       $scope.services=data.services;  
     });
  
-  $scope.order = {
-     services: []
-  };
+    $scope.order = {
+       services: []
+    };
     $scope.serviceSum= function(index){
       $scope.new_price=0;
       $scope.new_time=0;
+      $scope.title_sum="";
       var i=0;
       if($scope.services[index].isChecked==true){
         var i=$scope.order.services.indexOf($scope.services[index]);
@@ -291,13 +286,31 @@ fineCarApp.controller('addServiceController', function($scope, $http) {
       angular.forEach($scope.order.services, function(value, key) {
         $scope.new_price +=parseFloat(value.price);
         $scope.new_time +=parseFloat(value.time);  
-        $scope.title_sum +=parseFloat(value.name);  
+        $scope.title_sum +=value.name+"+";  
       });
 
 
       console.log( $scope.order.services);
     };
 
+    $scope.addService= function(index){
+      if(!$scope.newServiceName){$scope.newServiceName="Mega+"};
+      var newService={};
+      newService.service_name=$scope.newServiceName;
+      newService.service_description=$scope.title_sum;
+      newService.service_time=$scope.new_time+"минут";
+      newService.service_price=$scope.new_price;
+      $scope.userServices.push(newService);
+    };
+
+
+});
+
+
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('addServiceController', function($scope, $http) {
+    
 
 });
 

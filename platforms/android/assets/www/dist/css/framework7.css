@@ -3447,7 +3447,7 @@ html.ios-gt-6.pixel-ratio-3 .card-footer:before {
   -ms-transition-property: -ms-transform, opacity;
   -o-transition-property: -o-transform, opacity;
   transition-property: transform, opacity;
-  color: #000;
+  color: #fff;
   display: none;
 }
 .modal.modal-in {
@@ -3469,7 +3469,7 @@ html.ios-gt-6.pixel-ratio-3 .card-footer:before {
   padding: 15px;
   border-radius: 7px 7px 0 0;
   position: relative;
-  background: #e8e8e8;
+  background: #222426;
 }
 .modal-inner:after {
   content: '';
@@ -3525,8 +3525,8 @@ html.ios-gt-6.pixel-ratio-3 .modal-inner:after {
   font-size: 17px;
   line-height: 44px;
   text-align: center;
-  color: #007aff;
-  background: #e8e8e8;
+  color: orange;
+  background: #222426;
   display: block;
   position: relative;
   white-space: nowrap;

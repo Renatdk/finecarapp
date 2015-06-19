@@ -103,14 +103,14 @@
             panelsCloseByOutside: true,
             // Modals
             modalButtonOk: 'OK',
-            modalButtonCancel: 'Cancel',
-            modalUsernamePlaceholder: 'Username',
-            modalPasswordPlaceholder: 'Password',
+            modalButtonCancel: 'Отмена',
+            modalUsernamePlaceholder: 'Имя',
+            modalPasswordPlaceholder: 'Пароль',
             modalTitle: 'Framework7',
             modalCloseByOutside: false,
             actionsCloseByOutside: true,
             popupCloseByOutside: true,
-            modalPreloaderTitle: 'Loading... ',
+            modalPreloaderTitle: 'Загрузка... ',
             modalStack: true,
             // Lazy Load
             imagesLazyLoadThreshold: 0,
