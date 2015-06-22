@@ -42,6 +42,11 @@
                 <div class="item-inner"> 
                   <div class="item-title">Отзывы</div>
                 </div></a></li>
+             <li><a href="#index" class="item-link item-content close-panel">
+                <div class="item-media"><i class="icon icon-exit"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Выход</div>
+                </div></a></li>
         </ul>
       </div>
     </div>
@@ -105,10 +110,22 @@
               <a href="#" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
             </div>
           </div>
+          <!-- Navbar inner for Bid page-->
+          <div data-page="bid" class="navbar-inner cached">
+            <div class="left sliding"><a href="#home" class=" link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Заявка</div>
+          </div>
           <!-- Navbar inner for Washer service add list page-->
           <div data-page="washer_service_add_list" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Список услуг</div>
+          </div>
+          <!-- Navbar inner for Bid Time choice page-->
+          <div data-page="bid_time_choice" class="navbar-inner cached">
+            <div class="left sliding">
+              <a href="#" class="back link"> 
+                <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Выбор Времени</div>
           </div>
           <!-- Navbar inner for Time choice page-->
           <div data-page="time_choice" class="navbar-inner cached">
@@ -301,21 +318,16 @@
               <div class="content-block-title">Помыть авто</div>
               <div class="list-block">
                 <ul>
-                  <li ng-repeat="car in cars">
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <a href="#choice_service" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams($event)" class="button">{{car.car_name}} - {{car.car_number}}</a>
-                      </div>
-                    </div>
-                  </li>
-                  <li ng-repeat="car in cars">
-                    <a href="#choice_service" class="item-link item-content" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams(car)">
+                  <li ng-repeat="car in cars"  class="swipeout">
+                    <a href="#choice_service" class="item-link item-content swipeout-content" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams(car)">
                       <div class="item-media"><i class="icon icon-form-car"></i></div>
                       <div class="item-inner">
                       <div class="item-title orange">{{car.car_name}} - {{car.car_number}}</div>
                       </div>
                     </a>
+                    <div class="swipeout-actions-right">
+                      <a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите удалить авто?" data-confirm-title="Удалить?">Удалить</a>
+                    </div>
                   <li>
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-car"></i></div>
@@ -326,24 +338,90 @@
                   </li>
                 </ul>
               </div>
-              
               <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
               <div  class="list-block">
                 <ul>
-                  <li ng-repeat="bid in UserBids.bids track by $index">
-                    <div class="item-content">
+                  <li ng-repeat="bid in UserBids.bids track by $index"  class="swipeout">
+                    <a href="#bid" ng-click="getBid($index)"  class="item-link item-content swipeout-content">
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_bid" class="button">{{bid.day}} {{bid.time}} {{bid.name}} {{bid.namber}} </a>
+                        <div class="item-title orange">{{bid.day}} {{bid.time}} {{bid.name}} {{bid.namber}} </div>
                       </div>
+                    </a>
+                    <div class="swipeout-actions-right">
+                      <a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите отказаться от заявки?" data-confirm-title="Отказ?">Отказаться</a>
                     </div>
                   </li>
+                  
                 </ul>
               </div>
             </div>
-           
           </div>
 
+
+          <div ng-controller="bidController">
+            <!-- Bid Page-->
+            <div data-page="bid" class="page cached">
+              <div class="page-content">  
+                <div class="card">
+                  <div class="card-header orange">{{UserBid.washer}}</div>
+                  <div class="card-content"> 
+                    <div class="card-content-inner">
+                      <i class="icon icon-form-garage"></i>
+                      <p>{{UserBid.address}} - {{UserBid.km}}км</p>
+                      <div class="accordion-item">
+                        <a href="#" class="item-link item-content " ng-click="showMap()">
+                          <div class="item-inner">
+                            <div class="item-title"><i class="icon icon-map"></i> Карта проезда</div>
+                          </div>
+                        </a>
+                        <div class="accordion-item-content" >
+                          <div class="content-block">
+                            <div id="map" style="width:300px"> <img ng-src="{{img}}"></div>
+                          </div> 
+                        </div>
+                      </div>
+                      <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
+                      <p>{{UserBid.name}} - {{UserBid.number}}</p>
+                      <p>{{UserBid.day}} - {{UserBid.time}}</p>
+                      <p class="orange">Статус: Не подтвержен</p>
+                      <div class="buttons-row"><a href="#home" ng-click="bidFailure()"  class="button button-round">Отказаться</a><a href="#bid_time_choice"  class="button button-round">Изменить время</a></div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </div>
+            <!-- Bid Time choice Page -->
+            <div data-page="bid_time_choice" class="page cached" >
+              <div class="page-content">  
+                <div class="card">
+                  <div class="card-header orange">{{UserBid.washer}}</div>
+                  <div class="card-content"> 
+                    <div class="card-content-inner">
+                    <i class="icon icon-form-garage"></i>
+                    <p>{{UserBid.address}} - {{UserBid.km}}км</p>
+                    <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
+                    <p>{{UserBid.name}} - {{UserBid.number}}</p>
+                    </div>
+                  </div>
+                  <div class="list-block">
+                    <div class="list-group" ng-repeat="day in days">
+                      <ul>
+                        <li  class="item-content orange">{{day.day}}</li>
+                        <li  ng-repeat="time_item in day.time" ng-click="getParams(day.day,time_item)">
+                          <a href="#bid" class="item-link item-content" >
+                            <div class="item-inner"> 
+                              <div class="item-title">{{time_item}}</div>
+                            </div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+            </div>
+          </div>
           <div ng-controller="choiceServiceController">
             <!-- Choice service Page -->
             <div data-page="choice_service" class="page cached" >

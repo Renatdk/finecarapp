@@ -222,12 +222,50 @@ fineCarApp.controller('homeController', function($scope, $http, UserBid, UserBid
     $scope.cars=UserCar.cars;  
     
     $scope.getParams=function(obj){
-      UserBid.name=obj.name;
-      UserBid.number=obj.number;
+      UserBid.name=obj.car_name;
+      UserBid.number=obj.car_number;
       console.log(UserBid);
     };
 
     $scope.UserBids=UserBids;
+
+    $scope.getBid=function(index){
+      UserBid.address=UserBids.bids[index].address;
+      UserBid.day=UserBids.bids[index].day;
+      UserBid.km=UserBids.bids[index].km;
+      UserBid.name=UserBids.bids[index].name;
+      UserBid.number=UserBids.bids[index].number;
+      UserBid.price=UserBids.bids[index].price;
+      UserBid.service=UserBids.bids[index].service;
+      UserBid.time=UserBids.bids[index].time;
+      UserBid.washer=UserBids.bids[index].washer;
+    };
+});
+
+// create the controller and inject Angular's $scope
+fineCarApp.controller('bidController', function($scope, $http, UserBid, UserBids) {
+    
+    $scope.UserBid=UserBid;
+    
+    $scope.showMap=function(){
+      $scope.img="http://static-maps.yandex.ru/1.x/?l=map&size=250,300&pt="+UserBid.mlong+","+UserBid.mlat+",pm2am~"+UserBid.wlong+","+UserBid.wlat+",pm2bm";
+    };
+
+    $scope.bidFailure= function (){
+      var i= UserBids.bids.indexOf(UserBid);
+      UserBids.bids.splice(i);
+    };
+
+    $scope.days=[];
+    $http.get('json/user/time_choice.json').success(function(data){
+      $scope.days=data.washer_time;  
+    });
+
+    $scope.getParams=function(day,time){
+      UserBid.day=day;
+      UserBid.time=time;
+      console.log(UserBid);
+    }; 
 });
 
 fineCarApp.controller('addAutoController', function($scope, UserCar) {
@@ -243,6 +281,8 @@ fineCarApp.controller('addAutoController', function($scope, UserCar) {
       console.log(UserCar);
       mainView.router.back();
     }
+
+
 
 });
 
@@ -404,6 +444,10 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids) {
     x.service=$scope.UserBid.service;
     x.time=$scope.UserBid.time;
     x.washer=$scope.UserBid.washer;
+    x.mlat=$scope.UserBid.mlat;
+    x.mlong=$scope.UserBid.mlong;
+    x.wlat=$scope.UserBid.wlat;
+    x.wlong=$scope.UserBid.wlong;
     UserBids.bids.push(x);
     console.log(UserBid);
     console.log(UserBids);

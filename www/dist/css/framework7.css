@@ -1904,6 +1904,11 @@ i.icon.icon-map {
   height: 29px;
   background-image: url("../img/i-map.png");
 }
+i.icon.icon-exit {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-exit.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;
