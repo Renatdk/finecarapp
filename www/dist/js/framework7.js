@@ -106,7 +106,7 @@
             modalButtonCancel: 'Отмена',
             modalUsernamePlaceholder: 'Имя',
             modalPasswordPlaceholder: 'Пароль',
-            modalTitle: 'Framework7',
+            modalTitle: 'FineCar',
             modalCloseByOutside: false,
             actionsCloseByOutside: true,
             popupCloseByOutside: true,

@@ -74,9 +74,103 @@ i.tabbar-demo-icon-4 {
   color: orange;
 }
 
-.h15{height: 14px; font-size: 11px;}
+
+
+.queue_bkg{
+  background-color: orange;
+  text-align: center;
+  margin-left: 1px;
+  color:#1e1e1e;
+  border-bottom: 1px solid #222426;
+}
+
+.queue_in_box_bkg{
+  background-color: orange;
+  text-align: center;
+  margin-left: 1px;
+  color:#1e1e1e;
+  border-bottom: 1px solid #222426;
+}
+
+.displaced_bkg{
+  background-color: green; 
+   border-bottom:solid 1px #222426;
+  margin-left: 1px;
+  color: #1e1e1e;
+}
+
+
+.canceled_bkg{
+  background-color: tomato; 
+  border-bottom:solid 1px #222426;
+  margin-left: 1px;
+  color: #1e1e1e;
+}
+
+.in_box_bkg{
+  background-color: yellow; 
+  border-bottom:solid 1px #222426;
+  margin-left: 1px;
+  color: #1e1e1e;
+
+}
+
+.new_bkg{
+  background-color: LimeGreen; 
+   border-bottom:solid 1px #222426;
+  margin-left: 1px;
+  color: #1e1e1e;
+}
+
+.clean_bkg{
+ color: orange;
+  background-color: #333;
+  margin-left: 1px;
+  text-align: center;
+  border-bottom: 1px solid #222426;
+}
+.black_bkg{
+  background-color: #999; 
+  margin-left: 1px;
+  text-align: center;
+  border-bottom: 1px solid #222426;
+}
+
+.right{
+  float: right;
+}
+
+.h5{height: 19px}
+.h10{height: 19px}
+.h15{height: 19px}
+.h20{height: 19px}
+.h25{height: 24px}
 .h30{height: 29px}
+.h35{height: 34px}
 .h40{height: 39px}
+.h45{height: 44px}
+.h50{height: 49px}
+.h55{height: 54px}
 .h60{height: 59px}
+.h65{height: 64px}
+.h70{height: 69px}
+.h75{height: 74px}
+.h80{height: 79px}
+.h85{height: 84px}
+.h90{height: 89px}
+.h95{height: 94px}
+.h100{height: 99px}
+.h105{height: 104px}
+.h110{height: 109px}
+.h115{height: 114px}
 .h120{height: 119px}
+.h125{height: 124px}
+.h180{height: 179px}
+.h240{height: 239px}
+.h300{height: 299px}
 .h1440{height: 1439px}
+
+.center{
+  text-align: center;
+}
+

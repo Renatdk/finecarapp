@@ -1909,6 +1909,16 @@ i.icon.icon-exit {
   height: 29px;
   background-image: url("../img/i-exit.png");
 }
+i.icon.icon-clock {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-clock.png");
+}
+i.icon.icon-clock-filled {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-clock-filled.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;
