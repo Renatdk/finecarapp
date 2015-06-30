@@ -1,4 +1,4 @@
-angular.module('fineCarApp.factory',[])
+angular.module('fineCarApp.factory',['lbServices'])
 .factory('UserBid', function() {
   return {
       car : 'anonymous',
@@ -14,6 +14,38 @@ angular.module('fineCarApp.factory',[])
   return {
       cars : []
   };
+})
+.factory('washerLogin', function(Washers, $rootScope, Bids) {
+  return function(e,p){
+    myApp.showIndicator();
+
+    Washers.login({email: e, password: p},
+      function(response){
+        $rootScope.currentWasher = {
+          id: response.user.id,
+          tokenId: response.id,
+          username:  response.user.username,
+          email:  response.user.email,
+        };
+
+        Bids.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(bids) { 
+          $rootScope.bids = bids;
+          console.log("bids:",bids);
+        },function(err){
+          console.log("err:",err);
+        });
+
+        console.log(response);
+        mainView.router.load({pageName: 'washer_home'});
+        myApp.hideIndicator();
+      },
+
+      function(response){
+        myApp.alert('Неверный Email или Пароль!');
+        console.log(response);
+        myApp.hideIndicator();
+      });
+  };  
 })
 .factory('getDastance', function() {
   return {

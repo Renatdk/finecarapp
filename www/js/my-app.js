@@ -6,7 +6,7 @@ var myApp = new Framework7({
     template7Pages: true, //enable Template7 rendering for pages
     precompileTemplates: true
 
-});
+  });
 
 var user_SCL={}; //user choice list
 
@@ -23,8 +23,6 @@ var mainView = myApp.addView('.view-main', {
 });
 
 
-
- 
 
 
 
@@ -146,7 +144,7 @@ fineCarApp.controller('userRegistrationController', function($scope, FUser,$root
 });
 
 
-fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars) {
+fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars, washerLogin) {
   
   $scope.loginData={};
   $scope.loginData.email="renatd.k@gmail.com";
@@ -154,6 +152,10 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
 
   $scope.Login=function(){
     $rootScope.userLogin($scope.loginData.email,$scope.loginData.password);
+  };
+
+  $scope.wLogin=function(){
+    washerLogin($scope.loginData.email,$scope.loginData.password);
   };
   
   $rootScope.userLogin=function(e,p){
@@ -274,14 +276,16 @@ fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $root
       var car={};
       car.car_name=$scope.addCartData.mark+" "+$scope.addCartData.model;
       car.car_number=$scope.addCartData.number;
-      $scope.new_car = Cars.create(car).$promise;
-      $rootScope.userCars.push($scope.new_car);
-      console.log($scope.new_car);
+      Cars.create(car, function(cars) { 
+          $rootScope.userCars.push(car);
+          console.log("cars:",cars);
+        },function(err){
+          console.log("err:",err);
+          mainView.router.loadPage({pageName: 'index'});
+        });
+      console.log(car);
       mainView.router.back();
     }
-
-
-
 });
 
 
@@ -469,9 +473,70 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids) {
   }
 });
 
+fineCarApp.controller('washerRegistrationController', function($scope, Washers, $rootScope, washerLogin) {
+  $scope.registerData={};
 
-fineCarApp.controller('washerHomeController', function($scope, $http ) {
-  
+  $scope.registration=function(){
+    myApp.showIndicator();
+    Washers.create($scope.registerData,
+      function(response){
+        washerLogin( $scope.registerData.email, $scope.registerData.password);
+        console.log(response);
+      },
+      function(response){
+        myApp.alert(response.data.error.message);
+        console.log("response:",response);        
+        myApp.hideIndicator();
+      }   
+    );
+  };
+
+  $scope.getPhoto = function(){
+    navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+        destinationType: Camera.DestinationType.DATA_URL
+    });
+
+    function onSuccess(imageData) {
+        var image = document.getElementById('myImage');
+        image.src = "data:image/jpeg;base64," + imageData;
+        $scope.registerData.photo=imageData;
+    }
+
+    function onFail(message) {
+        alert('Failed because: ' + message);
+    }
+
+  };
+  $scope.showMap = function(){
+
+    var map;
+
+    DG.then(function () {
+        map = DG.map('mapwasher', {
+            center: [54.98, 82.89],
+            zoom: 13,
+        });
+        
+        marker=DG.marker([54.98, 82.89],{
+          draggable: true
+        }).addTo(map);
+
+        marker.on('drag', function(e) {
+            var lat = e.target._latlng.lat.toFixed(3),
+                lng = e.target._latlng.lng.toFixed(3);
+
+            locationInfo.innerHTML = lat + ', ' + lng;
+        }); 
+    });
+      
+  };
+
+
+});
+
+fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin) {
+ 
+
    function getDecimal(num) {
     var str = "" + num;
     var zeroPos = str.indexOf(".");
@@ -510,7 +575,6 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
   $http.get('json/user/bids.json').success(function(data){
     $scope.boxes=data;  
   });
-//- One group, title, three buttons
 
   $scope.deleteItem =function(id){
     angular.forEach($scope.boxes, function(value, key) {
@@ -542,8 +606,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
         };
       });
     });
-  mainView.router.refreshPage() 
-    $$('#key').html(id);
+   myApp.closeModal();
   };
 
   $scope.services=[];
@@ -579,6 +642,36 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
       $scope.new_time +=parseFloat(value.time);  
       $scope.title_sum +=value.name+"+";  
     });
+
+    var beginTimeLength=$scope.newOrderData.maxDuration-$scope.new_time;
+    beginTimeLength=$scope.minuteAddToTime(beginTimeLength,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
+    $scope.newOrderData.endTimeH=beginTimeLength.hour;
+    $scope.newOrderData.endTimeM=beginTimeLength.minute;  
+    $scope.newOrderData.maxDinamicDuration=$scope.newOrderData.maxDuration-$scope.new_time;
+
+    console.log("max:",$scope.newOrderData.maxDuration,"order",$scope.new_time)
+
+    if(parseInt($scope.newOrderData.maxDuration)<$scope.new_time){
+      myApp.confirm("Всего" +$scope.newOrderData.maxDuration+"мин. Удалить последний?",
+       "Превышен лимит по времени," +$scope.new_time+"мин!"
+       
+      ,function() {
+        
+         var lastItem=$scope.order.services.pop();
+         $scope.order_price-=parseFloat(lastItem.price);
+         $scope.new_time -=parseFloat(lastItem.time);  
+         $scope.newOrderData.maxDinamicDuration=$scope.newOrderData.maxDuration-$scope.new_time;
+         var beginTimeLength=$scope.newOrderData.maxDuration-$scope.new_time;
+         beginTimeLength=$scope.minuteAddToTime(beginTimeLength,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
+         $scope.newOrderData.endTimeH=beginTimeLength.hour;
+         $scope.newOrderData.endTimeM=beginTimeLength.minute;  
+       },function(){
+         $scope.newOrderData.endTimeH=$scope.newOrderData.startTimeH;
+         $scope.newOrderData.endTimeM=$scope.newOrderData.startTimeM; 
+         $scope.newOrderData.maxDinamicDuration=0;
+       }
+     );
+    };
   };
 
   $scope.rangeChange = function(){
@@ -596,7 +689,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
     $scope.newOrderData.rangeData=0;    
     $scope.newOrderData.id=id;
     $scope.order_price=0;
-    $scope.order_time=0;
+    $scope.new_time=0;
     angular.forEach($scope.boxes, function(value, key) {
       angular.forEach(value,function(val,k){
         if (parseInt(val.id) == parseInt(id)){ 
@@ -613,7 +706,105 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
         }
       });
     });   
-    mainView.router.reloadPage({pageName: 'washer_new_bid'}); 
+    mainView.router.loadPage({pageName: 'washer_new_bid'});
+  };
+
+   $scope.doNewOrder = function() {
+
+    angular.forEach($scope.boxes, function(value, key) {
+      angular.forEach(value,function(val,k){
+        if (parseInt(val.id) == $scope.newOrderData.id){ 
+          
+          var item={};
+          item.id=$scope.newOrderData.id+'1';
+          item.status="queue";
+          item.duration=$scope.new_time;
+          item.start_time_h=$scope.newOrderData.setTimeH;
+          item.start_time_m=$scope.newOrderData.setTimeM;
+          console.log(val);
+          value.splice(k,1); //Удаляем зявку из списка
+          value.splice(k,0,item); //Добавляем item в список
+
+          if(item.duration<$scope.newOrderData.maxDuration){
+            if($scope.newOrderData.rangeData==$scope.newOrderData.maxDinamicDuration){
+              var item1={};
+              item1.id=$scope.newOrderData.id+'2';
+              item1.status="clean";
+              item1.duration=$scope.newOrderData.rangeData;
+              item1.start_time_h=$scope.newOrderData.startTimeH;
+              item1.start_time_m=$scope.newOrderData.startTimeM;
+              console.log(1);
+              if(value[k-1].status=="clean"){
+                value[k-1].duration=parseInt(value[k-1].duration)+parseInt(item1.duration);
+              }else{
+                value.splice(k,0,item1); //Добавляем item в список
+              }
+            };
+
+            if($scope.newOrderData.rangeData==0){
+              var item1={};
+              item1.id=$scope.newOrderData.id+'2';
+              item1.status="clean";
+              item1.duration=$scope.newOrderData.maxDuration-$scope.new_time;
+              
+              console.log($scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
+              console.log(item1.duration);
+              
+              var t = moment($scope.newOrderData.startTimeH,"h").add($scope.newOrderData.startTimeM,"m").add(parseInt(item.duration),"m");
+              console.log(2);
+              
+              item1.start_time_h=t.get("h");
+              
+              if(t.get("m")<10){
+                item1.start_time_m="0"+t.get("m");  
+              }else{
+                item1.start_time_m=t.get("m");
+              };
+
+              if(value[k+1].status=="clean"){
+                value[k+1].start_time_h=item1.start_time_h;
+                value[k+1].start_time_m=item1.start_time_m;
+                value[k+1].duration=parseInt(value[k+1].duration)+parseInt(item1.duration);
+              }else{
+                value.splice(k+1,0,item1); //Добавляем item в список
+              }
+            };
+
+            if($scope.newOrderData.rangeData>0 && $scope.newOrderData.rangeData<$scope.newOrderData.maxDinamicDuration){
+              var item1={};
+              item1.id=$scope.newOrderData.id+'2';
+              item1.status="clean";
+              item1.duration=$scope.newOrderData.rangeData;
+              item1.start_time_h=$scope.newOrderData.startTimeH;
+              item1.start_time_m=$scope.newOrderData.startTimeM;
+              console.log(3);
+              if(value[k-1].status=="clean"){
+                value[k-1].duration=parseInt(value[k-1].duration)+parseInt(item1.duration);
+              }else{
+                value.splice(k,0,item1); //Добавляем item в список
+              }
+
+              var item2={};
+              item2.id=$scope.newOrderData.id+'3';
+              item2.status="clean";
+              item2.duration=$scope.newOrderData.maxDuration-$scope.new_time-$scope.newOrderData.rangeData;
+              var sumDuration=parseInt($scope.newOrderData.rangeData)+parseInt(item.duration);
+              console.log(sumDuration);
+              var rangeDataToHM=$scope.minuteAddToTime(sumDuration,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM)
+              item2.start_time_h=rangeDataToHM.hour;
+              item2.start_time_m=rangeDataToHM.minute;
+               if(value[k+1].status=="clean"){
+                value[k+1].start_time_h=item2.start_time_h;
+                value[k+1].start_time_m=item2.start_time_m;
+                value[k+1].duration=parseInt(value[k+1].duration)+parseInt(item2.duration);
+              }else{
+                value.splice(k+2,0,item2); //Добавляем item в список
+              }
+            };
+          }
+        }
+      });
+    });
   };
 
   $scope.bidMove = function(id){
@@ -627,63 +818,207 @@ fineCarApp.controller('washerHomeController', function($scope, $http ) {
     });
     mainView.router.loadPage({pageName: 'bid_move'});
   };
+  
+  $scope.doOrderMove = function(id){
+    angular.forEach($scope.boxes, function(value, key) {
+      angular.forEach(value,function(val,k){
+       if (parseInt(val.id) == id){
 
- $scope.boxItemClick = function(status,id) {
-   console.log(id);
+        var item={};
+        item.id=id+'1';
+        item.status="queue";
+        item.duration=$scope.moveItem.duration;
+        item.start_time_h=val.start_time_h;
+        item.start_time_m=val.start_time_m;
+        
+        if(item.duration<val.duration){
+          var item1={};
+          item1.id=id+'2';
+          item1.status="clean";
+          item1.duration=val.duration-item.duration;
+          var itemDurationL=$scope.minuteAddToTime(item1.duration,val.start_time_h,val.start_time_m);
+          item1.start_time_h=itemDurationL.hour;
+          item1.start_time_m=itemDurationL.minute;
+        }
 
-   var buttons1 = [
-        {
-            text: 'Создать',
-            onClick: function () {
-                $scope.newOrder(id);
-            }
-        }
-    ];
-    var buttons2 = [
-        {
-            text: 'Удалить',
-            onClick: function () {
-                $scope.deleteItem(id);
-            }
-        },
-        {
-            text: 'Переместить',
-            onClick: function () {
-               $scope.bidMove(id);
-            }
-        },
-        {
-            text: 'Отказ',
-        }
-    ];
-    var buttons3 = [
-        {
-            text: 'Отмена',
-            color: 'red'
-        }
-    ];
+        console.log(val);
+        value.splice(k,1); //Удаляем зявку из списка
+        value.splice(k,0,item); //Добавляем item в список
+        if(item1){value.splice(k+1,0,item1)}
+        $scope.deleteItem($scope.moveItem.id);
+        };
+      });
+    });
+    mainView.router.back();
+  };
 
-    var buttons4 = [
-        {
-            text: 'Удалить',
-            onClick: function () {
-                $scope.deleteItem(id);
-            }
+  $scope.closeModal=function(){
+    myApp.closeModal();
+  };
+
+  $scope.editOrder= function(id){
+    $scope.editOrderData={};  
+    angular.forEach($scope.boxes, function(value, key) {
+      angular.forEach(value,function(val,k){
+       if (parseInt(val.id) == id){
+        console.log(val.duration);
+        
+        $scope.editOrderData.id=val.id;
+        $scope.editOrderData.setTimeH=val.start_time_h;
+        $scope.editOrderData.setTimeM=val.start_time_m;
+        $scope.editOrderData.startTimeH=val.start_time_h;
+        $scope.editOrderData.startTimeM=val.start_time_m;
+        $scope.editOrderData.endTimeH=val.start_time_h;
+        $scope.editOrderData.endTimeM=val.start_time_m;
+        $scope.editOrderData.duration=val.duration;
+        $scope.editOrderData.maxDinamicDuration=0;
+
+        if(value[k+1] && value[k+1].status=="clean"){
+         var t=$scope.minuteAddToTime(value[k+1].duration, val.start_time_h, val.start_time_m);
+         $scope.editOrderData.endTimeH=t.hour;
+         $scope.editOrderData.endTimeM=t.minute;
+         $scope.editOrderData.maxDinamicDuration=value[k+1].duration;
+         $scope.editOrderData.rangeData=0;
+        };
+
+        if(value[k-1] && value[k-1].status=="clean"){
+          $scope.editOrderData.startTimeH=value[k-1].start_time_h;
+          $scope.editOrderData.startTimeM=value[k-1].start_time_m;
+          $scope.editOrderData.maxDinamicDuration=value[k-1].duration;
+          $scope.editOrderData.rangeData=value[k-1].duration;
+
+          if(value[k+1] && value[k+1].status=="clean"){
+            $scope.editOrderData.startTimeH=value[k-1].start_time_h;
+            $scope.editOrderData.startTimeM=value[k-1].start_time_m;
+            var t=$scope.minuteAddToTime(value[k+1].duration, val.start_time_h, val.start_time_m);
+            $scope.editOrderData.endTimeH=t.hour;
+            $scope.editOrderData.endTimeM=t.minute;
+            $scope.editOrderData.maxDinamicDuration=parseInt(value[k+1].duration)+parseInt(value[k-1].duration);
+            $scope.editOrderData.rangeData=value[k-1].duration;
+          };
+        };
+       };
+      });
+    });
+    mainView.router.loadPage({pageName: 'washer_edit_bid'});
+  };
+
+  $scope.rangeEditChange = function(){
+    var rangeDataAdd=$scope.minuteAddToTime($scope.editOrderData.rangeData,$scope.editOrderData.startTimeH,$scope.editOrderData.startTimeM);
+    $scope.editOrderData.setTimeH=rangeDataAdd.hour;
+    $scope.editOrderData.setTimeM=rangeDataAdd.minute;
+  }; 
+
+  $scope.doEditOrder = function(){
+    angular.forEach($scope.boxes, function(value, key) {
+      angular.forEach(value,function(val,k){
+        if (parseInt(val.id) == $scope.editOrderData.id){ 
+          var pushItem={};
+          var item={};
+          item.id=$scope.editOrderData.id+'1';
+          item.status="queue";
+          item.duration=$scope.editOrderData.duration;
+          item.start_time_h=$scope.editOrderData.setTimeH;
+          item.start_time_m=$scope.editOrderData.setTimeM;
+          console.log(val);
+          pushItem.mainVal=item;
+            console.log($scope.editOrderData.rangeData,$scope.editOrderData.maxDinamicDuration);
+            
+              var item3={};
+              item3.id=$scope.editOrderData.id+'2';
+              item3.status="clean";
+              item3.duration=$scope.editOrderData.rangeData;
+              item3.start_time_h=$scope.editOrderData.startTimeH;
+              item3.start_time_m=$scope.editOrderData.startTimeM;
+              pushItem.leftItem=item3;
+              // if(item3.duration>0){console.log(k);if(k==0){value.splice(k,0,item3)}else{value.splice(k-1,0,item3)}}; //Добавляем item в список
+              var item4={};
+              item4.id=$scope.editOrderData.id+'3';
+              item4.status="clean";
+              item4.duration=$scope.editOrderData.maxDinamicDuration-$scope.editOrderData.rangeData;
+              var rangeDataToHM=$scope.minuteAddToTime($scope.editOrderData.duration,$scope.editOrderData.setTimeH,$scope.editOrderData.setTimeM)
+              item4.start_time_h=rangeDataToHM.hour;
+              item4.start_time_m=rangeDataToHM.minute;
+              
+              pushItem.rightItem=item4;
+              // if(value[k+1] && value[k+1].status=="clean"){
+              //   value.splice(k+1,1);// Удаляем пустую заявку
+              // };
+
+              if(value[k-1] && value[k-1].status=="clean" && value[k+1] && value[k+1].status=="clean"){//если есть пустые с обеих сторон
+                if(value[k-1] && value[k-1].status=="clean"){
+                  item3.start_time_h=value[k-1].start_time_h;
+                  item3.start_time_m=value[k-1].start_time_m;
+                  value[k-1]=pushItem.leftItem;
+                };
+                  value[k]=pushItem.mainVal;
+
+                if(value[k+1] && value[k+1].status=="clean"){
+                   value[k+1]=pushItem.rightItem;
+                };
+
+                if(value[k+1] && value[k+1].duration==0){
+                  value.splice(k+1,1);// Удаляем пустую заявку k+1
+                };
+
+                if(value[k-1] && value[k-1].duration==0){
+                  value.splice(k-1,1);// Удаляем пустую заявку k-1
+                };
+
+              }else{
+                if(value[k-1] && value[k-1].status=="clean"){//если есть пустая с лева
+                  item3.start_time_h=value[k-1].start_time_h;
+                  item3.start_time_m=value[k-1].start_time_m;
+                  value[k-1]=pushItem.leftItem;
+                  value[k]=pushItem.mainVal;
+                  value.splice(k+1,0,pushItem.rightItem);
+                  if(value[k-1] && value[k-1].duration==0){
+                    value.splice(k-1,1);// Удаляем пустую заявку k-1
+                  };
+
+                }else{
+                  if(value[k+1] && value[k+1].status=="clean"){ //если есть пустая с права
+                    value[k]=pushItem.mainVal;
+                    value[k+1]=pushItem.rightItem;
+                    value.splice(k,0,pushItem.leftItem);
+                  
+                    if(value[k+2] && value[k+2].duration==0){
+                      value.splice(k+2,1);// Удаляем пустую заявку k+1
+                    };
+                  };
+                };
+              }
+            // };
+          // }
         }
-    ];
+      });
+    });
+  }
+
+  $scope.boxItemClick = function(status,id) {
     
-    if(status=="queue"){
-      var groups = [buttons2, buttons3];
-      myApp.actions( groups);
+   myApp.pickerModal('.'+status);
+
+   $scope.delete = function() {
+      $scope.deleteItem(id);
+      $scope.closeModal();
     };
-    if(status=="canceled"){
-      var groups = [buttons1, buttons4, buttons3];
-      myApp.actions(groups);
+
+    $scope.move = function() {
+      $scope.bidMove(id);
+      $scope.closeModal();
     };
-    if(status=="clean"){
-      var groups = [buttons1, buttons3];
-      myApp.actions(groups);
+
+    $scope.new = function() {
+      $scope.newOrder(id);
+      $scope.closeModal();
     };
- };
+
+    $scope.edit = function() {
+      $scope.editOrder(id);
+      $scope.closeModal();
+    };
+
+  };
 
 })

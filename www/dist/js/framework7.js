@@ -3261,14 +3261,14 @@
                     var buttonsHTML = '';
                     for (var i = 0; i < params.length; i++) {
                         for (var j = 0; j < params[i].length; j++) {
-                            if (j === 0) buttonsHTML += '<div class="actions-modal-group">';
+                            if (j === 0) buttonsHTML += '<div class="actions-modal-group" ng-controller="washerHomeController">';
                             var button = params[i][j];
                             var buttonClass = button.label ? 'actions-modal-label' : 'actions-modal-button';
                             if (button.bold) buttonClass += ' actions-modal-button-bold';
                             if (button.color) buttonClass += ' color-' + button.color;
                             if (button.bg) buttonClass += ' bg-' + button.bg;
                             if (button.disabled) buttonClass += ' disabled';
-                            buttonsHTML += '<span class="' + buttonClass + '">' + button.text + '</span>';
+                            buttonsHTML += '<span ng-click="actions()" class="' + buttonClass + '">' + button.text + '</span>';
                             if (j === params[i].length - 1) buttonsHTML += '</div>';
                         }
                     }

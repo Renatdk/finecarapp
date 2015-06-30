@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="dist/css/framework7.css">
     <link rel="stylesheet" href="css/framework7.themes.css">
     <!-- Path to your custom app styles-->
+    
     <link rel="stylesheet" href="css/my-app.css">
   </head>
   <body class="layout-dark theme-orange">
@@ -183,6 +184,11 @@
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Новая заявка</div>
           </div>
+          <!-- Navbar inner for Washer Bid edit page-->
+          <div data-page="washer_edit_bid" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Новая заявка</div>
+          </div>
           <!-- Navbar inner for Washerman add page-->
           <div data-page="washerman_add" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
@@ -239,7 +245,13 @@
         <div data-page="bid_move" class="navbar-inner cached">
           <div class="left sliding">
               <a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
-          <div class="center sliding">Перемещение заявка</div>
+          <div class="center sliding">Перемещение заявки</div>
+        </div>
+        <!-- Navbar inner for Send tiket page-->
+        <div data-page="map_washer" class="navbar-inner cached">
+          <div class="left sliding">
+              <a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+          <div class="center sliding">Координаты автомойки</div>
         </div>
 
         <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -281,8 +293,8 @@
                       <div class="item-inner"> 
                         <div class="item-input">
                           <div class="buttons-row">
-                            <a href="#" ng-click="Login(loginData.email,loginData.password)" class="button">Водитель</a>
-                            <a href="#washer_home" class="button">Автомойка</a>
+                            <a href="#" ng-click="Login()" class="button">Водитель</a>
+                            <a href="#" ng-click="wLogin()" class="button">Автомойка</a>
                           </div>
                           
                         </div>
@@ -716,7 +728,7 @@
             </div>
           </div>
           <!-- Washer registration Page -->
-          <div data-page="washer_registration" class="page cached">
+          <div data-page="washer_registration" class="page cached" ng-controller="washerRegistrationController">
             <div class="page-content">
               <div class="content-block-title">Введите данные</div>
               <div class="list-block">
@@ -726,7 +738,7 @@
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="text" placeholder="Наименование мойки">
+                          <input type="text" ng-model="registerData.username" placeholder="Наименование мойки">
                         </div>
                       </div>
                     </div>
@@ -736,7 +748,7 @@
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="text" placeholder="Наименование юр. лица">
+                          <input type="text" ng-model="registerData.entityName" placeholder="Наименование юр. лица">
                         </div>
                       </div>
                     </div>
@@ -746,7 +758,9 @@
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="text" placeholder="Фото сведетельства юр. лица">
+                          <p><a href="#" class="button" ng-click="getPhoto()">Фото удастоверения юр. лица</a></p>
+                          <img id="myImage" />
+                          <input type="hidden"  ng-model="registerData.photo" placeholder="Фото сведетельства юр. лица">
                         </div>
                       </div>
                     </div>
@@ -756,17 +770,28 @@
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="number" placeholder="ИИН юр. лица">
+                          <input type="number" ng-model="registerData.iin" placeholder="ИИН юр. лица">
                         </div>
                       </div>
                     </div>
                   </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-email"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <input type="email" ng-model="registerData.email" placeholder="Email">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
                   <li>
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-tel"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="tel" placeholder="Телефон">
+                          <input type="tel" ng-model="registerData.phone" placeholder="Телефон">
                         </div>
                       </div>
                     </div>
@@ -776,7 +801,7 @@
                       <div class="item-media"><i class="icon icon-form-password"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="password" placeholder="Пароль">
+                          <input type="password" ng-model="registerData.password" placeholder="Пароль">
                         </div>
                       </div>
                     </div>
@@ -786,7 +811,18 @@
                       <div class="item-media"><i class="icon icon-form-building"></i></div>
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <input type="text" placeholder="Адрес укажите на карте">
+                          <input type="text" ng-model="registerData.address" placeholder="Адрес">
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="item-content">
+                      <div class="item-media"><i class="icon icon-form-building"></i></div>
+                      <div class="item-inner"> 
+                        <div class="item-input">
+                          <p><a href="#map_washer" ng-click="showMap()" class="button">Указать координаты</a></p>
+                          <input type="hidden" ng-model="registerData.coordinates" placeholder="Координаты автомойки">
                         </div>
                       </div>
                     </div>
@@ -794,7 +830,16 @@
                 </ul>
               </div>
               <div class="content-block">
-                <a href="#home" class="button button-big active">Зарегестрироваться</a>
+                <a href="#" ng-click="registration()" class="button button-big active">Зарегестрироваться</a>
+              </div>
+            </div>
+          </div>
+          <!-- Washer registration Page -->
+          <div data-page="map_washer" class="page cached" ng-controller="washerRegistrationController">
+            <div class="page-content">
+              <div class="content-block">
+                <div class="content-block-title">Укажите автомойку на карте</div>
+                <div id="mapwasher"></div>
               </div>
             </div>
           </div>
@@ -873,123 +918,86 @@
               </form>    
             </div>
           </div>
-          
-
           <!-- Washer home Boxes Page-->
           <div ng-controller="washerHomeController">
 
             <div data-page="washer_home" class="page cached">
-              <div class="page-content">
-                <div class="content-block">
-                  <div class="buttons-row">
-                    <a href="#washer_new_bid" class="button active">Бокс 1</a>
-                    <a href="#bid_move" class="button active">Бокс 2</a>
-                    <a href="#washer_single_box" class="button active">Бокс 3</a>
-                    <a href="#washer_single_box" class="button">Бокс 4</a>
-                  </div>
-                </div>
-                <div class="content-block-title"><span id="realtime">14:25:30</span></div>
-                <div class="content-block">
-                  <div class="row no-gutter">
-                    <div class="col-25">
-                      <a href="#" class="ac-3">
-                        <div class="background_orange h30">14:30 30м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h30">15:00 30м</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">15:30 30м</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">16:00 30м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h30">16:30 30м</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h15">17:00 15м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h120">17:15 2ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">19:15 30м</div>
-                      </a>
-                    </div>
-                    <div class="col-25">
-                      <a href="#" class="ac-3">
-                        <div class="background_orange h60">14:30 1ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h60">15:30 1ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">16:30 30м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h30">17:00 30м</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h15">17:30 15м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h120">17:45 2ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">19:45 30м</div>
-                      </a>
-                    </div>
-                    <div class="col-25">
-                      <a href="#" class="ac-3">
-                        <div class="background_orange h120">14:30 2ч</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h120">16:30 2ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">18:30 30м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h30">19:00 30м</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h15">19:30 15м</div>
-                      </a>
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h120">19:45 2ч</div>
-                      </a>
-                      <a href="#" class="ac-4">
-                        <div class="background_orange h30">21:45 30м</div>
-                      </a>
-                    </div>
-                    <div class="col-25">
-                      <a href="#" class="ac-2">
-                        <div class="background_gray h240">14:30 24ч </div>
-                      </a>
+                <div class="page-content">
+                  <div class="content-block">
+                    <div class="buttons-row">
+                      <a href="#washer_new_bid" ng-click="actions()" class="button active">Бокс 1</a>
+                      <a href="#bid_move" class="button active">Бокс 2</a>
+                      <a href="#washer_single_box" class="button active">Бокс 3</a>
+                      <a href="#washer_single_box" class="button">Бокс 4</a>
                     </div>
                   </div>
-
+                
                   <div class="row no-gutter center" >
-                    <div class="col-25" ng-repeat="(box_key,box) in boxes">
+                    <div class="col-25" ng-repeat="(box_key,box) in boxes track by $index">
                       <div>{{box_key}}<span id="key"></span></div>
-                      <div ng-repeat="box_item in box">
+                      <div ng-repeat="box_item in box track by $index">
                         <div  ng-if="box_item.status=='queue'  &&  $index==0" class="h{{box_item.duration}} queue_in_box_bkg" ng-click="as_queue_in_box(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
 
                           <div ng-if="box_item.status!='queue'  ||  $index!=0" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="boxItemClick(box_item.status,box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
-                        </div>
                       </div>
                     </div>
                   </div>
+                
                 </div>
                 <div class="content-block">
-                  <!-- <div class="buttons-row"> -->
                     <a href="#box_add" class="button">+Добавить Бокс</a>
-                  <!-- </div> -->
-                </div>
-              </div>
+                </div> 
+                
+                <!-- picker modal for clean box -->
+                <div class="actions-modal picker-modal clean">
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button" ng-click="new()" >Создать</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                </div>  
 
-            
+                <!-- picker modal for canceled box -->
+                <div class="actions-modal picker-modal canceled">
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="new()" >Создать</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                </div>  
+                
+                <!-- picker modal for canceled box -->
+                <div class="actions-modal picker-modal queue">
+                  <div class="actions-modal-group">
+                    <span class="actions-modal-label" >F456ASD</span>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="move()" >Переместить</div>
+                    <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                </div>  
+
+                <div class="actions-modal picker-modal picker-1">
+                  <div class="actions-modal-group">
+                    <span class="actions-modal-label" >F456ASD</span>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="new()" >Создать</div>
+                    <div class="actions-modal-button" ng-click="move()" >Переместить</div>
+                    <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button">Тестовый</div>
+                  </div>
+                </div>  
+            </div>
 
             <div data-page="washer_new_bid" class="page cached">
               <div class="page-content">
@@ -1073,7 +1081,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="addService()" class="button active back link">Создать</a>
+                              <a href="#"  ng-click="doNewOrder()" class="button active back link">Создать</a>
                             </div>
                           </div>
                         </div>
@@ -1084,18 +1092,91 @@
               </div>
             </div>
 
+            <div data-page="washer_edit_bid" class="page cached">
+              <div class="page-content">
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="editOrderData.car_number" placeholder="Номер авто">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="editOrderData.tel" placeholder="Телефон">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Время начала: {{editOrderData.setTimeH}}:{{editOrderData.setTimeM}}</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                             <div class="range-slider">
+                              <i class="icon icon-form-clock"></i>
+                              {{editOrderData.startTimeH}}:{{editOrderData.startTimeM}}
+
+                              <span class="right">
+                                {{editOrderData.endTimeH}}:{{editOrderData.endTimeM}}
+                                <i class="icon icon-clock-filled"></i>
+                              </span>
+                              <input ng-model="editOrderData.rangeData" ng-change="rangeEditChange()"  type="range" min="0" max="{{editOrderData.maxDinamicDuration}}" value="0" step="5">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#"  ng-click="doEditOrder()" class="button active back link">Переместить</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+              </div>
+            </div>
+
             <!-- Washer home Boxes Page-->
             <div data-page="bid_move" class="page cached">
               <div class="page-content">
-                <div class="content-block-title"><span id="realtime">14:25:30{{moveItem.duration}}</span></div>
+                <div class="content-block-title"><span id="realtime">14:25:30</span></div>
                 <div class="content-block">
                   <div class="row no-gutter center" >
                     <div class="col-25" ng-repeat="(box_key,box) in boxes">
                       <div>{{box_key}}</div>
                       <div ng-repeat="box_item in box">
-                        <div  ng-if="box_item.status=='clean'  &&  box_item.duration>=parseInt(moveItem.duration)" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="doOrderMove(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
+                        <div  ng-if="box_item.status=='clean'  &&  box_item.duration>=moveItem.duration" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="doOrderMove(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
 
-                          <div ng-if="box_item.status!='clean' || box_item.duration<parseIn(moveItem.duration)" class="h{{box_item.duration}} black_bkg" ></div>
+                          <div ng-if="box_item.status!='clean' || box_item.duration<moveItem.duration" class="h{{box_item.duration}} black_bkg" ></div>
 
                         </div>
                     </div>
@@ -1105,6 +1186,7 @@
             </div>
 
           </div>
+
           <!-- Washer single box Page-->
           <div data-page="washer_single_box" class="page cached">
             <div class="page-content">
@@ -1734,11 +1816,11 @@
 
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
-    <script type="text/javascript" src="dist/js/zepto.min.js"></script>
+    <script type="text/javascript" src="dist/js/moment.js"></script>
     <script type="text/javascript" src="dist/js/angular.js"></script>
     <script type="text/javascript" src="dist/js/angular-resource/angular-resource.js"></script>
-    
     <script type="text/javascript" src="cordova.js"></script>
+    <script src="http://maps.api.2gis.ru/2.0/loader.js?pkg=full" data-id="dgLoader"></script>
     <!-- Path to your app js-->
     <script type="text/javascript" src="js/my-app.js"></script>
     <script type="text/javascript" src="js/factory.js"></script>
