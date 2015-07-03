@@ -123,6 +123,9 @@ fineCarApp.config(function(LoopBackResourceProvider) {
   });
 
 
+
+
+
 fineCarApp.controller('userRegistrationController', function($scope, FUser,$rootScope) {
   $scope.registerData={};
 
@@ -168,6 +171,7 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
           tokenId: response.id,
           username:  response.user.username,
           email:  response.user.email,
+          city:  response.user.city,
         };
 
         Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
@@ -211,6 +215,7 @@ fineCarApp.controller('homeController', function($scope, $http, $rootScope, User
     $scope.getParams=function(obj){
       UserBid.name=obj.car_name;
       UserBid.number=obj.car_number;
+      UserBid.body_type=obj.body_type;
       console.log(UserBid);
       myApp.showIndicator();
       ComplexServices.find({filter: { where: {driverId: $rootScope.currentUser.id}}}).$promise.then(function(response){
@@ -270,12 +275,13 @@ fineCarApp.controller('bidController', function($scope, $http, UserBid, UserBids
 fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $rootScope) {
 
     $scope.addCartData={};
-    $scope.addCartData.car_type="passenger";
+    $scope.addCartData.body_type="passenger";
     
     $scope.doAddCar= function(){
       var car={};
       car.car_name=$scope.addCartData.mark+" "+$scope.addCartData.model;
       car.car_number=$scope.addCartData.number;
+      car.body_type=$scope.addCartData.body_type;
       Cars.create(car, function(cars) { 
           $rootScope.userCars.push(car);
           console.log("cars:",cars);
@@ -291,14 +297,15 @@ fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $root
 
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid, Services, ComplexServices) {
+fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $http, UserBid, Services, ComplexServices) {
     
     // $http.get('json/user/choice_service.json').success(function(data){
     //   $scope.userServices=data.services;  
     // });
 
     $scope.getParams=function(obj){
-      UserBid.service=obj.service_description;
+      UserBid.services=obj.serviceIds;
+      $rootScope.showWashers();
       console.log(UserBid);
     };
 
@@ -317,6 +324,7 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
       $scope.new_price=0;
       $scope.new_time=0;
       $scope.title_sum="";
+      $scope.serviceIds=[];
       var i=0;
       if($scope.services[index].isChecked==true){
         var i=$scope.order.services.indexOf($scope.services[index]);
@@ -332,6 +340,7 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
         $scope.new_price +=parseFloat(value.price);
         $scope.new_time +=parseFloat(value.time);  
         $scope.title_sum +=value.name+"+";  
+        $scope.serviceIds.push(value.id);
       });
 
 
@@ -345,6 +354,8 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
       newService.description=$scope.title_sum;
       newService.time=$scope.new_time;
       newService.price=$scope.new_price;
+      newService.serviceIds=$scope.serviceIds;
+
       myApp.showIndicator();
       ComplexServices.create(newService).$promise.then(function(response){
         $scope.userServices.push(newService);
@@ -365,16 +376,8 @@ fineCarApp.controller('choiceServiceController', function($scope, $http, UserBid
 
 });
 
-
-
 // create the controller and inject Angular's $scope
-fineCarApp.controller('addServiceController', function($scope, $http) {
-    
-
-});
-
-// create the controller and inject Angular's $scope
-fineCarApp.controller('choiceWasherController', function($scope, $http, $cordovaGeolocation, getDastance, UserBid) {
+fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $http, $cordovaGeolocation, getDastance, UserBid, WasherProfile, WasherServices) {
 
   $scope.sorts='km';
   $scope.sort_by =function (val){
@@ -387,40 +390,88 @@ fineCarApp.controller('choiceWasherController', function($scope, $http, $cordova
       return ""
     }
   };
- $scope.geoObject="Определение местоположения..."
+ $scope.geoObject="Определение местоположения...";
 
-  myApp.onPageBeforeInit('washer_choice', function (page) {
-         
+  $rootScope.showWashers = function(){
+    
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation
     .getCurrentPosition(posOptions)
     .then(function (position) {
+      
       $scope.lat  = position.coords.latitude; UserBid.mlat=position.coords.latitude;
       $scope.long = position.coords.longitude; UserBid.mlong=position.coords.longitude;
+      
       $scope.geoObject="Координаты определены..."
+      
       $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
         $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
       });
-      $http.get('json/user/washer_choice.json').then(function(data){
-        $scope.washers=data.data.washers;
-        angular.forEach($scope.washers, function(value, key) {
-          value.km=getDastance.distance(value.lat,value.long,$scope.lat,$scope.long);
-        }, $scope.washers);
+        
+        $scope.washers=[];
+        WasherProfile.find({filter: { where: {City: $rootScope.currentUser.city}}}, function(WasherProfiles) { 
 
-      });
+          angular.forEach(WasherProfiles, function(value, key) {
+            value.services=[];
+            value.km=getDastance.distance(value.coordinates.lat,value.coordinates.lng,$scope.lat,$scope.long);
+
+            WasherServices.find({filter: { where: {wProfileId: value.id}}}, function(wServices) { 
+              var price = 0;
+              var time = 0;
+              var names = "";
+              var count = 0;
+              angular.forEach(UserBid.services, function(val, k) {
+                angular.forEach(wServices, function(wVal, wK) {
+                  if(val==wVal.serviceId){
+                    value.services.push(wVal);
+
+                    if(UserBid.body_type=="passenger"){price += wVal.price1};
+                    if(UserBid.body_type=="pikup"){price += wVal.price2};
+                    if(UserBid.body_type=="miniven"){price += wVal.price3};
+                    
+                    time += wVal.duration;
+                    names += " "+wVal.name;
+                    count +=1;
+                  };
+                });
+                value.price=price;
+                value.time=time;
+                value.names=names;
+                value.count=count;
+              });
+              if(price>0){
+                $scope.washers.push(value);
+              };
+              console.log("wServices:", wServices);
+            },function(err){
+              console.log("err:",err);
+            });
+
+
+          });
+
+
+
+          console.log("$scope.washers:",$scope.washers);
+
+        },function(err){
+          console.log("err:",err);
+        });
+
+      // $http.get('json/user/washer_choice.json').then(function(data){
+      //   $scope.washers=data.data.washers;
+      //   angular.forEach($scope.washers, function(value, key) {
+      //     value.km=getDastance.distance(value.lat,value.long,$scope.lat,$scope.long);
+      //   }, $scope.washers);
+      // });
     
     }, function(err) {
       // error
     });
-  });
+  };
 
   $scope.getParams=function(obj){
-      UserBid.washer=obj.name;
-      UserBid.address=obj.address;
-      UserBid.price=obj.price;
-      UserBid.km=obj.km;
-      UserBid.wlat=obj.lat;
-      UserBid.wlong=obj.long;
+      UserBid.washer=obj;
       console.log(UserBid);
     }; 
 
@@ -447,7 +498,7 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids) {
   $scope.UserBid=UserBid;
   
   $scope.showMap=function(){
-    $scope.img="http://static-maps.yandex.ru/1.x/?l=map&size=250,300&pt="+UserBid.mlong+","+UserBid.mlat+",pm2am~"+UserBid.wlong+","+UserBid.wlat+",pm2bm";
+    $scope.img="http://static-maps.yandex.ru/1.x/?l=map&size=250,300&pt="+UserBid.mlong+","+UserBid.mlat+",pm2am~"+UserBid.washer.coordinates.lng+","+UserBid.washer.coordinates.lat+",pm2bm";
   };
 
 
@@ -473,7 +524,8 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids) {
   }
 });
 
-fineCarApp.controller('washerRegistrationController', function($scope, Washers, $rootScope, washerLogin) {
+fineCarApp.controller('washerRegistrationController', function($scope, $http, Washers, $rootScope, washerLogin, $cordovaGeolocation, WasherProfile) {
+  
   $scope.registerData={};
 
   $scope.registration=function(){
@@ -492,8 +544,16 @@ fineCarApp.controller('washerRegistrationController', function($scope, Washers, 
   };
 
   $scope.getPhoto = function(){
-    navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
-        destinationType: Camera.DestinationType.DATA_URL
+    navigator.camera.getPicture(onSuccess, onFail, { 
+      quality: 50,
+      destinationType : Camera.DestinationType.DATA_URL,
+      sourceType : Camera.PictureSourceType.CAMERA,
+      allowEdit : true,
+      encodingType: Camera.EncodingType.JPEG,
+      targetWidth: 300,
+      targetHeight: 400,
+      popoverOptions: CameraPopoverOptions,
+      saveToPhotoAlbum: false
     });
 
     function onSuccess(imageData) {
@@ -507,43 +567,181 @@ fineCarApp.controller('washerRegistrationController', function($scope, Washers, 
     }
 
   };
+
+  $scope.newProfile={};
+
+  $scope.addWasherProfile = function(){
+    $scope.newProfile.openH="00";
+    $scope.newProfile.closeH="24";
+
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation
+    .getCurrentPosition(posOptions)
+    .then(function (position) {
+      $scope.lat  = position.coords.latitude;
+      $scope.long = position.coords.longitude;
+      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
+        $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+        $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+      });
+    }, function(err) {
+      // error
+    });
+  };
+
+
+
   $scope.showMap = function(){
 
     var map;
 
     DG.then(function () {
         map = DG.map('mapwasher', {
-            center: [54.98, 82.89],
-            zoom: 13,
+            center: [$scope.lat, $scope.long],
+            zoom: 16,
         });
         
-        marker=DG.marker([54.98, 82.89],{
+        marker=DG.marker([$scope.lat, $scope.long],{
           draggable: true
         }).addTo(map);
 
         marker.on('drag', function(e) {
-            var lat = e.target._latlng.lat.toFixed(3),
-                lng = e.target._latlng.lng.toFixed(3);
-
-            locationInfo.innerHTML = lat + ', ' + lng;
+          var lat = e.target._latlng.lat,
+              lng = e.target._latlng.lng;
+          
+          $$("input#lat").val(lat);
+          $$("input#long").val(lng);
+          
+          console.log(e.target._latlng.lat,e.target._latlng.lng);
+          console.log($scope.newProfile.lat,$scope.newProfile.long);
         }); 
     });
       
   };
 
+  $scope.setCoord = function(){
+    $scope.newProfile.coordinates=$$("input#lat").val()+","+$$("input#long").val();
+    console.log("coor:",$scope.newProfile.coordinates);
+    $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$$("input#long").val()+','+$$("input#lat").val()).success(function(data){
+        $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+        $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+    
+      });
+    
+    mainView.router.back();
+  };
+
+  $scope.addProfile = function (){
+    console.log($scope.newProfile);
+    $scope.newProfile.closeH=parseInt($scope.newProfile.closeH);
+    $scope.newProfile.openH=parseInt($scope.newProfile.openH);
+    WasherProfile.create($scope.newProfile, function(response) { 
+        $scope.profiles.push($scope.newProfile);
+        console.log("response:",response);
+      },function(err){
+        console.log("err:",err);
+      });
+    mainView.router.back();
+  };
+
+  $scope.setCurrentWProfile = function(profile){
+    $rootScope.currentWProfile=profile;
+
+    var header = {};
+
+    $rootScope.BoxTable = [[{i:1,j:1,"class":"border_right"},{i:1,j:2,"boxHeader":"Бокс1"},{i:1,j:3,"boxHeader":"Бокс2"},{i:1,j:4,"boxHeader":"Бокс3"}],
+                           [{i:2,j:1,"class":"border_right"},{i:2,j:2, "class":"c2x2"},{i:2,j:3},{i:2,j:4}],
+                           [{i:3,j:1,"class":"border_right"},{i:3,j:2},{i:3,j:3},{i:3,j:4}],
+                           [{i:4,j:1,"class":"border_right"},{i:4,j:2},{i:4,j:3},{i:4,j:4,"class":"c4x4"}],
+                           [{i:5,j:1,"class":"border_right"},{i:5,j:2},{i:5,j:3},{i:5,j:4}]];
+
+
+  };
 
 });
 
-fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin) {
+fineCarApp.controller('washerServicesController', function($scope, WasherProfile, Services, $rootScope, WasherServices) {
  
 
-   function getDecimal(num) {
-    var str = "" + num;
-    var zeroPos = str.indexOf(".");
-    if (zeroPos == -1) return 0;
-    str = str.slice(zeroPos);
-    return +str;
+  myApp.onPageBeforeInit('washer_service', function (page) {
+    WasherServices.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id}}}, function(wServices) { 
+          $scope.wServices = wServices;
+          console.log("wServices:",wServices);
+        },function(err){
+          console.log("err:",err);
+        });
+
+    Services.find().$promise.then(function(response){
+      console.log(response);
+      $scope.services=response;
+    });
+  
+  });
+
+  $scope.setServiceChoice=function(service){
+    $scope.addWasherService={};
+
+    $scope.addWasherService.name=service.name;
+    $scope.addWasherService.description=service.description;
+    $scope.addWasherService.shotDescription=service.short_description;
+    $scope.addWasherService.serviceId=service.id;
+    $scope.addWasherService.wProfileId=$rootScope.currentWProfile.id;
+
+    console.log($scope.addWasherService);
   };
+
+  $scope.createWasherService=function(){
+    WasherServices.create($scope.addWasherService,
+      function(response){
+        $scope.wServices.push($scope.addWasherService);
+        console.log(response);
+        mainView.router.back();
+      },
+      function(response){
+        console.log("response:",response);  
+        myApp.alert(response.data.error.message);
+
+      }   
+    );
+  };
+
+
+});
+
+
+
+fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers) {
+  
+
+  $scope.item = function(){
+    console.log("item");
+  };
+
+  $scope.newItem = function(){
+    console.log("newItem");
+  };
+
+  $scope.addItemToTable = function(){
+    $$(".c4x4").append( $compile(
+    "<div class='box_item queue_item h120 top_15' ng-click='boxItemClick(\"queue\",1)'>Текст</div>")(scope));
+  };
+
+  $scope.showImage = function(){
+    var image = document.getElementById('washerImage');
+    image.src = "data:image/jpeg;base64," + $rootScope.currentWasher.photo;    
+    console.log("click");
+    console.log($rootScope.currentWasher.photo);
+
+  };
+   
+
+   function getDecimal(num) {
+      var str = "" + num;
+      var zeroPos = str.indexOf(".");
+      if (zeroPos == -1) return 0;
+      str = str.slice(zeroPos);
+      return +str;
+    };
   
   $scope.minuteToHour = function(minutes){
     var hour=0;

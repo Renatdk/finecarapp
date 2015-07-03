@@ -15,7 +15,7 @@ angular.module('fineCarApp.factory',['lbServices'])
       cars : []
   };
 })
-.factory('washerLogin', function(Washers, $rootScope, Bids) {
+.factory('washerLogin', function(Washers, $rootScope, WasherProfile) {
   return function(e,p){
     myApp.showIndicator();
 
@@ -26,17 +26,18 @@ angular.module('fineCarApp.factory',['lbServices'])
           tokenId: response.id,
           username:  response.user.username,
           email:  response.user.email,
+          photo:  response.user.photo,
         };
 
-        Bids.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(bids) { 
-          $rootScope.bids = bids;
-          console.log("bids:",bids);
+        WasherProfile.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(profiles) { 
+          $rootScope.profiles = profiles;
+          console.log("profiles:", profiles);
         },function(err){
           console.log("err:",err);
         });
 
         console.log(response);
-        mainView.router.load({pageName: 'washer_home'});
+        mainView.router.load({pageName: 'choice_profile'});
         myApp.hideIndicator();
       },
 
