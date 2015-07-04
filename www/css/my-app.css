@@ -180,6 +180,7 @@ table.time_box tr td{
   left:0;
   width: 100%;
   z-index:91;
+
 }
 
 .top_15{
@@ -193,6 +194,7 @@ table.time_box tr td{
   text-align: center;
   color:#1e1e1e;
   margin-top: -1px;
+  border:1px solid #333;
   /*border-bottom: 1px solid #222426;*/
 }
 

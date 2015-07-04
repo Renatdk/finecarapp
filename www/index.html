@@ -1109,14 +1109,18 @@
 
                   <div class="orange_border" >
                     <table class="time_box center">
-                      <tr ng-repeat="(box_row,i ) in BoxTable track by $index">
-                        <td ng-repeat="box_cell in i" ng-click="boxItemClick('clean',box_cell.i+box_cell.j)" class="{{box_cell.class}}">
-                          {{box_cell.i}}x{{box_cell.j}} {{box_cell.boxHeader}}
+                      <tr ng-repeat="(t, box_row ) in BoxTable track by box_row.i ">
+                        <td ng-repeat="(b,box_cell) in box_row track by $index" ng-click="addItemToBox(t,b)" class="{{box_cell.class}}">
+                          <div ng-click="boxItemClick(box_cell.status,1)" class="box_item {{box_cell.status}}_item h{{box_cell.duration}}"></div>
+                          {{box_cell.boxHeader}}{{box_cell.time}}
+                        </td>
+                        <td>
+                          {{box_row.i}}
                         </td>
                       </tr>
                     </table>
                   </div>
-                  <a href="#" ng-click="addItemToTable()">add item</a>
+                  <a href="#" ng-click="addItemToTable()">add item</a><div my-customer></div>
                   <div class="orange_border" >
                     <table class="time_box center">
                       <tr>

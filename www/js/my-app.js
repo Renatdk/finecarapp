@@ -633,8 +633,6 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
   $scope.addProfile = function (){
     console.log($scope.newProfile);
-    $scope.newProfile.closeH=parseInt($scope.newProfile.closeH);
-    $scope.newProfile.openH=parseInt($scope.newProfile.openH);
     WasherProfile.create($scope.newProfile, function(response) { 
         $scope.profiles.push($scope.newProfile);
         console.log("response:",response);
@@ -648,12 +646,56 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
     $rootScope.currentWProfile=profile;
 
     var header = {};
+    
+    var open=parseInt($rootScope.currentWProfile.openH);
+    var close=parseInt($rootScope.currentWProfile.closeH);
+    var boxCount=$rootScope.currentWProfile.boxCount;
+    var boxTable={};
+    var i=0; 
+    
+    for(var t=open-1; t<=close; t++){
+      boxTable['t'+t]={};
+      i++;
+      boxTable['t'+t].i=i;
+      
+      for(var b=0; b<=boxCount; b++){
+        boxTable['t'+t]['b'+b]={};
 
-    $rootScope.BoxTable = [[{i:1,j:1,"class":"border_right"},{i:1,j:2,"boxHeader":"Бокс1"},{i:1,j:3,"boxHeader":"Бокс2"},{i:1,j:4,"boxHeader":"Бокс3"}],
-                           [{i:2,j:1,"class":"border_right"},{i:2,j:2, "class":"c2x2"},{i:2,j:3},{i:2,j:4}],
-                           [{i:3,j:1,"class":"border_right"},{i:3,j:2},{i:3,j:3},{i:3,j:4}],
-                           [{i:4,j:1,"class":"border_right"},{i:4,j:2},{i:4,j:3},{i:4,j:4,"class":"c4x4"}],
-                           [{i:5,j:1,"class":"border_right"},{i:5,j:2},{i:5,j:3},{i:5,j:4}]];
+        if(b==0){
+          boxTable['t'+t]['b'+b].class='border_right';
+        };
+        
+        if(b==0 && t>=open){
+          if(t<10){
+            boxTable['t'+t]['b'+b].time='0'+t+":00";
+          }else{
+            boxTable['t'+t]['b'+b].time=t+":00";
+          }
+        };
+
+        if(b>0 && t<open){
+          boxTable['t'+t]['b'+b].boxHeader='Бокс ' + b;
+        };
+        
+        console.log('t:',t,'b:',b);
+     
+      };
+      
+
+    };
+    console.log(boxTable);
+
+    $rootScope.BoxTable = {
+                            't0':{'b0':{"class":"border_right"},'b1':{"boxHeader":"Бокс1"},'b2':{"boxHeader":"Бокс2"},'b3':{"boxHeader":"Бокс3"}, 'b4':{"boxHeader":"Бокс4"}},
+                            't8':{'b0':{"class":"border_right"},'b1':{x:2},'b2':{x:1},'b3':{x:2},'b4':{x:2}},
+                            't9':{'b0':{"class":"border_right"},'b1':{x:2},'b2':{x:1},'b3':{x:2},'b4':{x:2}}
+                          };
+    $rootScope.BoxTable = boxTable;
+     // [[{i:1,j:1,"class":"border_right"},{i:1,j:2,"boxHeader":"Бокс1"},{i:1,j:3,"boxHeader":"Бокс2"},{i:1,j:4,"boxHeader":"Бокс3"}],
+     //                       [{i:2,j:1,"class":"border_right"},{i:2,j:2, "class":"c2x2"},{i:2,j:3},{i:2,j:4}],
+     //                       [{i:3,j:1,"class":"border_right"},{i:3,j:2, "dClass":"box_item queue_item h120","dClick":"boxItemClick('queue',1)"},{i:3,j:3},{i:3,j:4}],
+     //                       [{i:4,j:1,"class":"border_right"},{i:4,j:2},{i:4,j:3},{i:4,j:4,"class":"c4x4"}],
+     //                       [{i:5,j:1,"class":"border_right"},{i:5,j:2},{i:5,j:3},{i:5,j:4}]];
 
 
   };
@@ -713,18 +755,20 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
 fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers) {
   
 
-  $scope.item = function(){
-    console.log("item");
+  $scope.addItemToTable = function(t,b){
+    $rootScope.BoxTable.t9.b3.duration="60";
+    $rootScope.BoxTable.t9.b3.status="queue";
   };
+  
+  $scope.addItemToBox = function(t,b){
+    console.log(t,b);
+    if(t!='t0' && b!='b0'){
+      $rootScope.BoxTable[t][b].duration="60";
+      $rootScope.BoxTable[t][b].status="queue";
+    }
+  };
+  
 
-  $scope.newItem = function(){
-    console.log("newItem");
-  };
-
-  $scope.addItemToTable = function(){
-    $$(".c4x4").append( $compile(
-    "<div class='box_item queue_item h120 top_15' ng-click='boxItemClick(\"queue\",1)'>Текст</div>")(scope));
-  };
 
   $scope.showImage = function(){
     var image = document.getElementById('washerImage');
@@ -1219,4 +1263,4 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
 
   };
 
-})
+});
