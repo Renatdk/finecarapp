@@ -8,7 +8,7 @@
     <title>FineCar App</title>
     <!-- Path to Framework7 Library CSS-->
     <link rel="stylesheet" href="dist/css/framework7.css">
-    <link rel="stylesheet" href="css/framework7.themes.css">
+    <link rel="stylesheet" href="dist/css/framework7.themes.min.css">
     <!-- Path to your custom app styles-->
     
     <link rel="stylesheet" href="css/my-app.css">
@@ -52,10 +52,10 @@
       </div>
     </div>
     <!-- Right panel with cover effect-->
-    <div class="panel panel-right panel-reveal">
+    <div class="panel panel-right panel-reveal" >
        <div class="content-block-title">Меню FineCar</div>
         <div class="list-block">
-          <ul>
+          <ul ng-controller="washerMenuController">
             <li><a href="#washer_home" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
@@ -66,7 +66,7 @@
                 <div class="item-inner"> 
                   <div class="item-title">Заявки</div>
                 </div></a></li>
-            <li><a href="#washer_service" class="close-panel item-link item-content">
+            <li><a href="#" ng-click="showService()" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Услуги</div>
@@ -195,7 +195,7 @@
           <!-- Navbar inner for Washer Bid edit page-->
           <div data-page="washer_edit_bid" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
-            <div class="center sliding">Новая заявка</div>
+            <div class="center sliding">Редактирование заявки</div>
           </div>
           <!-- Navbar inner for Washerman add page-->
           <div data-page="washerman_add" class="navbar-inner cached">
@@ -381,15 +381,16 @@
               <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
               <div  class="list-block">
                 <ul>
-                  <li ng-repeat="bid in UserBids.bids track by $index"  class="swipeout">
-                    <a href="#bid" ng-click="getBid($index)"  class="item-link item-content swipeout-content">
+                  <li ng-repeat="bid in UserBids track by $index"  class="swipeout">
+                    <a href="#" ng-click="getBid(bid)"  class="item-link item-content swipeout-content">
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <div class="item-title orange">{{bid.day}} {{bid.time}} {{bid.name}} {{bid.namber}} </div>
+                        <div class="item-title orange">{{bid.user_car}} ({{bid.dateF}}) {{bid.begin_h}}:{{bid.begin_m}} </div>
                       </div>
                     </a>
                     <div class="swipeout-actions-right">
-                      <a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите отказаться от заявки?" data-confirm-title="Отказ?">Отказаться</a>
+                      <a href="#" ng-click="homeBidFailure(bid.id)" class="swipeout-delete" >Отказаться</a>
+                      <!--<a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите отказаться от заявки?" data-confirm-title="Отказ?">Отказаться</a>-->
                     </div>
                   </li>
                   
@@ -404,11 +405,11 @@
             <div data-page="bid" class="page cached">
               <div class="page-content">  
                 <div class="card">
-                  <div class="card-header orange">{{UserBid.washer}}</div>
+                  <div class="card-header orange">{{userBid.washer.Name}}</div>
                   <div class="card-content"> 
                     <div class="card-content-inner">
                       <i class="icon icon-form-garage"></i>
-                      <p>{{UserBid.address}} - {{UserBid.km}}км</p>
+                      <p>{{userBid.washer.Street}} - {{userBid.washer.Home}}</p>
                       <div class="accordion-item">
                         <a href="#" class="item-link item-content " ng-click="showMap()">
                           <div class="item-inner">
@@ -421,11 +422,19 @@
                           </div> 
                         </div>
                       </div>
-                      <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
-                      <p>{{UserBid.name}} - {{UserBid.number}}</p>
-                      <p>{{UserBid.day}} - {{UserBid.time}}</p>
+                      <ol>
+                          <li ng-repeat="service in userBid.services">
+                            {{ service.description}}
+                            <span ng-if="UserBid.body_type=='passenger'">{{ service.price1}}тг. <span><span ng-if="UserBid.body_type=='miniven'">{{ service.price3}}тг.<span><span ng-if="UserBid.body_type=='pikup'">{{ service.price2}}тг.<span>
+                          </li> 
+                      </ol>
+                      <p><div ng-repeat="service in userBid.washer.services">{{service}}</div>Сумма: {{userBid.price}}тг.</p>
+                      <p>{{userBid.user_car}} - {{userBid.user_car_number}}</p>
+                      <p>{{userBid.dateF}} - {{userBid.begin_h}}:{{userBid.begin_m}}</p>
                       <p class="orange">Статус: Не подтвержен</p>
-                      <div class="buttons-row"><a href="#home" ng-click="bidFailure()"  class="button button-round">Отказаться</a><a href="#bid_time_choice"  class="button button-round">Изменить время</a></div>
+                      <div class="buttons-row"><a href="#home" ng-click="bidFailure(userBid.id)"  class="button button-round">Отказаться</a><a href="#" ng-click="showTimeLine()" class="button button-round">Изменить время</a></div>
+                      <br/>
+                      <a href="#home" ng-click="showUserBids()"  class="button button-round">На главную</a>
                     </div>
                   </div>
                 </div>
@@ -433,25 +442,31 @@
             </div>
             <!-- Bid Time choice Page -->
             <div data-page="bid_time_choice" class="page cached" >
-              <div class="page-content">  
+               <div class="page-content">  
                 <div class="card">
-                  <div class="card-header orange">{{UserBid.washer}}</div>
+                  <div class="card-header orange">{{UserBid.washer.Name}}</div>
                   <div class="card-content"> 
                     <div class="card-content-inner">
                     <i class="icon icon-form-garage"></i>
-                    <p>{{UserBid.address}} - {{UserBid.km}}км</p>
-                    <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
+                    <p>{{UserBid.washer.Street}} {{UserBid.washer.Home}} - {{UserBid.washer.km}}км</p>
+                    <ol>
+                        <li ng-repeat="service in UserBid.washer.services">
+                          {{ service.description}}
+                          <span ng-if="UserBid.body_type=='passenger'">{{ service.price1}}тг. <span><span ng-if="UserBid.body_type=='miniven'">{{ service.price3}}тг.<span><span ng-if="UserBid.body_type=='pikup'">{{ service.price2}}тг.<span>
+                        </li> 
+                    </ol>
+                    <p>Сумма: {{UserBid.washer.price}}тг.</p>
                     <p>{{UserBid.name}} - {{UserBid.number}}</p>
                     </div>
                   </div>
                   <div class="list-block">
-                    <div class="list-group" ng-repeat="day in days">
+                    <div class="list-group" ng-repeat="bs in boxesStatus | orderBy: 'date'">
                       <ul>
-                        <li  class="item-content orange">{{day.day}}</li>
-                        <li  ng-repeat="time_item in day.time" ng-click="getParams(day.day,time_item)">
-                          <a href="#bid" class="item-link item-content" >
+                        <li  class="item-content orange">{{bs.formatDate}}</li>
+                        <li  ng-repeat="time_item in bs.data" ng-click="getTimeParams(bs.date,time_item.b0.time,time_item.canDo,time_item.minute)" ng-if="time_item.canDo!=0">
+                          <a href="#" class="item-link item-content" >
                             <div class="item-inner"> 
-                              <div class="item-title">{{time_item}}</div>
+                              <div class="item-title">{{time_item.b0.time}}</div>
                             </div>
                           </a>
                         </li>
@@ -476,16 +491,35 @@
                           <div class="item-title orange">{{service.name}}</div>
                           <div class="item-after">~{{service.price}}тг</div>
                         </div>
-                        <div class="item-subtitle">{{service.description}}</div>
-                        <div class="item-text">Длительность: {{service.time}} минут</div>
+                        <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                        <div class="item-text">{{service.description}}</div>
                       </div></a>
                       <div class="swipeout-actions-right">
                         <a href="#" class="swipeout-delete" ng-click="deleteUserService(service)">Удалить</a>
                       </div>
                     </li>                  
                     <div class="item-inner">
-                      <a href="#shape_service" class="button">+ Сформировать комплекс услуг</a>
+                      <a href="#shape_service" ng-click="openAddService()" class="button">+ Сформировать комплекс услуг</a>
                     </div></li>
+                  </ul>
+                </div>
+                <div class="list-block accordion-list">
+                  <ul>
+                    <li class="accordion-item" ng-repeat="service in userServices">
+                      <a href="#" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title "><span class="orange">{{service.name}}</span><small> {{service.serviceIds.length}} позиц.</small></div>
+                        <div class="item-after">~{{service.price}}тг</div>
+                      </div></a>
+                      <div class="accordion-item-content">
+                        <div class="content-block">
+                          <p>Длительность: {{service.time}} минут</p>
+                          <ol>
+                            <li ng-repeat="service_item in service.serviceIds">{{service_item.description}}</li>
+                          </ol>
+                        </div>
+                      </div>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -577,12 +611,12 @@
                         <div class="buttons-row" id="sort_washers">
                           <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-round">км</a>
                           <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-round">цена</a>
-                          <a href="#" ng-class="getClass('time')" ng-click="sort_by('time')" class=" button button-round">время</a>
+                          <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-round">время</a>
                         </div>
                       </div>
                     </div>
                   </li>
-                  <li ng-repeat="washer in washers | orderBy:sorts" ng-click="getParams(washer)">
+                  <li ng-repeat="washer in washers | orderBy:sorts" ng-click="getParams(washer)" ng-if="washer.boxesStatus">
                     <a href="#time_choice" class="item-link item-content">
                     <div class="item-inner">
                       <div class="item-title-row">
@@ -590,8 +624,25 @@
                         <div class="item-after">{{washer.price}}тг </div>
                       </div>
                       <div class="item-subtitle">{{washer.Street}} {{washer.Home}} - {{washer.km}} км</div>
-                      <div class="item-text">{{washer.begin}} Время: {{washer.time}}мин. Всего {{washer.count}} поз. ({{washer.names}}) </div>
+                      <div class="item-text"> Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}}) </div>
                     </div></a></li>
+                </ul>
+              </div>
+              <div class="list-block accordion-list">
+                <ul>
+                  <li class="accordion-item" ng-repeat="washer in washers | orderBy:sorts" ng-if="washer.boxesStatus">
+                    <a href="#" class="item-link item-content">
+                    <div class="item-inner">
+                      <div class="item-title "><span class="orange">{{washer.Name}}</span>,<small> {{washer.km}} км</small></div>
+                      <div class="item-after">{{washer.price}}тг</div>
+                    </div></a>
+                    <div class="accordion-item-content">
+                      <div class="content-block">
+                        <p>{{washer.Street}} {{washer.Home}} - {{washer.km}} км.</p>
+                        <p>Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}})</p>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div> 
@@ -608,7 +659,7 @@
                   <ol>
                       <li ng-repeat="service in UserBid.washer.services">
                         {{ service.description}}
-              <span ng-if="UserBid.body_type=='passenger'">{{ service.price1}}тг. <span><span ng-if="UserBid.body_type=='miniven'">{{ service.price3}}тг.<span><span ng-if="UserBid.body_type=='pikup'">{{ service.price2}}тг.<span>
+                        <span ng-if="UserBid.body_type=='passenger'">{{ service.price1}}тг. <span><span ng-if="UserBid.body_type=='miniven'">{{ service.price3}}тг.<span><span ng-if="UserBid.body_type=='pikup'">{{ service.price2}}тг.<span>
                       </li> 
                   </ol>
                   <p>Сумма: {{UserBid.washer.price}}тг.</p>
@@ -616,13 +667,13 @@
                   </div>
                 </div>
                 <div class="list-block">
-                  <div class="list-group" ng-repeat="day in days">
+                  <div class="list-group" ng-repeat="bs in boxesStatus | orderBy: 'date'">
                     <ul>
-                      <li  class="item-content orange">{{day.day}}</li>
-                      <li  ng-repeat="time_item in day.time" ng-click="getParams(day.day,time_item)">
+                      <li  class="item-content orange">{{bs.formatDate}}</li>
+                      <li  ng-repeat="time_item in bs.data" ng-click="getParams(bs.date,time_item)" ng-if="time_item.canDo!=0">
                         <a href="#send_bid" class="item-link item-content" >
                           <div class="item-inner"> 
-                            <div class="item-title">{{time_item}}</div>
+                            <div class="item-title">{{time_item[time_item.canDo].begin_h}}:{{time_item[time_item.canDo].begin_m}}</div>
                           </div>
                         </a>
                       </li>
@@ -634,31 +685,39 @@
           </div>
           <!-- Send bid Page -->
           <div data-page="send_bid" class="page cached" ng-controller="sendBidController">
-            <div class="page-content">  
+            <div class="page-content"> 
+            
               <div class="card">
                 <div class="card-header orange">{{UserBid.washer.Name}}</div>
-                <div class="card-content"> 
+                 <div class="card-content"> 
                   <div class="card-content-inner">
-                    <i class="icon icon-form-garage"></i>
-                    <p>{{UserBid.address}} - {{UserBid.km}}км</p>
-                    <div class="accordion-item">
-                      <a href="#" class="item-link item-content " ng-click="showMap()">
-                        <div class="item-inner">
-                          <div class="item-title"><i class="icon icon-map"></i> Карта проезда</div>
-                        </div>
-                      </a>
-                      <div class="accordion-item-content" >
-                        <div class="content-block">
-                          <div id="map" style="width:300px"> <img ng-src="{{img}}"></div>
-                        </div> 
+                  <i class="icon icon-form-garage"></i>
+                  <p>{{UserBid.washer.Street}} {{UserBid.washer.Home}} - {{UserBid.washer.km}}км</p>
+                  <ol>
+                      <li ng-repeat="service in UserBid.washer.services">
+                        {{ service.description}}
+                        <span ng-if="UserBid.body_type=='passenger'">{{ service.price1}}тг. <span><span ng-if="UserBid.body_type=='miniven'">{{ service.price3}}тг.<span><span ng-if="UserBid.body_type=='pikup'">{{ service.price2}}тг.<span>
+                      </li> 
+                  </ol>
+                  <div class="accordion-item">
+                    <a href="#" class="item-link item-content " ng-click="showMap()">
+                      <div class="item-inner">
+                        <div class="item-title"><i class="icon icon-map"></i> Карта проезда</div>
                       </div>
+                    </a>
+                    <div class="accordion-item-content" >
+                      <div class="content-block">
+                        <div id="map" style="width:300px"> <img ng-src="{{img}}"></div>
+                      </div> 
                     </div>
-                    <p>{{UserBid.service}} = {{UserBid.price}}тг.</p>
-                    <p>{{UserBid.name}} - {{UserBid.number}}</p>
-                    <p>{{UserBid.day}} - {{UserBid.time}}</p>
                   </div>
-                    <a href="#home" ng-click="pushBid()" class="button button-big">Отправить заявку</a></p>
+                  <p>Сумма: {{UserBid.washer.price}}тг.</p>
+                  <p>{{UserBid.name}} - {{UserBid.number}}</p>
+                  <p>Дата: {{UserBid.dateF}} - Время: {{UserBid.item[UserBid.item.canDo].begin_h}}:{{UserBid.item[UserBid.item.canDo].begin_m}}</p>
+                  </div>
+                  <a href="#" ng-click="pushBid()" class="button button-big">Отправить заявку</a>
                 </div>
+                
               </div>
             </div> 
           </div>     
@@ -1106,159 +1165,55 @@
             <div data-page="washer_home" class="page cached">
                 <div class="page-content">
                   
-
-                  <div class="orange_border" >
-                    <table class="time_box center">
-                      <tr ng-repeat="(t, box_row ) in BoxTable track by box_row.i ">
-                        <td ng-repeat="(b,box_cell) in box_row track by $index" ng-click="addItemToBox(t,b)" class="{{box_cell.class}}">
-                          <div ng-click="boxItemClick(box_cell.status,1)" class="box_item {{box_cell.status}}_item h{{box_cell.duration}}"></div>
-                          {{box_cell.boxHeader}}{{box_cell.time}}
-                        </td>
-                        <td>
-                          {{box_row.i}}
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                  <a href="#" ng-click="addItemToTable()">add item</a><div my-customer></div>
-                  <div class="orange_border" >
-                    <table class="time_box center">
-                      <tr>
-                        <td class="border_right"><td>
-                        <td>Бокс 1<td>
-                        <td>Бокс 2<td>
-                        <td>Бокс 3<td>
-                        <td>Бокс 4<td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">8:00<td>
-                        <td ng-click="boxItemClick('clean',1)"><div class="box_item queue_item h120" ng-click="boxItemClick('queue',1)">8:00</div><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">9:00<td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><div class="box_item queue_item h120 top_15" ng-click="boxItemClick('queue',1)">9:15</div><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">10:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">11:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">12:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">13:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">14:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">15:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">16:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">17:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">18:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">19:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">20:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">21:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">22:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                    </table>
-                  </div>
-                  <br/>
                   <div class="content-block">
                     <div class="buttons-row">
-                      <a href="#washer_new_bid" ng-click="actions()" class="button active">Бокс 1</a>
-                      <a href="#bid_move" class="button active">Бокс 2</a>
-                      <a href="#washer_single_box" class="button active">Бокс 3</a>
-                      <a href="#" class="button" ng-click="showImage()">Бокс 4</a>
+                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button" ng-if="$index>2">{{d.name}}</a>
                     </div>
-                      <img id="washerImage">
-
+                    <br/>
+                    <div class="buttons-row">
+                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button" ng-if="$index<3">{{d.name}}</a>
+                    </div>
+                  </div>
+                  <div class="orange_border" >
+                    <table class="time_box center">
+                      <div class="time_line"><span>{{time}}</span></div>
+                      <tr ng-repeat="(t, box_row ) in BoxTable" ng-if="$index==0">
+                        <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
+                          {{box_cell.boxHeader}}
+                        </td>
+                      </tr>
+                      <tr ng-repeat="(t, box_row ) in BoxTable " ng-if="$index!=0">
+                        <td ng-repeat="(b,box_cell) in box_row track by $index" ng-click="boxItemClick('clean',t,b,box_cell.id)" class="{{box_cell.class}} top_{{box_cell.begin_m}}">
+                          <div ng-click="boxItemClick(box_cell.status,t,b,box_cell.id)" class="box_item {{box_cell.status}}_item h{{box_cell.duration}}">
+                            {{box_cell.user_car_number}} <br/> {{box_cell.duration_hm}}
+                          </div>
+                         {{box_cell.time}}   
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                   <br/>
-                  <div class="row no-gutter center" >
-                    <div class="col-25" ng-repeat="(box_key,box) in boxes track by $index">
-                      <div>{{box_key}}<span id="key"></span></div>
-                      <div ng-repeat="box_item in box track by $index">
-                        <div  ng-if="box_item.status=='queue'  &&  $index==0" class="h{{box_item.duration}} queue_in_box_bkg" ng-click="as_queue_in_box(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
+                  <!--<div class="content-block">-->
+                  <!--  <div class="buttons-row">-->
+                  <!--    <a href="#washer_new_bid" ng-click="actions()" class="button active">Бокс 1</a>-->
+                  <!--    <a href="#bid_move" class="button active">Бокс 2</a>-->
+                  <!--    <a href="#washer_single_box" class="button active">Бокс 3</a>-->
+                  <!--    <a href="#" class="button" ng-click="showImage()">Бокс 4</a>-->
+                  <!--  </div>-->
+                  <!--    <img id="washerImage">-->
 
-                          <div ng-if="box_item.status!='queue'  ||  $index!=0" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="boxItemClick(box_item.status,box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>
-                      </div>
-                    </div>
-                  </div>
+                  <!--</div>-->
+                  <br/>
+                  <!--<div class="row no-gutter center" >-->
+                  <!--  <div class="col-25" ng-repeat="(box_key,box) in boxes track by $index">-->
+                  <!--    <div>{{box_key}}<span id="key"></span></div>-->
+                  <!--    <div ng-repeat="box_item in box track by $index">-->
+                  <!--      <div  ng-if="box_item.status=='queue'  &&  $index==0" class="h{{box_item.duration}} queue_in_box_bkg" ng-click="as_queue_in_box(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>-->
+
+                  <!--        <div ng-if="box_item.status!='queue'  ||  $index!=0" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="boxItemClick(box_item.status,box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>-->
+                  <!--    </div>-->
+                  <!--  </div>-->
+                  <!--</div>-->
                 
                 </div>
                 <div class="content-block">
@@ -1289,6 +1244,20 @@
                 <!-- picker modal for canceled box -->
                 <div class="actions-modal picker-modal queue">
                   <div class="actions-modal-group">
+                    <span class="actions-modal-label">F987OPM</span>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="move()" >Переместить</div>
+                    <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                </div>  
+                
+                <!-- picker modal for canceled box -->
+                <div class="actions-modal picker-modal user_bid">
+                  <div class="actions-modal-group">
+                    <span class="actions-modal-label">F987OPM</span>
                     <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
                     <div class="actions-modal-button" ng-click="move()" >Переместить</div>
                     <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
@@ -1330,19 +1299,30 @@
 
             <div data-page="washer_new_bid" class="page cached">
               <div class="page-content">
-                <form id="my-form2">
+                
                   <div class="list-block media-list">
                     <ul >
-                      <li ng-repeat="service in services" ng-click="serviceSum($index)">
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="buttons-row" id="car_type">
+                              <a href="#"   ng-class="getClass('passenger')" ng-click="carType('passenger')" class="button button-round">Легковая</a>
+                              <a href="#"   ng-class="getClass('pikup')" ng-click="carType('pikup')" class="button button-round">Пикап</a>
+                              <a href="#" ng-class="getClass('miniven')" ng-click="carType('miniven')" class=" button button-round">Минивен</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li ng-repeat="service in wServices" ng-click="serviceSum($index)">
                         <label class="label-checkbox item-content" >
-                          <input type="checkbox" model="order.services" value="service">
-                          <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
+                          <!--<input type="checkbox" model="order.services" value="service">-->
+                          <div class="item-media"><i class="icon icon-checked"  ng-class="isServiceChecked($index)"></i></div>
                           <div class="item-inner"  >
                             <div class="item-title-row">
                               <div class="item-title orange">{{service.name}}</div>
                               <div class="item-after">{{service.price}}тг</div>
                             </div>
-                            <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                            <div class="item-subtitle">Длительность: {{service.duration}} минут</div>
                             <div class="item-text">{{service.description}} </div>
                           </div>
                         </label>
@@ -1378,7 +1358,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="newOrderData.tel" placeholder="Телефон">
+                              <input type="text" ng-model="newOrderData.phone" placeholder="Телефон">
                             </div>
                           </div>
                         </div>
@@ -1410,32 +1390,61 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="doNewOrder()" class="button active back link">Создать</a>
+                              <a href="#"  ng-click="doNewItem()" class="button active back link">Создать</a>
                             </div>
                           </div>
                         </div>
                       </li>
                     </ul>
                   </div>
-                </form>     
+                  
               </div>
             </div>
 
             <div data-page="washer_edit_bid" class="page cached">
               <div class="page-content">
+                  <div class="list-block media-list">
+                    <ul >
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="buttons-row" id="car_type">
+                              <a href="#"   ng-class="getClass('passenger')" ng-click="carType('passenger')" class="button button-round">Легковая</a>
+                              <a href="#"   ng-class="getClass('pikup')" ng-click="carType('pikup')" class="button button-round">Пикап</a>
+                              <a href="#" ng-class="getClass('miniven')" ng-click="carType('miniven')" class=" button button-round">Минивен</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li ng-repeat="service in wServices" ng-click="serviceSum($index)">
+                        <label class="label-checkbox item-content" >
+                          <!--<input type="checkbox" model="order.services" value="service">-->
+                          <div class="item-media"><i class="icon icon-checked"  ng-class="isServiceChecked($index)"></i></div>
+                          <div class="item-inner"  >
+                            <div class="item-title-row">
+                              <div class="item-title orange">{{service.name}}</div>
+                              <div class="item-after">{{service.price}}тг</div>
+                            </div>
+                            <div class="item-subtitle">Длительность: {{service.duration}} минут</div>
+                            <div class="item-text">{{service.description}} </div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div> 
                   <div class="list-block">
                     <ul>
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                            <div class="item-title">Общая цена: {{eItem.price}} тг</div>
                           </div>
                         </div>
                       </li>
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                            <div class="item-title">Общее время: {{eItem.duration}} мин</div>
                           </div>
                         </div>
                       </li>
@@ -1443,7 +1452,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="editOrderData.car_number" placeholder="Номер авто">
+                              <input type="text" ng-model="eItem.user_car_number" placeholder="Номер авто">
                             </div>
                           </div>
                         </div>
@@ -1452,7 +1461,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="editOrderData.tel" placeholder="Телефон">
+                              <input type="text" ng-model="eItem.user_phone" placeholder="Телефон">
                             </div>
                           </div>
                         </div>
@@ -1460,45 +1469,71 @@
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Время начала: {{editOrderData.setTimeH}}:{{editOrderData.setTimeM}}</div>
+                            <div class="item-title">Время начала: {{eItem.begin_h}}:{{eItem.begin_m}}</div>
                           </div>
                         </div>
                       </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                             <div class="range-slider">
-                              <i class="icon icon-form-clock"></i>
-                              {{editOrderData.startTimeH}}:{{editOrderData.startTimeM}}
+                      <!--<li>-->
+                      <!--  <div class="item-content">-->
+                      <!--    <div class="item-inner">-->
+                      <!--       <div class="range-slider">-->
+                      <!--        <i class="icon icon-form-clock"></i>-->
+                      <!--        {{editOrderData.startTimeH}}:{{editOrderData.startTimeM}}-->
 
-                              <span class="right">
-                                {{editOrderData.endTimeH}}:{{editOrderData.endTimeM}}
-                                <i class="icon icon-clock-filled"></i>
-                              </span>
-                              <input ng-model="editOrderData.rangeData" ng-change="rangeEditChange()"  type="range" min="0" max="{{editOrderData.maxDinamicDuration}}" value="0" step="5">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                      <!--        <span class="right">-->
+                      <!--          {{editOrderData.endTimeH}}:{{editOrderData.endTimeM}}-->
+                      <!--          <i class="icon icon-clock-filled"></i>-->
+                      <!--        </span>-->
+                      <!--        <input ng-model="editOrderData.rangeData" ng-change="rangeEditChange()"  type="range" min="0" max="{{editOrderData.maxDinamicDuration}}" value="0" step="5">-->
+                      <!--      </div>-->
+                      <!--    </div>-->
+                      <!--  </div>-->
+                      <!--</li>-->
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="doEditOrder()" class="button active back link">Переместить</a>
+                              <br/>
+                              <a href="#"  ng-click="doEditOrder()" class="button button-big button-fill back link">Сохранить</a>
+                              <br/>
                             </div>
                           </div>
                         </div>
                       </li>
                     </ul>
+                  
                   </div>
+                  
               </div>
             </div>
 
-            <!-- Washer home Boxes Page-->
+            <!-- Washer move Boxes Page-->
             <div data-page="bid_move" class="page cached">
               <div class="page-content">
+                
+                <div class="orange_border" >
+                  <table class="time_box center">
+                    <tr ng-repeat="(t, box_row ) in moveTable" ng-if="$index==0">
+                      <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
+                        {{box_cell.boxHeader}}
+                      </td>
+                    </tr>
+                    <tr ng-repeat="(t, box_row ) in moveTable " ng-if="$index!=0">
+                      <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
+                        <div ng-if="box_cell.move_status=='can_accommodate'" ng-click="doMove(t,b)" class="box_item {{box_cell.move_status}}_item h60">
+                          {{box_cell.user_car_number}} <br/> {{box_cell.duration_hm}}
+                        </div>
+                       {{box_cell.time}}   
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                
                 <div class="content-block-title"><span id="realtime">14:25:30</span></div>
                 <div class="content-block">
+                  
+                  
+                  
                   <div class="row no-gutter center" >
                     <div class="col-25" ng-repeat="(box_key,box) in boxes">
                       <div>{{box_key}}</div>
@@ -1633,7 +1668,7 @@
                 <div class="content-block">
                   <a href="#washer_service_add" class="button">+Добавить услугу</a>
                 </div>
-                <div class="content-block-title">Список услуг</div>
+                <div class="content-block-title">Список услуг {{currentWProfile.Name}}</div>
                 <div class="list-block media-list">
                   <ul>
                     <li><a href="#washer_single_service_edit" class="item-content" ng-repeat="service in wServices track by $index" >
@@ -2045,10 +2080,11 @@
     </div>
 
     <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="dist/js/framework7.js"></script>
+    <script type="text/javascript" src="dist/js/framework7.min.js"></script>
     <script type="text/javascript" src="dist/js/moment.js"></script>
-    <script type="text/javascript" src="dist/js/angular.js"></script>
-    <script type="text/javascript" src="dist/js/angular-resource/angular-resource.js"></script>
+    <script type="text/javascript" src="dist/js/angular.min.js"></script>
+    <script type="text/javascript" src="dist/js/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="dist/js/mqttws31.js"></script>
     <script type="text/javascript" src="cordova.js"></script>
     <script src="http://maps.api.2gis.ru/2.0/loader.js?pkg=full" data-id="dgLoader"></script>
     <!-- Path to your app js-->

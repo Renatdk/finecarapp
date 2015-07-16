@@ -1919,6 +1919,16 @@ i.icon.icon-clock-filled {
   height: 29px;
   background-image: url("../img/i-clock-filled.png");
 }
+i.icon.icon-checked {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-form-checked.png");
+}
+i.icon.icon-checked-filled {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-form-checked-filled.png");
+}
 i.icon.icon-next,
 i.icon.icon-prev {
   width: 15px;

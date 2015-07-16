@@ -5,7 +5,7 @@ angular.module('fineCarApp.factory',['lbServices'])
       number :  'anonymous'
   };
 })
-.factory('UserBids', function() {
+.factory('userBids', function() {
   return {
       bids : []
   };

@@ -883,6 +883,63 @@
                         </div>
                       </div>
                     </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-building"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="number" ng-model="newProfile.boxCount" placeholder="Количество боксов">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    
+                    <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Время открытия: {{newProfile.openH}}:00</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                             <div class="range-slider">
+                              <i class="icon icon-form-clock"></i>
+                                00:00
+
+                              <span class="right">
+                                24:00
+                                <i class="icon icon-clock-filled"></i>
+                              </span>
+                              <input ng-model="newProfile.openH" type="range" min="0" max="24" value="0" step="1">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Время закрытия: {{newProfile.closeH}}:00</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                             <div class="range-slider">
+                              <i class="icon icon-form-clock"></i>
+                                00:00
+
+                              <span class="right">
+                                24:00
+                                <i class="icon icon-clock-filled"></i>
+                              </span>
+                              <input ng-model="newProfile.closeH" type="range" min="0" max="24" value="0" step="1">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
                   </ul>
                 </div>
                 <div class="content-block">
@@ -911,7 +968,7 @@
                       <div class="item-content">
                         <div class="item-media"><i class="icon icon-form-garage"></i></div>
                         <div class="item-inner"> 
-                          <a href="#add_washer_profile"  class="button">+ Создать профайл</a>
+                          <a href="#add_washer_profile" ng-click="addWasherProfile()"  class="button">+ Создать профайл</a>
                         </div>
                       </div>
                     </li>
@@ -1048,6 +1105,26 @@
 
             <div data-page="washer_home" class="page cached">
                 <div class="page-content">
+                  
+
+                  <div class="orange_border" >
+                    <table class="time_box center">
+                      <tr ng-repeat="(t, box_row ) in BoxTable" ng-if="$index==0">
+                        <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
+                          {{box_cell.boxHeader}}
+                        </td>
+                      </tr>
+                      <tr ng-repeat="(t, box_row ) in BoxTable " ng-if="$index!=0">
+                        <td ng-repeat="(b,box_cell) in box_row track by $index" ng-click="boxItemClick('clean',t,b,box_cell.id)" class="{{box_cell.class}} top_{{box_cell.begin_m}}">
+                          <div ng-click="boxItemClick(box_cell.status,t,b,box_cell.id)" class="box_item {{box_cell.status}}_item h{{box_cell.duration}}">
+                            {{box_cell.user_car_number}} <br/> {{box_cell.duration_hm}}
+                          </div>
+                         {{box_cell.time}}   
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <br/>
                   <div class="content-block">
                     <div class="buttons-row">
                       <a href="#washer_new_bid" ng-click="actions()" class="button active">Бокс 1</a>
@@ -1057,123 +1134,6 @@
                     </div>
                       <img id="washerImage">
 
-                  </div>
-                  
-                  <div class="orange_border" >
-                    <table class="time_box center">
-                      <tr>
-                        <td class="border_right"><td>
-                        <td>Бокс 1<td>
-                        <td>Бокс 2<td>
-                        <td>Бокс 3<td>
-                        <td>Бокс 4<td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">8:00<td>
-                        <td ng-click="boxItemClick('clean',1)"><div class="box_item queue_item h120" ng-click="boxItemClick('queue',1)">8:00</div><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">9:00<td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><div class="box_item queue_item h120 top_15" ng-click="boxItemClick('queue',1)">9:15</div><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                        <td ng-click="boxItemClick('clean',1)"><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">10:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">11:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">12:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">13:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">14:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">15:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">16:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">17:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                      <tr>
-                        <td class="border_right">18:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">19:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">20:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">21:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                       <tr>
-                        <td class="border_right">22:00<td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                        <td><td>
-                      </tr>
-                    </table>
                   </div>
                   <br/>
                   <div class="row no-gutter center" >
@@ -1305,7 +1265,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="newOrderData.tel" placeholder="Телефон">
+                              <input type="text" ng-model="newOrderData.phone" placeholder="Телефон">
                             </div>
                           </div>
                         </div>
@@ -1337,7 +1297,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="doNewOrder()" class="button active back link">Создать</a>
+                              <a href="#"  ng-click="doNewItem()" class="button active back link">Создать</a>
                             </div>
                           </div>
                         </div>
@@ -1421,11 +1381,33 @@
               </div>
             </div>
 
-            <!-- Washer home Boxes Page-->
+            <!-- Washer move Boxes Page-->
             <div data-page="bid_move" class="page cached">
               <div class="page-content">
+                
+                <div class="orange_border" >
+                  <table class="time_box center">
+                    <tr ng-repeat="(t, box_row ) in moveTable" ng-if="$index==0">
+                      <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
+                        {{box_cell.boxHeader}}
+                      </td>
+                    </tr>
+                    <tr ng-repeat="(t, box_row ) in moveTable " ng-if="$index!=0">
+                      <td ng-repeat="(b,box_cell) in box_row track by $index" ng-click="boxItemClick('clean',t,b,box_cell.id)" class="{{box_cell.class}}">
+                        <div ng-click="boxItemClick(box_cell.status,t,b,box_cell.id)" class="box_item {{box_cell.move_status}}_item h60">
+                          {{box_cell.user_car_number}} <br/> {{box_cell.duration_hm}}
+                        </div>
+                       {{box_cell.time}}   
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                
                 <div class="content-block-title"><span id="realtime">14:25:30</span></div>
                 <div class="content-block">
+                  
+                  
+                  
                   <div class="row no-gutter center" >
                     <div class="col-25" ng-repeat="(box_key,box) in boxes">
                       <div>{{box_key}}</div>

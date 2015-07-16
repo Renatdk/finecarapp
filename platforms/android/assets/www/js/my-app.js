@@ -123,6 +123,9 @@ fineCarApp.config(function(LoopBackResourceProvider) {
   });
 
 
+
+
+
 fineCarApp.controller('userRegistrationController', function($scope, FUser,$rootScope) {
   $scope.registerData={};
 
@@ -567,8 +570,10 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
   $scope.newProfile={};
 
-  myApp.onPageBeforeInit('add_washer_profile', function (page) {
-         
+  $scope.addWasherProfile = function(){
+    $scope.newProfile.openH="00";
+    $scope.newProfile.closeH="24";
+
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation
     .getCurrentPosition(posOptions)
@@ -582,7 +587,8 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
     }, function(err) {
       // error
     });
-  });
+  };
+
 
 
   $scope.showMap = function(){
@@ -638,6 +644,57 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
   $scope.setCurrentWProfile = function(profile){
     $rootScope.currentWProfile=profile;
+
+    var header = {};
+    
+    var open=parseInt($rootScope.currentWProfile.openH);
+    var close=parseInt($rootScope.currentWProfile.closeH);
+    var boxCount=$rootScope.currentWProfile.boxCount;
+    var boxTable={};
+    
+    var today=moment();
+    
+    $rootScope.currentWProfile.currentDate=today.format("YYYY-MM-DD");
+    
+    for(var t=open-1; t<=close; t++){
+      if(t<10){
+        t="0"+t;
+      }
+      boxTable['t'+t]={};
+      
+      for(var b=0; b<=boxCount; b++){
+        boxTable['t'+t]['b'+b]={};
+
+        if(b==0){
+          boxTable['t'+t]['b'+b].class='border_right';
+        };
+        
+        if(b==0 && t>=open){
+          boxTable['t'+t]['b'+b].time=t+":00";
+        };
+
+        if(b>0 && t<open){
+          boxTable['t'+t]['b'+b].boxHeader='Бокс ' + b;
+        };
+        
+        console.log('t:',t,'b:',b);
+     
+      };
+     
+
+    };
+    console.log(boxTable);
+    
+    $rootScope.showItems();
+    
+    $rootScope.BoxTable = {
+                            't0':{'b0':{"class":"border_right"},'b1':{"boxHeader":"Бокс1"},'b2':{"boxHeader":"Бокс2"},'b3':{"boxHeader":"Бокс3"}, 'b4':{"boxHeader":"Бокс4"}},
+                            't8':{'b0':{"class":"border_right"},'b1':{x:2},'b2':{x:1},'b3':{x:2},'b4':{x:2}},
+                            't9':{'b0':{"class":"border_right"},'b1':{x:2},'b2':{x:1},'b3':{x:2},'b4':{x:2}}
+                          };
+    $rootScope.BoxTable = boxTable; 
+
+
   };
 
 });
@@ -690,15 +747,151 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
 
 });
 
-fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers) {
+
+
+fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers, Bids) {
   
 
-  $scope.item = function(){
-    console.log("item");
-  };
+  // $scope.addItemToTable = function(t,b){
+  //   $rootScope.BoxTable.t9.b3.duration="60";
+  //   $rootScope.BoxTable.t9.b3.status="queue";
+  // };
+  
+  // $scope.addItemToBox = function(t,b){
+  //   console.log(t,b);
+  //   if(t!='t0'+parseInt($rootScope.currentWProfile.openH)-1 && b!='b0'){
+  //     $rootScope.BoxTable[t][b].duration="60";
+  //     $rootScope.BoxTable[t][b].status="queue";
+  //   }
+  // };
+  
+  
+  $rootScope.showItems = function(){
+    
+    Bids.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id, date: $rootScope.currentWProfile.currentDate}}}, function(bids) { 
+          // $rootScope.userCars = cars;
+          console.log("bids:",bids);
+          
+        angular.forEach(bids, function(value, key) {
+          var t='t'+value.begin_h;
+          if(value.begin_h<10){t='t0'+value.begin_h;};
+          var b='b'+ value.box;
+          
+          $rootScope.BoxTable[t][b]=value;
+          if(moment.duration(value.duration,"m").hours()==0){
+            $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").minutes()+'мин';  
+          }else{
+            $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").hours()+"ч "+moment.duration(value.duration,"m").minutes()+'мин';  
+          }
+        });
+        
+        $scope.timeBoxes={};
+        
+      console.log($rootScope.currentWProfile.boxCount);
+      for(var i=1; i<=$rootScope.currentWProfile.boxCount; i++){
 
-  $scope.newItem = function(){
-    console.log("newItem");
+        var b="b"+i;
+        console.log(b);
+        
+        var boxes=[];
+        
+        var box={};
+        box.begin_h=$rootScope.currentWProfile.openH;
+        box.begin_m=0;
+        var t=parseInt($rootScope.currentWProfile.openH)-1;
+       
+        angular.forEach($rootScope.BoxTable, function(value, key) {
+
+            if(value[b].box>0){
+              box.end_h=value[b].begin_h;
+              box.end_m=value[b].begin_m;  
+              
+              box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+              box.status="clean";
+              boxes.push(box);
+              
+              box={};
+              box.begin_h=value[b].begin_h;
+              box.begin_m=value[b].begin_m;
+              box.end_h=value[b].end_h;
+              box.end_m=value[b].end_m;
+              box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+              box.status="queue";
+              boxes.push(box);
+              
+              box={};
+              box.begin_h=value[b].end_h;
+              box.begin_m=value[b].end_m;
+            }
+            
+        });
+        
+        box.end_h=$rootScope.currentWProfile.closeH;
+        box.end_m=0; 
+        box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+        box.status="clean";
+        
+        boxes.push(box);
+        console.log("boxes:",boxes);
+        $scope.timeBoxes[b]=boxes;
+        
+      };  
+       console.log("timeBoxes", $scope.timeBoxes);  
+        
+      $rootScope.timeMoveBoxes={};
+        
+      angular.forEach($scope.BoxTable, function(value, t) {
+        $rootScope.timeMoveBoxes[t]={};
+        angular.forEach(value, function(val, b) {
+          
+          if(parseInt(b.substr(1))==0){                                         // Добавляем линию времени в timeMoveBoxes
+            $rootScope.timeMoveBoxes[t][b]=val;
+          };
+          
+          console.log(b);  
+          
+          if(parseInt(t.substr(1))==$rootScope.currentWProfile.openH-1){        // Добавляем шапку в timeMoveBoxes
+            $rootScope.timeMoveBoxes[t][b]=val;
+          };
+          
+          
+          angular.forEach($scope.timeBoxes[b], function(v, k) {
+            var timeBox={};
+            if(v.begin_h<=parseInt(t.substr(1))){
+              timeBox.begin_h=parseInt(t.substr(1));
+              timeBox.begin_m=0;
+              timeBox.duration=(v.end_h-parseInt(t.substr(1)))*60+v.end_m;
+              
+              if(v.begin_h==parseInt(t.substr(1))){                            // Если t=x m!=0 т.е. если блок начинаеться не с начала часа 00.
+                timeBox.begin_m=v.begin_m;
+              };
+  
+              if(v.duration<60){                                                // Если временные блоки менее 60 минут. И если их несколько.
+                timeBox.duration=v.duration;    
+              };
+            
+              timeBox.end_h=v.end_h;
+              timeBox.end_m=v.end_m;
+              timeBox.status=v.status;
+              $rootScope.timeMoveBoxes[t][b]=timeBox;
+            };
+          });
+          
+          
+        });  
+      });
+      
+      console.log("MoveBoxes:", $rootScope.timeMoveBoxes);  
+        
+    },function(err){
+      console.log("err:",err);
+    });
+    
+    
+      
+    
+   
+
   };
 
   $scope.showImage = function(){
@@ -749,38 +942,38 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     $scope.boxes=data;  
   });
 
-  $scope.deleteItem =function(id){
-    angular.forEach($scope.boxes, function(value, key) {
-      angular.forEach(value,function(val,k){
-        if (parseInt(val.id) == parseInt(id)){
+  // $scope.deleteItem =function(id){
+  //   angular.forEach($scope.boxes, function(value, key) {
+  //     angular.forEach(value,function(val,k){
+  //       if (parseInt(val.id) == parseInt(id)){
           
-          var item={};
-          item.id=val.id;
-          item.status="clean";
-          item.duration=""+val.duration;
-          item.start_time_h=val.start_time_h;
-          item.start_time_m=val.start_time_m;
-          console.log(val);
-          value.splice(k,1); //Удаляем зявку из списка
-          value.splice(k,0,item); //Добавляем item в список
-          console.log($scope.boxes);
+  //         var item={};
+  //         item.id=val.id;
+  //         item.status="clean";
+  //         item.duration=""+val.duration;
+  //         item.start_time_h=val.start_time_h;
+  //         item.start_time_m=val.start_time_m;
+  //         console.log(val);
+  //         value.splice(k,1); //Удаляем зявку из списка
+  //         value.splice(k,0,item); //Добавляем item в список
+  //         console.log($scope.boxes);
 
-          if(value[k+1] && value[k+1].status=="clean"){
-            item.duration=parseInt(value[k+1].duration)+parseInt(item.duration);
-            value.splice(k+1, 1);
-          };
+  //         if(value[k+1] && value[k+1].status=="clean"){
+  //           item.duration=parseInt(value[k+1].duration)+parseInt(item.duration);
+  //           value.splice(k+1, 1);
+  //         };
 
-          if(value[k-1] && value[k-1].status=="clean"){
-            item.duration=parseInt(value[k-1].duration)+parseInt(item.duration);
-            item.start_time_h=value[k-1].start_time_h;
-            item.start_time_m=value[k-1].start_time_m;
-            value.splice(k-1,1);
-          }
-        };
-      });
-    });
-   myApp.closeModal();
-  };
+  //         if(value[k-1] && value[k-1].status=="clean"){
+  //           item.duration=parseInt(value[k-1].duration)+parseInt(item.duration);
+  //           item.start_time_h=value[k-1].start_time_h;
+  //           item.start_time_m=value[k-1].start_time_m;
+  //           value.splice(k-1,1);
+  //         }
+  //       };
+  //     });
+  //   });
+  // myApp.closeModal();
+  // };
 
   $scope.services=[];
   $http.get('json/user/services.json').success(function(data){
@@ -980,15 +1173,28 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     });
   };
 
-  $scope.bidMove = function(id){
-    angular.forEach($scope.boxes, function(value, key) {
-      angular.forEach(value,function(val,k){
-        if (parseInt(val.id) == parseInt(id)){ 
-          $scope.moveItem=value[k];
-          console.log($scope.moveItem);
+  $scope.bidMove = function(t,b){
+    
+    $scope.moveTable={};
+    
+    angular.forEach($rootScope.timeMoveBoxes, function(value, tc) {
+      $scope.moveTable[tc]={};
+      angular.forEach(value,function(val,bc){
+        $scope.moveTable[tc][bc]=$rootScope.timeMoveBoxes[tc][bc];
+        if ($rootScope.timeMoveBoxes[tc][bc].status == "clean" && $rootScope.timeMoveBoxes[tc][bc].duration > $rootScope.BoxTable[t][b].duration){ 
+         $scope.moveTable[tc][bc].move_status = "can_accommodate";
+        }
+        else{
+          $scope.moveTable[tc][bc].move_status = "clean";
         };
+        
       });
     });
+    
+    console.log("t,b:",t,b);
+    console.log("duration:",$rootScope.BoxTable[t][b].duration);
+    
+    console.log("moveTable:",$scope.moveTable);
     mainView.router.loadPage({pageName: 'bid_move'});
   };
   
@@ -1168,22 +1374,24 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     });
   }
 
-  $scope.boxItemClick = function(status,id) {
+  $scope.boxItemClick = function(status,t,b,id) {
     
    myApp.pickerModal('.'+status);
 
    $scope.delete = function() {
-      $scope.deleteItem(id);
+     console.log(id);
+      $scope.deleteItem(t,b,id);
       $scope.closeModal();
     };
 
     $scope.move = function() {
-      $scope.bidMove(id);
+      $scope.bidMove(t,b);
       $scope.closeModal();
     };
 
     $scope.new = function() {
-      $scope.newOrder(id);
+      // $scope.newOrder(id);
+      $scope.newItem(t,b);
       $scope.closeModal();
     };
 
@@ -1193,5 +1401,87 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     };
 
   };
+  
+  $scope.newItem =function(t,b,date,m){
+    
+    $scope.newOrderData={};
+    $scope.order = {
+      services: []
+    };
+    $scope.newOrderData.rangeData=0;    
+    $scope.order_price=0;
+    $scope.new_time=0;
 
-})
+
+    
+    $scope.newOrderData.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
+    $scope.newOrderData.maxDinamicDuration=$rootScope.timeMoveBoxes[t][b].duration;
+    $scope.newOrderData.startTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
+    $scope.newOrderData.startTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
+
+    $scope.newOrderData.endTimeH=$rootScope.timeMoveBoxes[t][b].end_h;
+    $scope.newOrderData.endTimeM=$rootScope.timeMoveBoxes[t][b].end_m;
+    $scope.newOrderData.setTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
+    $scope.newOrderData.setTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
+    $scope.newOrderData.date=$rootScope.currentWProfile.currentDate;
+    $scope.newOrderData.box=parseInt(b.substr(1));;
+    
+    if($scope.BoxTable[t][b].status=="queue"){
+      myApp.addNotification({
+        title: 'FineCar',
+        message: 'В один час можно создавать только одну заявку.'
+     });
+    }
+    else{
+      mainView.router.loadPage({pageName: 'washer_new_bid'});      
+    };
+    
+  };
+
+
+   $scope.doNewItem = function() {
+
+    var item ={};   
+    item.status="queue";
+    item.duration=$scope.new_time;
+    item.begin_h=$scope.newOrderData.setTimeH;
+    item.begin_m=$scope.newOrderData.setTimeM;
+    item.date=$scope.newOrderData.date;
+    var endTime=$scope.minuteAddToTime(item.duration,item.begin_h, item.begin_m);
+    item.end_h=endTime.hour;
+    item.end_m=endTime.minute;
+    item.box=$scope.newOrderData.box;
+    item.user_phone=$scope.newOrderData.phone;
+    item.user_car_number=$scope.newOrderData.car_number;
+    item.wProfileId=$scope.currentWProfile.id;
+
+    Bids.create(item, function(items) { 
+          // $rootScope.userCars.push(car);
+          console.log("items:",items);
+
+
+          var t='t'+items.begin_h;
+          if(items.begin_h<10){t='t0'+items.begin_h;};
+          var b='b'+ items.box;
+          
+          $rootScope.showItems();
+        },function(err){
+          console.log("err:",err);
+          // mainView.router.loadPage({pageName: 'index'});
+        });
+     $rootScope.showItems();    
+      console.log(item);
+  };
+  
+  $scope.deleteItem = function(t,b,id){
+    console.log(id);
+      Bids.deleteById({ id: id })
+        .$promise
+        .then(function() { 
+          console.log('deleted'); 
+          $rootScope.BoxTable[t][b]={};
+        });
+      console.log($rootScope.BoxTable[t][b]);
+    }
+
+});
