@@ -1313,7 +1313,7 @@
                           </div>
                         </div>
                       </li>
-                      <li ng-repeat="service in wServices" ng-click="serviceSum($index)">
+                      <li ng-repeat="service in wServices" ng-click="serviceSumNew($index)">
                         <label class="label-checkbox item-content" >
                           <!--<input type="checkbox" model="order.services" value="service">-->
                           <div class="item-media"><i class="icon icon-checked"  ng-class="isServiceChecked($index)"></i></div>
@@ -1334,14 +1334,14 @@
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                            <div class="item-title">Сумма: {{nItem.price}} тг</div>
                           </div>
                         </div>
                       </li>
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                            <div class="item-title">Длительность: {{nItem.duration}}мин <small>(max: {{nItem.maxDuration}}мин)</small></div>
                           </div>
                         </div>
                       </li>
@@ -1349,7 +1349,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="newOrderData.car_number" placeholder="Номер авто">
+                              <input type="text" ng-model="nItem.user_car_number" placeholder="Номер авто">
                             </div>
                           </div>
                         </div>
@@ -1358,7 +1358,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="newOrderData.phone" placeholder="Телефон">
+                              <input type="text" ng-model="nItem.user_phone" placeholder="Телефон">
                             </div>
                           </div>
                         </div>
@@ -1366,26 +1366,26 @@
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Время начала: {{newOrderData.setTimeH}}:{{newOrderData.setTimeM}}</div>
+                            <div class="item-title">Время начала: {{nItem.begin_h}} {{nItem.begin_m}}</div>
                           </div>
                         </div>
                       </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                             <div class="range-slider">
-                              <i class="icon icon-form-clock"></i>
-                              {{newOrderData.startTimeH}}:{{newOrderData.startTimeM}}
+                      <!--<li>-->
+                      <!--  <div class="item-content">-->
+                      <!--    <div class="item-inner">-->
+                      <!--       <div class="range-slider">-->
+                      <!--        <i class="icon icon-form-clock"></i>-->
+                      <!--        {{newOrderData.startTimeH}}:{{newOrderData.startTimeM}}-->
 
-                              <span class="right">
-                                {{newOrderData.endTimeH}}:{{newOrderData.endTimeM}}
-                                <i class="icon icon-clock-filled"></i>
-                              </span>
-                              <input ng-model="newOrderData.rangeData" ng-change="rangeChange()"  type="range" min="0" max="{{newOrderData.maxDinamicDuration}}" value="0" step="5">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                      <!--        <span class="right">-->
+                      <!--          {{newOrderData.endTimeH}}:{{newOrderData.endTimeM}}-->
+                      <!--          <i class="icon icon-clock-filled"></i>-->
+                      <!--        </span>-->
+                      <!--        <input ng-model="newOrderData.rangeData" ng-change="rangeChange()"  type="range" min="0" max="{{newOrderData.maxDinamicDuration}}" value="0" step="5">-->
+                      <!--      </div>-->
+                      <!--    </div>-->
+                      <!--  </div>-->
+                      <!--</li>-->
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
@@ -1416,7 +1416,7 @@
                           </div>
                         </div>
                       </li>
-                      <li ng-repeat="service in wServices" ng-click="serviceSum($index)">
+                      <li ng-repeat="service in wServices" ng-click="serviceSumEdit($index)">
                         <label class="label-checkbox item-content" >
                           <!--<input type="checkbox" model="order.services" value="service">-->
                           <div class="item-media"><i class="icon icon-checked"  ng-class="isServiceChecked($index)"></i></div>
@@ -1437,14 +1437,14 @@
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общая цена: {{eItem.price}} тг</div>
+                            <div class="item-title">Сумма: {{eItem.price}} тг</div>
                           </div>
                         </div>
                       </li>
                       <li>
                         <div class="item-content">
                           <div class="item-inner">
-                            <div class="item-title">Общее время: {{eItem.duration}} мин</div>
+                            <div class="item-title">Длительность: {{eItem.duration}}мин <small>(max: {{eItem.maxDuration}}мин)</small></div>
                           </div>
                         </div>
                       </li>
@@ -1473,28 +1473,12 @@
                           </div>
                         </div>
                       </li>
-                      <!--<li>-->
-                      <!--  <div class="item-content">-->
-                      <!--    <div class="item-inner">-->
-                      <!--       <div class="range-slider">-->
-                      <!--        <i class="icon icon-form-clock"></i>-->
-                      <!--        {{editOrderData.startTimeH}}:{{editOrderData.startTimeM}}-->
-
-                      <!--        <span class="right">-->
-                      <!--          {{editOrderData.endTimeH}}:{{editOrderData.endTimeM}}-->
-                      <!--          <i class="icon icon-clock-filled"></i>-->
-                      <!--        </span>-->
-                      <!--        <input ng-model="editOrderData.rangeData" ng-change="rangeEditChange()"  type="range" min="0" max="{{editOrderData.maxDinamicDuration}}" value="0" step="5">-->
-                      <!--      </div>-->
-                      <!--    </div>-->
-                      <!--  </div>-->
-                      <!--</li>-->
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
                               <br/>
-                              <a href="#"  ng-click="doEditOrder()" class="button button-big button-fill back link">Сохранить</a>
+                              <a href="#"  ng-click="doEditItem()" class="button button-big button-fill">Сохранить</a>
                               <br/>
                             </div>
                           </div>

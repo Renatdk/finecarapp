@@ -1342,27 +1342,22 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     }
   }
 
-  $scope.serviceSum= function(index){
+  
+  $scope.serviceSumEdit= function(index){
     
     console.log("click serviceSum");
-    // $scope.new_price=0;
-    // $scope.new_time=0;
-    // $scope.title_sum="";
-    // $scope.newOrderData.rangeData=0;
-    // $scope.newOrderData.setTimeH=$scope.newOrderData.startTimeH;
-    // $scope.newOrderData.setTimeM=$scope.newOrderData.startTimeM;   
     $scope.eItem.duration=0;
     $scope.eItem.price=0;
     
     var i=0;
     
     if($scope.wServices[index].isChecked==true){
-      var i=$scope.order.services.indexOf($scope.wServices[index]);
-      $scope.order.services.splice(i,1);
+      var i=$scope.eItem.services.indexOf($scope.wServices[index]);
+      $scope.eItem.services.splice(i,1);
       $scope.wServices[index].isChecked=false;
     }else{
       $scope.wServices[index].index=index;
-      $scope.order.services.push($scope.wServices[index]);
+      $scope.eItem.services.push($scope.wServices[index]);
       $scope.wServices[index].isChecked=true;
     };
     
@@ -1374,41 +1369,19 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
         }
     };
     
-    console.log('$scope.order.services',$scope.order.services);
-    angular.forEach($scope.order.services, function(value, key) {
+    console.log('$scope.order.services',$scope.eItem.services);
+    angular.forEach($scope.eItem.services, function(value, key) {
       $scope.eItem.price +=parseFloat(value.price);
       $scope.eItem.duration +=parseFloat(value.duration);  
-    });
-
-    // var beginTimeLength=$scope.newOrderData.maxDuration-$scope.new_time;
-    // beginTimeLength=$scope.minuteAddToTime(beginTimeLength,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
-    // $scope.newOrderData.endTimeH=beginTimeLength.hour;
-    // $scope.newOrderData.endTimeM=beginTimeLength.minute;  
-    // $scope.newOrderData.maxDinamicDuration=$scope.newOrderData.maxDuration-$scope.new_time;
-
-    console.log("duration", $scope.eItem.duration, "price:", $scope.eItem.price);
-
-    // if(parseInt($scope.newOrderData.maxDuration)<$scope.new_time){
-    //   myApp.confirm("Всего" +$scope.newOrderData.maxDuration+"мин. Удалить последний?",
-    //   "Превышен лимит по времени," +$scope.new_time+"мин!"
-       
-    //   ,function() {
+    console.log("duration", value.duration, "price:", value.price);
         
-    //      var lastItem=$scope.order.services.pop();
-    //      $scope.order_price-=parseFloat(lastItem.price);
-    //      $scope.new_time -=parseFloat(lastItem.duration);  
-    //      $scope.newOrderData.maxDinamicDuration=$scope.newOrderData.maxDuration-$scope.new_time;
-    //      var beginTimeLength=$scope.newOrderData.maxDuration-$scope.new_time;
-    //      beginTimeLength=$scope.minuteAddToTime(beginTimeLength,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
-    //      $scope.newOrderData.endTimeH=beginTimeLength.hour;
-    //      $scope.newOrderData.endTimeM=beginTimeLength.minute;  
-    //   },function(){
-    //      $scope.newOrderData.endTimeH=$scope.newOrderData.startTimeH;
-    //      $scope.newOrderData.endTimeM=$scope.newOrderData.startTimeM; 
-    //      $scope.newOrderData.maxDinamicDuration=0;
-    //   }
-    //  );
-    // };
+    });
+    
+     if($scope.eItem.duration>$scope.eItem.maxDuration){
+        myApp.alert("Превышена максимальная длительность!<br/>"+$scope.eItem.duration+"мин > "+$scope.eItem.maxDuration+" мин");
+    };
+    
+    
   };
 
   $scope.rangeChange = function(){
@@ -1498,10 +1471,20 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
   $scope.editItem= function(t,b,id){
     
     $scope.eItem=$rootScope.BoxTable[t][b];
+    console.log($scope.eItem);
+    
+    t1=parseInt(t.substr(1));
+    t1++;
+    if(t1<10){t1="t0"+t1}else{t1="t"+t1};
+    console.log("t1:",t1);
+    
+    if(t1 && $rootScope.timeMoveBoxes[t1][b].status=="clean"){
+        $scope.eItem.maxDuration=$scope.eItem.duration+$rootScope.timeMoveBoxes[t1][b].duration;
+    }else{
+        $scope.eItem.maxDuration=$scope.eItem.duration;
+    }
+    
     console.log("$scope.editItem",$scope.eItem);
-    $scope.order = {
-      services: []
-    };
     
     console.log("edit item",$scope.eItem);
     
@@ -1523,7 +1506,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
                 if(value.id==item.id){
                     
                     value.isChecked=true;  
-                    $scope.order.services.push(value);
+                
                     $scope.isServiceChecked = function(key){
                         if($scope.wServices[key].isChecked){
                             console.log("$scope.wServices[key].isChecked",$scope.wServices[key].isChecked);
@@ -1551,19 +1534,19 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
       
       if(val=="passenger"){
         angular.forEach($scope.wServices, function(value, key) {
-          value.price=value.price1;
+           value.price+=value.price1;
         });
       };
       
       if(val=="pikup"){
         angular.forEach($scope.wServices, function(value, key) {
-          value.price=value.price2;
+           value.price+=value.price2;
         });
       };
       
       if(val=="miniven"){
         angular.forEach($scope.wServices, function(value, key) {
-          value.price=value.price3;
+           value.price=value.price3;
         });
       };
       
@@ -1607,35 +1590,31 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
    console.log("doEditItem:");
     myApp.showIndicator();
     
-    // Bids.findById({ id: $scope.fromMoveItem.id },
-    //   function(response){
-    //     console.log('response',response);
+    Bids.findById({ id: $scope.eItem.id },
+      function(response){
+        console.log('response',response);
         
-    //     $scope.moveItem=response;
-    //     $scope.moveItem.begin_h=parseInt(t.substr(1));
-    //     $scope.moveItem.begin_m=$rootScope.timeMoveBoxes[t][b].begin_m;
-    //     $scope.moveItem.box=parseInt(b.substr(1));
-    //     $scope.moveItem.end_h=parseInt(t.substr(1))+moment.duration($scope.moveItem.duration,"m").hours();
-    //     $scope.moveItem.end_m=moment.duration($scope.moveItem.duration,"m").minutes();
-        
-    //     $scope.moveItem
-    //       .$save()
-    //       .then(function() {
-    //         $scope.showItems();
-    //         mainView.router.back();
-    //       });
-        
-    //     var box='b'+$scope.fromMoveItem.box;                                                                          // удаляем из предыдущей позиции.  
-    //     var time=$scope.fromMoveItem.begin_h<10 ? 't0'+$scope.fromMoveItem.begin_h : 't'+$scope.fromMoveItem.begin_h;
-    //     $scope.BoxTable[time][box]={};
-    //     myApp.hideIndicator();
-    //   },
-    //   function(err){
-    //     console.log('error',err);
-    //     myApp.hideIndicator();
-    //   }).$promise;
+        $scope.editingItem=response;
+        $scope.editingItem.services=$scope.eItem.services;
+        $scope.editingItem.price=$scope.eItem.price;
+        $scope.editingItem.duration=$scope.eItem.duration;
+        $scope.editingItem.car_type=$scope.car_type;
+        $scope.editingItem
+          .$save()
+          .then(function() {
+            $scope.showItems();
+            mainView.router.back();
+          });
+          
+        console.log("editing item:",$scope.editingItem);
+        myApp.hideIndicator();
+      },
+      function(err){
+        console.log('error',err);
+        myApp.hideIndicator();
+      }).$promise;
     
-    // console.log("item:",$scope.moveItem);
+    
     
    
    
@@ -1726,37 +1705,90 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
       
   }
 
+  $scope.serviceSumNew= function(index){
+    
+    console.log("click serviceSum");
+    $scope.nItem.duration=0;
+    $scope.nItem.price=0;
+    
+    var i=0;
+    
+    if($scope.wServices[index].isChecked==true){
+      var i=$scope.nItem.services.indexOf($scope.wServices[index]);
+      $scope.nItem.services.splice(i,1);
+      $scope.wServices[index].isChecked=false;
+    }else{
+      $scope.wServices[index].index=index;
+      $scope.nItem.services.push($scope.wServices[index]);
+      $scope.wServices[index].isChecked=true;
+    };
+    
+    $scope.isServiceChecked = function(index){
+        if($scope.wServices[index].isChecked){
+            return "icon-checked-filled"
+        }else{
+            return ""
+        }
+    };
+    
+    console.log('$scope.order.services',$scope.nItem.services);
+    angular.forEach($scope.nItem.services, function(value, key) {
+      $scope.nItem.price +=parseFloat(value.price);
+      $scope.nItem.duration +=parseFloat(value.duration);  
+    console.log("duration", value.duration, "price:", value.price);
+        
+    });
+    
+    if($scope.nItem.duration>$scope.nItem.maxDuration){
+        myApp.alert("Превышена максимальная длительность!<br/>"+$scope.nItem.duration+"мин > "+$scope.nItem.maxDuration+" мин");
+    };
+    
+    
+  };
+
   $scope.newItem =function(t,b,date,m){
     
-    $scope.newOrderData={};
-    $scope.order = {
-      services: []
+    $scope.nItem=$rootScope.timeMoveBoxes[t][b];
+    $scope.nItem.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
+    
+    if($scope.nItem.begin_h==moment().hours() && $rootScope.currentWProfile.currentDate==moment().startOf('day')){
+        $scope.nItem.minutes=moment().minutes();
+        $scope.nItem.maxDuration=$rootScope.timeMoveBoxes[t][b].duration-moment().minutes();
     };
-    $scope.newOrderData.rangeData=0;    
-    $scope.new_price=0;
-    $scope.new_time=0;
+    
+    $scope.nItem.box=parseInt(b.substr(1));
+    
+    
+    
+    console.log("nItem",$scope.nItem);
+    $scope.newOrderData={};
+    $scope.nItem.services = [];
+  
+    // $scope.newOrderData.rangeData=0;    
+    // $scope.new_price=0;
+    // $scope.new_time=0;
 
 
     
-    $scope.newOrderData.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
-    $scope.newOrderData.maxDinamicDuration=$rootScope.timeMoveBoxes[t][b].duration;
-    $scope.newOrderData.startTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
-    $scope.newOrderData.startTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
+    // $scope.newOrderData.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
+    // $scope.newOrderData.maxDinamicDuration=$rootScope.timeMoveBoxes[t][b].duration;
+    // $scope.newOrderData.startTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
+    // $scope.newOrderData.startTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
 
-    $scope.newOrderData.endTimeH=$rootScope.timeMoveBoxes[t][b].end_h;
-    $scope.newOrderData.endTimeM=$rootScope.timeMoveBoxes[t][b].end_m;
-    $scope.newOrderData.setTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
-    $scope.newOrderData.setTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
-    $scope.newOrderData.date=$rootScope.currentWProfile.currentDate;
-    $scope.newOrderData.box=parseInt(b.substr(1));;
+    // $scope.newOrderData.endTimeH=$rootScope.timeMoveBoxes[t][b].end_h;
+    // $scope.newOrderData.endTimeM=$rootScope.timeMoveBoxes[t][b].end_m;
+    // $scope.newOrderData.setTimeH=$rootScope.timeMoveBoxes[t][b].begin_h;
+    // $scope.newOrderData.setTimeM=$rootScope.timeMoveBoxes[t][b].begin_m;
+    // $scope.newOrderData.date=$rootScope.currentWProfile.currentDate;
+    // $scope.newOrderData.box=parseInt(b.substr(1));
     
-    if($scope.BoxTable[t][b].status=="queue"){
-      myApp.addNotification({
-        title: 'FineCar',
-        message: 'В один часовой промежуток, можно создать только одну заявку. Выберите другой бокс.'
-     });
-    }
-    else{
+    // if($scope.BoxTable[t][b].status=="queue"){
+    //   myApp.addNotification({
+    //     title: 'FineCar',
+    //     message: 'В один часовой промежуток, можно создать только одну заявку. Выберите другой бокс.'
+    //  });
+    // }
+    // else{
       WasherServices.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id}}}, function(wServices) { 
           $scope.wServices = wServices;
           
@@ -1770,7 +1802,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
         },function(err){
           console.log("err:",err);
         });  
-    };
+    // };
     
     $scope.car_type='passenger';
     $scope.carType =function (val){
@@ -1809,21 +1841,21 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
 
   $scope.doNewItem = function() {
 
-    var item ={};   
+    var item =$scope.nItem;   
     item.status="queue";
-    item.duration=$scope.new_time;
-    item.begin_h=$scope.newOrderData.setTimeH;
-    item.begin_m=$scope.newOrderData.setTimeM;
-    item.date=$scope.newOrderData.date;
+    // item.duration=$scope.new_time;
+    // item.begin_h=$scope.dateTime.hours;
+    // item.begin_m=$scope.dateTime.minutes;
+    item.date=$scope.currentWProfile.currentDate;
     var endTime=$scope.minuteAddToTime(item.duration,item.begin_h, item.begin_m);
     item.end_h=endTime.hour;
     item.end_m=endTime.minute;
-    item.box=$scope.newOrderData.box;
-    item.user_phone=$scope.newOrderData.phone;
-    item.user_car_number=$scope.newOrderData.car_number;
+    // item.box=$scope.dateTime.box;
+    // item.user_phone=$scope.newOrderData.phone;
+    // item.user_car_number=$scope.newOrderData.car_number;
     item.wProfileId=$scope.currentWProfile.id;
-    item.price=$scope.new_price;
-    item.services=$scope.order.services;
+    // item.price=$scope.new_price;
+    // item.services=$scope.order.services;
     item.car_type=$scope.car_type;
     Bids.create(item, function(items) { 
           // $rootScope.userCars.push(car);
