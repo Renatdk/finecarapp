@@ -1121,7 +1121,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     
     myApp.onPageInit('washer_home', function (page) {
         function sec() {
-            var pixels=(moment().hours()-$rootScope.currentWProfile.openH)*60+moment().minutes()+50-moment().hours();
+            var pixels=(moment().hours()-$rootScope.currentWProfile.openH)*60+moment().minutes()+41;
             $$('.time_line').css('margin-top', pixels+'px');
             $$('.time_line').css('visibility', 'visible');
             $$('.time_line span').text(moment().format('HH:mm:ss'));
