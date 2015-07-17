@@ -1922,10 +1922,12 @@
                         </div>
                       </a>
                       <div class="swipeout-actions-left">
-                        <a href="#" ng-click="blockWasherMan(washerMan)" class="bg-pink">Блокировать</a>
+                        <a href="tel:{{washerMan.phone}}" ng-click="blockWasherMan(washerMan)" class="action1 bg-orange">Позвонить</a>
+                        <a href="sms:{{washerMan.phone}}" ng-click="blockWasherMan(washerMan)" class="action1 bg-lightgreen">Написать</a>
                       </div>
                       <div class="swipeout-actions-right">
-                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="swipeout-delete">Удалить</a>
+                        <a href="#" ng-click="blockWasherMan(washerMan)" class="action1 bg-lightgreen">Блокировать</a>
+                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="action2 swipeout-delete">Удалить</a>
                       </div>
                     </li>
                     <li>
@@ -1938,10 +1940,12 @@
                         </div>
                       </a>
                       <div class="swipeout-actions-left">
-                        <a href="#" ng-click="unblockWasherMan(washerMan)" class="bg-lightgreen">Активировать</a>
+                        <a href="tel:{{washerMan.phone}}" ng-click="blockWasherMan(washerMan)" class="action1 bg-orange">Позвонить</a>
+                        <a href="sms:{{washerMan.phone}}" ng-click="blockWasherMan(washerMan)" class="action1 bg-lightgreen">Написать</a>
                       </div>
                       <div class="swipeout-actions-right">
-                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="swipeout-delete">Удалить</a>
+                        <a href="#" ng-click="unblockWasherMan(washerMan)" class="action1 bg-lightgreen">Активировать</a>
+                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="action2 swipeout-delete">Удалить</a>
                       </div>
                     </li>
                   </ul>
