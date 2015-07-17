@@ -260,6 +260,12 @@ table.time_box tr td:active{
   /*border-bottom: 1px solid #222426;*/
 }
 
+.in_box_item{
+  background-color: yellow;
+  text-align: center;
+  color:#1e1e1e;
+  margin-top: -1px;
+}
 
 
 

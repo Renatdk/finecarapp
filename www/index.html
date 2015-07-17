@@ -1193,27 +1193,6 @@
                     </table>
                   </div>
                   <br/>
-                  <!--<div class="content-block">-->
-                  <!--  <div class="buttons-row">-->
-                  <!--    <a href="#washer_new_bid" ng-click="actions()" class="button active">Бокс 1</a>-->
-                  <!--    <a href="#bid_move" class="button active">Бокс 2</a>-->
-                  <!--    <a href="#washer_single_box" class="button active">Бокс 3</a>-->
-                  <!--    <a href="#" class="button" ng-click="showImage()">Бокс 4</a>-->
-                  <!--  </div>-->
-                  <!--    <img id="washerImage">-->
-
-                  <!--</div>-->
-                  <br/>
-                  <!--<div class="row no-gutter center" >-->
-                  <!--  <div class="col-25" ng-repeat="(box_key,box) in boxes track by $index">-->
-                  <!--    <div>{{box_key}}<span id="key"></span></div>-->
-                  <!--    <div ng-repeat="box_item in box track by $index">-->
-                  <!--      <div  ng-if="box_item.status=='queue'  &&  $index==0" class="h{{box_item.duration}} queue_in_box_bkg" ng-click="as_queue_in_box(box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>-->
-
-                  <!--        <div ng-if="box_item.status!='queue'  ||  $index!=0" class="h{{box_item.duration}} {{box_item.status}}_bkg" ng-click="boxItemClick(box_item.status,box_item.id)" >{{box_item.start_time_h}}:{{box_item.start_time_m}} {{box_item.duration}}м</div>-->
-                  <!--    </div>-->
-                  <!--  </div>-->
-                  <!--</div>-->
                 
                 </div>
                 <div class="content-block">
@@ -1245,9 +1224,10 @@
                 <div class="actions-modal picker-modal queue">
                   <div class="actions-modal-group">
                     <span class="actions-modal-label">F987OPM</span>
-                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="toBox()" >В бокс</div>
                     <div class="actions-modal-button" ng-click="move()" >Переместить</div>
                     <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
                   </div>
                   <div class="actions-modal-group">
                     <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
@@ -1258,9 +1238,10 @@
                 <div class="actions-modal picker-modal user_bid">
                   <div class="actions-modal-group">
                     <span class="actions-modal-label">F987OPM</span>
-                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                    <div class="actions-modal-button" ng-click="toBox()" >В бокс</div>
                     <div class="actions-modal-button" ng-click="move()" >Переместить</div>
                     <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
                   </div>
                   <div class="actions-modal-group">
                     <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
@@ -1490,6 +1471,100 @@
                   
                   </div>
                   
+              </div>
+            </div>
+            
+            <div data-page="washer_in_box_bid" class="page cached">
+              <div class="page-content">
+                  <div class="list-block media-list">
+                    <ul >
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">Номер авто: {{iItem.user_car_number}} </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-title">Телефон: <a href="tel:{{iItem.user_phone}}">{{iItem.user_phone}}</a></div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="list-block media-list">
+                    <ul>
+                      <li ng-repeat="washerMan in washerMans" ng-click="checkWasherMans($index)" ng-if="washerMan.active">
+                        <label class="label-checkbox item-content">
+                          <!-- Checked by default -->
+                          <!--<input type="checkbox" name="my-checkbox" value="Books" checked="checked">-->
+                          <div class="item-media"><i class="icon icon-checked"  ng-class="isWasherManChecked($index)"></i></div>
+                          <!--<div class="item-media">-->
+                          <!--  <i class="icon icon-form-checkbox"></i>-->
+                          <!--</div>-->
+                          <div class="item-inner">
+                            <div class="item-title">{{washerMan.name}} {{washerMan.second_name}}</div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="list-block media-list">
+                    <ul>
+                      <li ng-repeat="service in iItem.services">
+                        <label class="item-content" >
+                          <!--<input type="checkbox" model="order.services" value="service">-->
+                          <!--<div class="item-media"><i class="icon icon-checked"  ng-class="isServiceChecked($index)"></i></div>-->
+                          <div class="item-inner"  >
+                            <div class="item-title-row">
+                              <div class="item-title orange">{{service.name}}</div>
+                              <div class="item-after"> {{service.duration}} мин</div>
+                            </div>
+                            <!--<div class="item-subtitle">Длительность: {{service.duration}} минут</div>-->
+                            <div class="item-text">{{service.description}} </div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div> 
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Сумма: {{iItem.price}} тг</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Длительность: {{iItem.duration}}мин </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Время начала: {{iItem.begin_h}}:{{iItem.begin_m}}</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <br/>
+                              <a href="#"  ng-click="doGoItemToBox()" class="button button-big button-fill">Запустить</a>
+                              <br/>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
               </div>
             </div>
 

@@ -1081,631 +1081,628 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
 fineCarApp.controller('washerMenuController', function($scope, WasherProfile, Services, $rootScope, WasherServices){
 });
 
-fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers, Bids, BoxesStatus, WasherServices) {
+fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers, Bids, BoxesStatus, WasherServices, WasherMans) {
   
     
-  $scope.getTimeLineClass = function(path) {
-    if (moment($rootScope.currentWProfile.currentDate).format("D MMM") == path.name) {
-      return "active"
-    } else {
-      return ""
-    }
-  };
-
-  $scope.setCurrentDate = function(date){
-    $rootScope.currentWProfile.currentDate=date.date;
-    console.log("currentDate:", $rootScope.currentWProfile.currentDate);
-    $rootScope.showItems();
-  };
-  
-  $scope.cleanItems = function(){
-      var open=parseInt($rootScope.currentWProfile.openH);
-      var close=parseInt($rootScope.currentWProfile.closeH);
-      var boxCount=$rootScope.currentWProfile.boxCount;
-      
-      for(var t=open; t<=close; t++){
-        t<10 ? to="t0"+t : to="t"+t; 
-        
-        for(var b=1; b<=boxCount; b++){
-          bo="b"+b;
-          $rootScope.BoxTable[to][bo]={};
-          console.log('b->t,b',to,bo);
+    $scope.getTimeLineClass = function(path) {
+        if (moment($rootScope.currentWProfile.currentDate).format("D MMM") == path.name) {
+          return "active"
+        } else {
+          return ""
         }
-        console.log('t->t,b',to,bo);
+      };
+    
+    $scope.setCurrentDate = function(date){
+        $rootScope.currentWProfile.currentDate=date.date;
+        console.log("currentDate:", $rootScope.currentWProfile.currentDate);
+        $rootScope.showItems();
       };
       
-      console.log("$scope.cleanItems->",$rootScope.BoxTable);
-  };
-  
-  $rootScope.showItems = function(){
-    
-    myApp.onPageInit('washer_home', function (page) {
-        function sec() {
-            var pixels=(moment().hours()-$rootScope.currentWProfile.openH)*60+moment().minutes()+41;
-            $$('.time_line').css('margin-top', pixels+'px');
-            $$('.time_line').css('visibility', 'visible');
-            $$('.time_line span').text(moment().format('HH:mm:ss'));
-        }
-        setInterval(sec, 1000);  
-    });   
-
-    
-    
-    $scope.dateLine =[];
-    
-    for(var i=0;i<7;i++ ){                                                                                                                          
-      var date={};
-      
-      date.date=moment().add(i, 'days').startOf('day');
-      date.name=moment().add(i, 'days').format("D MMM"); 
-      if(moment($rootScope.currentWProfile.currentDate).format("D MMM")==date.name){console.log(date.name)};
-      $scope.dateLine.push(date);      
-    };
-
-    console.log('dateLine',$scope.dateLine, 'currentDate',$rootScope.currentWProfile.currentDate);
-    
-    $scope.cleanItems();
-    
-    Bids.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id, date: $rootScope.currentWProfile.currentDate}}}, function(bids) { 
-        console.log("bids:",bids);
+    $scope.cleanItems = function(){
+          var open=parseInt($rootScope.currentWProfile.openH);
+          var close=parseInt($rootScope.currentWProfile.closeH);
+          var boxCount=$rootScope.currentWProfile.boxCount;
           
-        angular.forEach(bids, function(value, key) {
-          var t='t'+value.begin_h;
-          if(value.begin_h<10){t='t0'+value.begin_h;};
-          var b='b'+ value.box;
-          
-          $rootScope.BoxTable[t][b]=value;
-          if(moment.duration(value.duration,"m").hours()==0){
-            $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").minutes()+'мин';  
-          }else{
-            $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").hours()+"ч "+moment.duration(value.duration,"m").minutes()+'мин';  
-          }
-        });
-        
-      console.log('$rootScope.BoxTable',$rootScope.BoxTable);
-        
-      $scope.timeBoxes={};
-        
-      console.log($rootScope.currentWProfile.boxCount);
-      for(var i=1; i<=$rootScope.currentWProfile.boxCount; i++){
-
-        var b="b"+i;
-        console.log(b);
-        
-        var boxes=[];
-        
-        var box={};
-        box.begin_h=$rootScope.currentWProfile.openH;
-        box.begin_m=0;
-        var t=parseInt($rootScope.currentWProfile.openH)-1;
-       
-        angular.forEach($rootScope.BoxTable, function(value, key) {
-
-            if(value[b].box>0){
-              box.end_h=value[b].begin_h;
-              box.end_m=value[b].begin_m;  
-              
-              box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
-              box.status="clean";
-              boxes.push(box);
-              
-              box={};
-              box.begin_h=value[b].begin_h;
-              box.begin_m=value[b].begin_m;
-              box.end_h=value[b].end_h;
-              box.end_m=value[b].end_m;
-              box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
-              box.status="queue";
-              boxes.push(box);
-              
-              box={};
-              box.begin_h=value[b].end_h;
-              box.begin_m=value[b].end_m;
+          for(var t=open; t<=close; t++){
+            t<10 ? to="t0"+t : to="t"+t; 
+            
+            for(var b=1; b<=boxCount; b++){
+              bo="b"+b;
+              $rootScope.BoxTable[to][bo]={};
+              console.log('b->t,b',to,bo);
             }
-            
-        });
-        
-        box.end_h=$rootScope.currentWProfile.closeH;
-        box.end_m=0; 
-        box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
-        box.status="clean";
-        
-        boxes.push(box);
-
-        $scope.timeBoxes[b]=boxes;
-        
-      };  
-       console.log("timeBoxes", $scope.timeBoxes);  
-        
-        $rootScope.timeMoveBoxes={};                                              // Создаем слепок состояния боксов при каждом изменении
-            
-        
-            
-      angular.forEach($scope.BoxTable, function(value, t) {
-        $rootScope.timeMoveBoxes[t]={};
-        
-        angular.forEach(value, function(val, b) {
-  
-            if(parseInt(b.substr(1))==0){                                         // Добавляем линию времени в timeMoveBoxes
-                $rootScope.timeMoveBoxes[t][b]=val;
-            };
-    
-              
-            if(parseInt(t.substr(1))==$rootScope.currentWProfile.openH-1){        // Добавляем шапку в timeMoveBoxes
-                $rootScope.timeMoveBoxes[t][b]=val;
-            };
-              
-              
-            angular.forEach($scope.timeBoxes[b], function(v, k) {
-                var timeBox={};
-                
-                if(v.begin_h<=parseInt(t.substr(1))){
-                    timeBox.begin_h=parseInt(t.substr(1));
-                    timeBox.begin_m=0;
-                    timeBox.duration=(v.end_h-parseInt(t.substr(1)))*60+v.end_m;
-                  
-                    if(v.begin_h==parseInt(t.substr(1))){                            // Если t=x m!=0 т.е. если блок начинаеться не с начала часа 00.
-                        timeBox.begin_m=v.begin_m;
-                    };
+            console.log('t->t,b',to,bo);
+          };
+          
+          console.log("$scope.cleanItems->",$rootScope.BoxTable);
+      };
       
-                    if(v.duration<60){                                                // Если временные блоки менее 60 минут.
-                        timeBox.duration=v.duration;    
-                    };
-                
-                    timeBox.end_h=v.end_h;
-                    timeBox.end_m=v.end_m;
-                    timeBox.status=v.status;
-                    $rootScope.timeMoveBoxes[t][b]=timeBox;
-                    
-                    
-                };
+    $rootScope.showItems = function(){
+        
+        myApp.onPageInit('washer_home', function (page) {
+            function sec() {
+                var pixels=(moment().hours()-$rootScope.currentWProfile.openH)*60+moment().minutes()+41;
+                $$('.time_line').css('margin-top', pixels+'px');
+                $$('.time_line').css('visibility', 'visible');
+                $$('.time_line span').text(moment().format('HH:mm:ss'));
+            }
+            setInterval(sec, 1000);  
+        });   
+    
+        
+        
+        $scope.dateLine =[];
+        
+        for(var i=0;i<7;i++ ){                                                                                                                          
+          var date={};
+          
+          date.date=moment().add(i, 'days').startOf('day');
+          date.name=moment().add(i, 'days').format("D MMM"); 
+          if(moment($rootScope.currentWProfile.currentDate).format("D MMM")==date.name){console.log(date.name)};
+          $scope.dateLine.push(date);      
+        };
+    
+        console.log('dateLine',$scope.dateLine, 'currentDate',$rootScope.currentWProfile.currentDate);
+        
+        $scope.cleanItems();
+        
+        Bids.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id, date: $rootScope.currentWProfile.currentDate}}}, function(bids) { 
+            console.log("bids:",bids);
+              
+            angular.forEach(bids, function(value, key) {
+              var t='t'+value.begin_h;
+              if(value.begin_h<10){t='t0'+value.begin_h;};
+              var b='b'+ value.box;
+              
+              $rootScope.BoxTable[t][b]=value;
+              if(moment.duration(value.duration,"m").hours()==0){
+                $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").minutes()+'мин';  
+              }else{
+                $rootScope.BoxTable[t][b].duration_hm=moment.duration(value.duration,"m").hours()+"ч "+moment.duration(value.duration,"m").minutes()+'мин';  
+              }
             });
-        });  
-      });
+            
+          console.log('$rootScope.BoxTable',$rootScope.BoxTable);
+            
+          $scope.timeBoxes={};
+            
+          console.log($rootScope.currentWProfile.boxCount);
+          for(var i=1; i<=$rootScope.currentWProfile.boxCount; i++){
+    
+            var b="b"+i;
+            console.log(b);
+            
+            var boxes=[];
+            
+            var box={};
+            box.begin_h=$rootScope.currentWProfile.openH;
+            box.begin_m=0;
+            var t=parseInt($rootScope.currentWProfile.openH)-1;
+           
+            angular.forEach($rootScope.BoxTable, function(value, key) {
+    
+                if(value[b].box>0){
+                  box.end_h=value[b].begin_h;
+                  box.end_m=value[b].begin_m;  
+                  
+                  box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+                  box.status="clean";
+                  boxes.push(box);
+                  
+                  box={};
+                  box.begin_h=value[b].begin_h;
+                  box.begin_m=value[b].begin_m;
+                  box.end_h=value[b].end_h;
+                  box.end_m=value[b].end_m;
+                  box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+                  box.status="queue";
+                  boxes.push(box);
+                  
+                  box={};
+                  box.begin_h=value[b].end_h;
+                  box.begin_m=value[b].end_m;
+                }
+                
+            });
+            
+            box.end_h=$rootScope.currentWProfile.closeH;
+            box.end_m=0; 
+            box.duration=(box.end_h-box.begin_h)*60+box.end_m-box.begin_m;
+            box.status="clean";
+            
+            boxes.push(box);
+    
+            $scope.timeBoxes[b]=boxes;
+            
+          };  
+           console.log("timeBoxes", $scope.timeBoxes);  
+            
+            $rootScope.timeMoveBoxes={};                                              // Создаем слепок состояния боксов при каждом изменении
+                
+            
+                
+          angular.forEach($scope.BoxTable, function(value, t) {
+            $rootScope.timeMoveBoxes[t]={};
+            
+            angular.forEach(value, function(val, b) {
       
-      console.log("MoveBoxes:", $rootScope.timeMoveBoxes);  
-      
-      
-      var boxesStatus={};
-      
-      BoxesStatus.findOne({filter: { where: {wProfileId: $rootScope.currentWProfile.id, date: $rootScope.currentWProfile.currentDate}}}, function(bs) { 
+                if(parseInt(b.substr(1))==0){                                         // Добавляем линию времени в timeMoveBoxes
+                    $rootScope.timeMoveBoxes[t][b]=val;
+                };
         
-        $scope.boxesStatus=bs;
-        console.log("boxesStatus:", $scope.boxesStatus);
-        
-        $scope.boxesStatus.data=$rootScope.timeMoveBoxes;
-
-        $scope.boxesStatus.$save();
-        
-      },function(err){
-        
-        boxesStatus.date=$rootScope.currentWProfile.currentDate;
-        boxesStatus.wProfileId=$rootScope.currentWProfile.id;
-        boxesStatus.data=$rootScope.timeMoveBoxes;
-        
-        BoxesStatus.create(boxesStatus,
-          function(bs){console.log(bs)},
-          function(err){
-            myApp.addNotification({
-              title: 'FineCar',
-              message: 'Ошибка синхранизации заявок с базой данных: '+err});
-            console.log(err);
+                  
+                if(parseInt(t.substr(1))==$rootScope.currentWProfile.openH-1){        // Добавляем шапку в timeMoveBoxes
+                    $rootScope.timeMoveBoxes[t][b]=val;
+                };
+                  
+                  
+                angular.forEach($scope.timeBoxes[b], function(v, k) {
+                    var timeBox={};
+                    
+                    if(v.begin_h<=parseInt(t.substr(1))){
+                        timeBox.begin_h=parseInt(t.substr(1));
+                        timeBox.begin_m=0;
+                        timeBox.duration=(v.end_h-parseInt(t.substr(1)))*60+v.end_m;
+                      
+                        if(v.begin_h==parseInt(t.substr(1))){                            // Если t=x m!=0 т.е. если блок начинаеться не с начала часа 00.
+                            timeBox.begin_m=v.begin_m;
+                        };
+          
+                        if(v.duration<60){                                                // Если временные блоки менее 60 минут.
+                            timeBox.duration=v.duration;    
+                        };
+                    
+                        timeBox.end_h=v.end_h;
+                        timeBox.end_m=v.end_m;
+                        timeBox.status=v.status;
+                        $rootScope.timeMoveBoxes[t][b]=timeBox;
+                        
+                        
+                    };
+                });
+            });  
+          });
+          
+          console.log("MoveBoxes:", $rootScope.timeMoveBoxes);  
+          
+          
+          var boxesStatus={};
+          
+          BoxesStatus.findOne({filter: { where: {wProfileId: $rootScope.currentWProfile.id, date: $rootScope.currentWProfile.currentDate}}}, function(bs) { 
+            
+            $scope.boxesStatus=bs;
+            console.log("boxesStatus:", $scope.boxesStatus);
+            
+            $scope.boxesStatus.data=$rootScope.timeMoveBoxes;
+    
+            $scope.boxesStatus.$save();
+            
+          },function(err){
+            
+            boxesStatus.date=$rootScope.currentWProfile.currentDate;
+            boxesStatus.wProfileId=$rootScope.currentWProfile.id;
+            boxesStatus.data=$rootScope.timeMoveBoxes;
+            
+            BoxesStatus.create(boxesStatus,
+              function(bs){console.log(bs)},
+              function(err){
+                myApp.addNotification({
+                  title: 'FineCar',
+                  message: 'Ошибка синхранизации заявок с базой данных: '+err});
+                console.log(err);
+            });
+            console.log("get bs err:",err);
+          });
+    
+            
+            
+        },function(err){
+          console.log("err:",err);
         });
-        console.log("get bs err:",err);
-      });
-
+      };
+    
+    $scope.showImage = function(){
+        var image = document.getElementById('washerImage');
+        image.src = "data:image/jpeg;base64," + $rootScope.currentWasher.photo;    
+        console.log("click");
+        console.log($rootScope.currentWasher.photo);
+    
+      };
+    
+    function getDecimal(num) {
+          var str = "" + num;
+          var zeroPos = str.indexOf(".");
+          if (zeroPos == -1) return 0;
+          str = str.slice(zeroPos);
+          return +str;
+        };
+      
+    $scope.minuteToHour = function(minutes){
+        var hour=0;
+        var minute=0;
+        hour=Math.floor(minutes/60);
+        minute=parseFloat(getDecimal(minutes/60))*60;
+        return{
+          hour:hour,
+          minute:minute
+        }
+      };
+    
+    $scope.minuteAddToTime = function(minutes,time_h,time_m){
+        var hour=0;
+        var minute=0;
+        minutes=parseInt(minutes)+parseInt(time_m);
+        hour=Math.floor(minutes/60)+parseInt(time_h);
+        minute=Math.round(parseFloat(getDecimal(minutes/60))*60);
+        if (minute<10){minute="0"+minute};
+        if (hour<10){hour="0"+hour};
+        return{
+          hour:hour,
+          minute:minute
+        }
+      }
+      
+    $scope.serviceSumEdit= function(index){
         
+        console.log("click serviceSum");
+        $scope.eItem.duration=0;
+        $scope.eItem.price=0;
         
-    },function(err){
-      console.log("err:",err);
-    });
-  };
-
-  $scope.showImage = function(){
-    var image = document.getElementById('washerImage');
-    image.src = "data:image/jpeg;base64," + $rootScope.currentWasher.photo;    
-    console.log("click");
-    console.log($rootScope.currentWasher.photo);
-
-  };
-
-  function getDecimal(num) {
-      var str = "" + num;
-      var zeroPos = str.indexOf(".");
-      if (zeroPos == -1) return 0;
-      str = str.slice(zeroPos);
-      return +str;
-    };
-  
-  $scope.minuteToHour = function(minutes){
-    var hour=0;
-    var minute=0;
-    hour=Math.floor(minutes/60);
-    minute=parseFloat(getDecimal(minutes/60))*60;
-    return{
-      hour:hour,
-      minute:minute
-    }
-  };
-
-  $scope.minuteAddToTime = function(minutes,time_h,time_m){
-    var hour=0;
-    var minute=0;
-    minutes=parseInt(minutes)+parseInt(time_m);
-    hour=Math.floor(minutes/60)+parseInt(time_h);
-    minute=Math.round(parseFloat(getDecimal(minutes/60))*60);
-    if (minute<10){minute="0"+minute};
-    if (hour<10){hour="0"+hour};
-    return{
-      hour:hour,
-      minute:minute
-    }
-  }
-
-  
-  $scope.serviceSumEdit= function(index){
-    
-    console.log("click serviceSum");
-    $scope.eItem.duration=0;
-    $scope.eItem.price=0;
-    
-    var i=0;
-    
-    if($scope.wServices[index].isChecked==true){
-      var i=$scope.eItem.services.indexOf($scope.wServices[index]);
-      $scope.eItem.services.splice(i,1);
-      $scope.wServices[index].isChecked=false;
-    }else{
-      $scope.wServices[index].index=index;
-      $scope.eItem.services.push($scope.wServices[index]);
-      $scope.wServices[index].isChecked=true;
-    };
-    
-    $scope.isServiceChecked = function(index){
-        if($scope.wServices[index].isChecked){
-            return "icon-checked-filled"
+        var i=0;
+        
+        if($scope.wServices[index].isChecked==true){
+          var i=$scope.eItem.services.indexOf($scope.wServices[index]);
+          $scope.eItem.services.splice(i,1);
+          $scope.wServices[index].isChecked=false;
         }else{
-            return ""
-        }
-    };
-    
-    console.log('$scope.order.services',$scope.eItem.services);
-    angular.forEach($scope.eItem.services, function(value, key) {
-      $scope.eItem.price +=parseFloat(value.price);
-      $scope.eItem.duration +=parseFloat(value.duration);  
-    console.log("duration", value.duration, "price:", value.price);
-        
-    });
-    
-     if($scope.eItem.duration>$scope.eItem.maxDuration){
-        myApp.alert("Превышена максимальная длительность!<br/>"+$scope.eItem.duration+"мин > "+$scope.eItem.maxDuration+" мин");
-    };
-    
-    
-  };
-
-  $scope.rangeChange = function(){
-    var rangeDataAdd=$scope.minuteAddToTime($scope.newOrderData.rangeData,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
-    $scope.newOrderData.setTimeH=rangeDataAdd.hour;
-    $scope.newOrderData.setTimeM=rangeDataAdd.minute;
-  }; 
-
-  $scope.bidMove = function(t,b,id){
-    
-    $scope.fromMoveItem =  $rootScope.BoxTable[t][b];
-    
-    $scope.moveTable={};
-    
-    angular.forEach($rootScope.timeMoveBoxes, function(value, tc) {
-      $scope.moveTable[tc]={};
-      angular.forEach(value,function(val,bc){
-        $scope.moveTable[tc][bc]=$rootScope.timeMoveBoxes[tc][bc];
-        if ($rootScope.timeMoveBoxes[tc][bc].status == "clean" && $rootScope.timeMoveBoxes[tc][bc].duration > $rootScope.BoxTable[t][b].duration){ 
-         
-         $scope.moveTable[tc][bc].move_status = "can_accommodate";
-         if($rootScope.BoxTable[tc][bc].status=='queue'){
-           $scope.moveTable[tc][bc].move_status = "clean";
-         };
-        }
-        else{
-          $scope.moveTable[tc][bc].move_status = "clean";
+          $scope.wServices[index].index=index;
+          $scope.eItem.services.push($scope.wServices[index]);
+          $scope.wServices[index].isChecked=true;
         };
         
-      });
-    });
-    
-    console.log("t,b:",t,b);
-    console.log("duration:",$rootScope.BoxTable[t][b].duration);
-    
-    console.log("moveTable:",$scope.moveTable);
-    mainView.router.loadPage({pageName: 'bid_move'});
-  };
-  
-  $scope.doMove = function(t,b){
-
-    console.log("moveItemы:", $scope.moveItem);
-    myApp.showIndicator();
-    
-    Bids.findById({ id: $scope.fromMoveItem.id },
-      function(response){
-        console.log('response',response);
+        $scope.isServiceChecked = function(index){
+            if($scope.wServices[index].isChecked){
+                return "icon-checked-filled"
+            }else{
+                return ""
+            }
+        };
         
-        $scope.moveItem=response;
-        $scope.moveItem.begin_h=parseInt(t.substr(1));
-        $scope.moveItem.begin_m=$rootScope.timeMoveBoxes[t][b].begin_m;
-        $scope.moveItem.box=parseInt(b.substr(1));
-        $scope.moveItem.end_h=parseInt(t.substr(1))+moment.duration($scope.moveItem.duration,"m").hours();
-        $scope.moveItem.end_m=moment.duration($scope.moveItem.duration,"m").minutes();
-        
-        $scope.moveItem
-          .$save()
-          .then(function() {
-            $scope.showItems();
-            mainView.router.back();
-          });
-        
-        var box='b'+$scope.fromMoveItem.box;                                                                          // удаляем из предыдущей позиции.  
-        var time=$scope.fromMoveItem.begin_h<10 ? 't0'+$scope.fromMoveItem.begin_h : 't'+$scope.fromMoveItem.begin_h;
-        $scope.BoxTable[time][box]={};
-        myApp.hideIndicator();
-      },
-      function(err){
-        console.log('error',err);
-        myApp.hideIndicator();
-      }).$promise;
-    
-    console.log("item:",$scope.moveItem);
-    
-  };
-
-  $scope.closeModal=function(){
-    myApp.closeModal();
-  };
-
-  $scope.rangeEditChange = function(){
-    var rangeDataAdd=$scope.minuteAddToTime($scope.editOrderData.rangeData,$scope.editOrderData.startTimeH,$scope.editOrderData.startTimeM);
-    $scope.editOrderData.setTimeH=rangeDataAdd.hour;
-    $scope.editOrderData.setTimeM=rangeDataAdd.minute;
-  }; 
-
-  $scope.editItem= function(t,b,id){
-    
-    $scope.eItem=$rootScope.BoxTable[t][b];
-    console.log($scope.eItem);
-    
-    t1=parseInt(t.substr(1));
-    t1++;
-    if(t1<10){t1="t0"+t1}else{t1="t"+t1};
-    console.log("t1:",t1);
-    
-    if(t1 && $rootScope.timeMoveBoxes[t1][b].status=="clean"){
-        $scope.eItem.maxDuration=$scope.eItem.duration+$rootScope.timeMoveBoxes[t1][b].duration;
-    }else{
-        $scope.eItem.maxDuration=$scope.eItem.duration;
-    }
-    
-    console.log("$scope.editItem",$scope.eItem);
-    
-    console.log("edit item",$scope.eItem);
-    
-    WasherServices.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id}}}, function(wServices) { 
-        $scope.wServices = wServices;
-          
-        angular.forEach($scope.wServices, function(value, key) {
-            if($scope.eItem.car_type=="passenger"){
-                value.price=value.price1;
-            };
-            if($scope.eItem.car_type=="pikup"){
-                value.price=value.price2;
-            };
-            if($scope.eItem.car_type=="miniven"){
-              value.price=value.price3;
-            };  
-            for(var index in $scope.eItem.services){
-                var item=$scope.eItem.services[index];
-                if(value.id==item.id){
-                    
-                    value.isChecked=true;  
-                
-                    $scope.isServiceChecked = function(key){
-                        if($scope.wServices[key].isChecked){
-                            console.log("$scope.wServices[key].isChecked",$scope.wServices[key].isChecked);
-                            return "icon-checked-filled"
-                        }else{
-                            return ""
-                        }
-                    };  
-                }
-            };
-         });
-          
-        console.log("wServices:",$scope.wServices);
-        mainView.router.loadPage({pageName: 'washer_edit_bid'});
-        },function(err){
-            console.log("err:",err);
-        });  
-
-    
-    
-    $scope.car_type=$scope.eItem.car_type;
-   
-    $scope.carType =function (val){
-      $scope.car_type=val;
-      
-      if(val=="passenger"){
-        angular.forEach($scope.wServices, function(value, key) {
-           value.price+=value.price1;
-        });
-      };
-      
-      if(val=="pikup"){
-        angular.forEach($scope.wServices, function(value, key) {
-           value.price+=value.price2;
-        });
-      };
-      
-      if(val=="miniven"){
-        angular.forEach($scope.wServices, function(value, key) {
-           value.price=value.price3;
-        });
-      };
-      
-      
-    };
-    $scope.getClass = function(path) {
-      if ($scope.car_type == path) {
-        return "active"
-      } else {
-        return ""
-      }
-    };
-    
-    
-    // var to = parseInt(t.substr(1))<10 ? 't0' : 't'; 
-    // $scope.editOrderData={};  
-    // $scope.editOrderData.id=$scope.eItem.id;
-    // $scope.editOrderData.setTimeH=$scope.eItem.begin_h;
-    // $scope.editOrderData.setTimeM=$scope.eItem.begin_m;
-    // $scope.editOrderData.startTimeH=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_h ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_h : $rootScope.timeMoveBoxes[t][b].begin_h;
-    // $scope.editOrderData.startTimeM=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_m ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_m : $rootScope.timeMoveBoxes[t][b].begin_m;
-    
-    // to = (parseInt(t.substr(1))+1)<10 ? 't0' : 't'; 
-    
-    // $scope.editOrderData.endTimeH=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)] && $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_h ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_h : $rootScope.timeMoveBoxes[t][b].end_h;
-    // $scope.editOrderData.endTimeM=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)] && $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_m ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_m : $rootScope.timeMoveBoxes[t][b].end_m;
-    // console.log(to+(parseInt(t.substr(1))+1));
-    // $scope.editOrderData.duration=$scope.eItem.duration;
-    // $scope.editOrderData.car_number=$scope.eItem.user_car_number;
-    // $scope.editOrderData.tel=$scope.eItem.user_phone;
-    // $scope.new_price=$scope.eItem.price;
-    // $scope.new_time= $scope.eItem.duration;
-    // $scope.order.services= $rootScope.BoxTable[t][b].services;
-    // console.log($rootScope.BoxTable[t][b].services);
-    // $scope.editOrderData.maxDinamicDuration=0;
-    
-  };    
-
-  $scope.doEditItem = function(){
-   
-   console.log("doEditItem:");
-    myApp.showIndicator();
-    
-    Bids.findById({ id: $scope.eItem.id },
-      function(response){
-        console.log('response',response);
-        
-        $scope.editingItem=response;
-        $scope.editingItem.services=$scope.eItem.services;
-        $scope.editingItem.price=$scope.eItem.price;
-        $scope.editingItem.duration=$scope.eItem.duration;
-        $scope.editingItem.car_type=$scope.car_type;
-        $scope.editingItem
-          .$save()
-          .then(function() {
-            $scope.showItems();
-            mainView.router.back();
-          });
-          
-        console.log("editing item:",$scope.editingItem);
-        myApp.hideIndicator();
-      },
-      function(err){
-        console.log('error',err);
-        myApp.hideIndicator();
-      }).$promise;
-    
-    
-    
-   
-   
-    // angular.forEach($scope.boxes, function(value, key) {
-    //   angular.forEach(value,function(val,k){
-    //     if (parseInt(val.id) == $scope.editOrderData.id){ 
-    //       var pushItem={};
-    //       var item={};
-    //       item.id=$scope.editOrderData.id+'1';
-    //       item.status="queue";
-    //       item.duration=$scope.editOrderData.duration;
-    //       item.start_time_h=$scope.editOrderData.setTimeH;
-    //       item.start_time_m=$scope.editOrderData.setTimeM;
-    //       console.log(val);
-    //       pushItem.mainVal=item;
-    //         console.log($scope.editOrderData.rangeData,$scope.editOrderData.maxDinamicDuration);
+        console.log('$scope.order.services',$scope.eItem.services);
+        angular.forEach($scope.eItem.services, function(value, key) {
+          $scope.eItem.price +=parseFloat(value.price);
+          $scope.eItem.duration +=parseFloat(value.duration);  
+        console.log("duration", value.duration, "price:", value.price);
             
-    //           var item3={};
-    //           item3.id=$scope.editOrderData.id+'2';
-    //           item3.status="clean";
-    //           item3.duration=$scope.editOrderData.rangeData;
-    //           item3.start_time_h=$scope.editOrderData.startTimeH;
-    //           item3.start_time_m=$scope.editOrderData.startTimeM;
-    //           pushItem.leftItem=item3;
-    //           // if(item3.duration>0){console.log(k);if(k==0){value.splice(k,0,item3)}else{value.splice(k-1,0,item3)}}; //Добавляем item в список
-    //           var item4={};
-    //           item4.id=$scope.editOrderData.id+'3';
-    //           item4.status="clean";
-    //           item4.duration=$scope.editOrderData.maxDinamicDuration-$scope.editOrderData.rangeData;
-    //           var rangeDataToHM=$scope.minuteAddToTime($scope.editOrderData.duration,$scope.editOrderData.setTimeH,$scope.editOrderData.setTimeM)
-    //           item4.start_time_h=rangeDataToHM.hour;
-    //           item4.start_time_m=rangeDataToHM.minute;
-              
-    //           pushItem.rightItem=item4;
-    //           // if(value[k+1] && value[k+1].status=="clean"){
-    //           //   value.splice(k+1,1);// Удаляем пустую заявку
-    //           // };
-
-    //           if(value[k-1] && value[k-1].status=="clean" && value[k+1] && value[k+1].status=="clean"){//если есть пустые с обеих сторон
-    //             if(value[k-1] && value[k-1].status=="clean"){
-    //               item3.start_time_h=value[k-1].start_time_h;
-    //               item3.start_time_m=value[k-1].start_time_m;
-    //               value[k-1]=pushItem.leftItem;
-    //             };
-    //               value[k]=pushItem.mainVal;
-
-    //             if(value[k+1] && value[k+1].status=="clean"){
-    //               value[k+1]=pushItem.rightItem;
-    //             };
-
-    //             if(value[k+1] && value[k+1].duration==0){
-    //               value.splice(k+1,1);// Удаляем пустую заявку k+1
-    //             };
-
-    //             if(value[k-1] && value[k-1].duration==0){
-    //               value.splice(k-1,1);// Удаляем пустую заявку k-1
-    //             };
-
-    //           }else{
-    //             if(value[k-1] && value[k-1].status=="clean"){//если есть пустая с лева
-    //               item3.start_time_h=value[k-1].start_time_h;
-    //               item3.start_time_m=value[k-1].start_time_m;
-    //               value[k-1]=pushItem.leftItem;
-    //               value[k]=pushItem.mainVal;
-    //               value.splice(k+1,0,pushItem.rightItem);
-    //               if(value[k-1] && value[k-1].duration==0){
-    //                 value.splice(k-1,1);// Удаляем пустую заявку k-1
-    //               };
-
-    //             }else{
-    //               if(value[k+1] && value[k+1].status=="clean"){ //если есть пустая с права
-    //                 value[k]=pushItem.mainVal;
-    //                 value[k+1]=pushItem.rightItem;
-    //                 value.splice(k,0,pushItem.leftItem);
-                  
-    //                 if(value[k+2] && value[k+2].duration==0){
-    //                   value.splice(k+2,1);// Удаляем пустую заявку k+1
-    //                 };
-    //               };
-    //             };
-    //           }
-    //         // };
-    //       // }
-    //     }
-    //   });
-    // });
-  
+        });
+        
+         if($scope.eItem.duration>$scope.eItem.maxDuration){
+            myApp.alert("Превышена максимальная длительность!<br/>"+$scope.eItem.duration+"мин > "+$scope.eItem.maxDuration+" мин");
+        };
+        
+        
+      };
+    
+    $scope.rangeChange = function(){
+        var rangeDataAdd=$scope.minuteAddToTime($scope.newOrderData.rangeData,$scope.newOrderData.startTimeH,$scope.newOrderData.startTimeM);
+        $scope.newOrderData.setTimeH=rangeDataAdd.hour;
+        $scope.newOrderData.setTimeM=rangeDataAdd.minute;
+      }; 
+    
+    $scope.bidMove = function(t,b,id){
+        
+        $scope.fromMoveItem =  $rootScope.BoxTable[t][b];
+        
+        $scope.moveTable={};
+        
+        angular.forEach($rootScope.timeMoveBoxes, function(value, tc) {
+          $scope.moveTable[tc]={};
+          angular.forEach(value,function(val,bc){
+            $scope.moveTable[tc][bc]=$rootScope.timeMoveBoxes[tc][bc];
+            if ($rootScope.timeMoveBoxes[tc][bc].status == "clean" && $rootScope.timeMoveBoxes[tc][bc].duration > $rootScope.BoxTable[t][b].duration){ 
+             
+             $scope.moveTable[tc][bc].move_status = "can_accommodate";
+             if($rootScope.BoxTable[tc][bc].status=='queue'){
+               $scope.moveTable[tc][bc].move_status = "clean";
+             };
+            }
+            else{
+              $scope.moveTable[tc][bc].move_status = "clean";
+            };
+            
+          });
+        });
+        
+        console.log("t,b:",t,b);
+        console.log("duration:",$rootScope.BoxTable[t][b].duration);
+        
+        console.log("moveTable:",$scope.moveTable);
+        mainView.router.loadPage({pageName: 'bid_move'});
+      };
       
-  }
+    $scope.doMove = function(t,b){
+    
+        console.log("moveItemы:", $scope.moveItem);
+        myApp.showIndicator();
+        
+        Bids.findById({ id: $scope.fromMoveItem.id },
+          function(response){
+            console.log('response',response);
+            
+            $scope.moveItem=response;
+            $scope.moveItem.begin_h=parseInt(t.substr(1));
+            $scope.moveItem.begin_m=$rootScope.timeMoveBoxes[t][b].begin_m;
+            $scope.moveItem.box=parseInt(b.substr(1));
+            $scope.moveItem.end_h=parseInt(t.substr(1))+moment.duration($scope.moveItem.duration,"m").hours();
+            $scope.moveItem.end_m=moment.duration($scope.moveItem.duration,"m").minutes();
+            
+            $scope.moveItem
+              .$save()
+              .then(function() {
+                $scope.showItems();
+                mainView.router.back();
+              });
+            
+            var box='b'+$scope.fromMoveItem.box;                                                                          // удаляем из предыдущей позиции.  
+            var time=$scope.fromMoveItem.begin_h<10 ? 't0'+$scope.fromMoveItem.begin_h : 't'+$scope.fromMoveItem.begin_h;
+            $scope.BoxTable[time][box]={};
+            myApp.hideIndicator();
+          },
+          function(err){
+            console.log('error',err);
+            myApp.hideIndicator();
+          }).$promise;
+        
+        console.log("item:",$scope.moveItem);
+        
+      };
+    
+    $scope.closeModal=function(){
+        myApp.closeModal();
+      };
+    
+    $scope.rangeEditChange = function(){
+        var rangeDataAdd=$scope.minuteAddToTime($scope.editOrderData.rangeData,$scope.editOrderData.startTimeH,$scope.editOrderData.startTimeM);
+        $scope.editOrderData.setTimeH=rangeDataAdd.hour;
+        $scope.editOrderData.setTimeM=rangeDataAdd.minute;
+      }; 
+    
+    $scope.editItem= function(t,b,id){
+        
+        $scope.eItem=$rootScope.BoxTable[t][b];
+        console.log($scope.eItem);
+        
+        t1=parseInt(t.substr(1));
+        t1++;
+        if(t1<10){t1="t0"+t1}else{t1="t"+t1};
+        console.log("t1:",t1);
+        
+        if(t1 && $rootScope.timeMoveBoxes[t1][b].status=="clean"){
+            $scope.eItem.maxDuration=$scope.eItem.duration+$rootScope.timeMoveBoxes[t1][b].duration;
+        }else{
+            $scope.eItem.maxDuration=$scope.eItem.duration;
+        }
+        
+        console.log("$scope.editItem",$scope.eItem);
+        
+        console.log("edit item",$scope.eItem);
+        
+        WasherServices.find({filter: { where: {wProfileId: $rootScope.currentWProfile.id}}}, function(wServices) { 
+            $scope.wServices = wServices;
+              
+            angular.forEach($scope.wServices, function(value, key) {
+                if($scope.eItem.car_type=="passenger"){
+                    value.price=value.price1;
+                };
+                if($scope.eItem.car_type=="pikup"){
+                    value.price=value.price2;
+                };
+                if($scope.eItem.car_type=="miniven"){
+                  value.price=value.price3;
+                };  
+                for(var index in $scope.eItem.services){
+                    var item=$scope.eItem.services[index];
+                    if(value.id==item.id){
+                        
+                        value.isChecked=true;  
+                    
+                        $scope.isServiceChecked = function(key){
+                            if($scope.wServices[key].isChecked){
+                                console.log("$scope.wServices[key].isChecked",$scope.wServices[key].isChecked);
+                                return "icon-checked-filled"
+                            }else{
+                                return ""
+                            }
+                        };  
+                    }
+                };
+             });
+              
+            console.log("wServices:",$scope.wServices);
+            mainView.router.loadPage({pageName: 'washer_edit_bid'});
+            },function(err){
+                console.log("err:",err);
+            });  
+    
+        
+        
+        $scope.car_type=$scope.eItem.car_type;
+       
+        $scope.carType =function (val){
+          $scope.car_type=val;
+          
+          if(val=="passenger"){
+            angular.forEach($scope.wServices, function(value, key) {
+               value.price=value.price1;
+            });
+          };
+          
+          if(val=="pikup"){
+            angular.forEach($scope.wServices, function(value, key) {
+               value.price=value.price2;
+            });
+          };
+          
+          if(val=="miniven"){
+            angular.forEach($scope.wServices, function(value, key) {
+               value.price=value.price3;
+            });
+          };
+          
+          
+        };
+        $scope.getClass = function(path) {
+          if ($scope.car_type == path) {
+            return "active"
+          } else {
+            return ""
+          }
+        };
+        
+        
+        // var to = parseInt(t.substr(1))<10 ? 't0' : 't'; 
+        // $scope.editOrderData={};  
+        // $scope.editOrderData.id=$scope.eItem.id;
+        // $scope.editOrderData.setTimeH=$scope.eItem.begin_h;
+        // $scope.editOrderData.setTimeM=$scope.eItem.begin_m;
+        // $scope.editOrderData.startTimeH=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_h ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_h : $rootScope.timeMoveBoxes[t][b].begin_h;
+        // $scope.editOrderData.startTimeM=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_m ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))-1)][b].begin_m : $rootScope.timeMoveBoxes[t][b].begin_m;
+        
+        // to = (parseInt(t.substr(1))+1)<10 ? 't0' : 't'; 
+        
+        // $scope.editOrderData.endTimeH=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)] && $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_h ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_h : $rootScope.timeMoveBoxes[t][b].end_h;
+        // $scope.editOrderData.endTimeM=$rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)] && $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_m ? $rootScope.timeMoveBoxes[to+(parseInt(t.substr(1))+1)][b].end_m : $rootScope.timeMoveBoxes[t][b].end_m;
+        // console.log(to+(parseInt(t.substr(1))+1));
+        // $scope.editOrderData.duration=$scope.eItem.duration;
+        // $scope.editOrderData.car_number=$scope.eItem.user_car_number;
+        // $scope.editOrderData.tel=$scope.eItem.user_phone;
+        // $scope.new_price=$scope.eItem.price;
+        // $scope.new_time= $scope.eItem.duration;
+        // $scope.order.services= $rootScope.BoxTable[t][b].services;
+        // console.log($rootScope.BoxTable[t][b].services);
+        // $scope.editOrderData.maxDinamicDuration=0;
+        
+      };    
+    
+    $scope.doEditItem = function(){
+       
+       console.log("doEditItem:",$scope.eItem);
+        myApp.showIndicator();
+        
+        Bids.findById({ id: $scope.eItem.id },
+          function(response){
+            console.log('response',response);
+            
+    
+            $scope.editingItem=$scope.eItem;
+            $scope.editingItem.car_type=$scope.car_type;
+            $scope.editingItem
+              .$save()
+              .then(function() {
+                $scope.showItems();
+                mainView.router.back();
+              });
+              
+            console.log("editing item:",$scope.editingItem);
+            myApp.hideIndicator();
+          },
+          function(err){
+            console.log('error',err);
+            myApp.hideIndicator();
+          }).$promise;
+        
+        
+        
+       
+       
+        // angular.forEach($scope.boxes, function(value, key) {
+        //   angular.forEach(value,function(val,k){
+        //     if (parseInt(val.id) == $scope.editOrderData.id){ 
+        //       var pushItem={};
+        //       var item={};
+        //       item.id=$scope.editOrderData.id+'1';
+        //       item.status="queue";
+        //       item.duration=$scope.editOrderData.duration;
+        //       item.start_time_h=$scope.editOrderData.setTimeH;
+        //       item.start_time_m=$scope.editOrderData.setTimeM;
+        //       console.log(val);
+        //       pushItem.mainVal=item;
+        //         console.log($scope.editOrderData.rangeData,$scope.editOrderData.maxDinamicDuration);
+                
+        //           var item3={};
+        //           item3.id=$scope.editOrderData.id+'2';
+        //           item3.status="clean";
+        //           item3.duration=$scope.editOrderData.rangeData;
+        //           item3.start_time_h=$scope.editOrderData.startTimeH;
+        //           item3.start_time_m=$scope.editOrderData.startTimeM;
+        //           pushItem.leftItem=item3;
+        //           // if(item3.duration>0){console.log(k);if(k==0){value.splice(k,0,item3)}else{value.splice(k-1,0,item3)}}; //Добавляем item в список
+        //           var item4={};
+        //           item4.id=$scope.editOrderData.id+'3';
+        //           item4.status="clean";
+        //           item4.duration=$scope.editOrderData.maxDinamicDuration-$scope.editOrderData.rangeData;
+        //           var rangeDataToHM=$scope.minuteAddToTime($scope.editOrderData.duration,$scope.editOrderData.setTimeH,$scope.editOrderData.setTimeM)
+        //           item4.start_time_h=rangeDataToHM.hour;
+        //           item4.start_time_m=rangeDataToHM.minute;
+                  
+        //           pushItem.rightItem=item4;
+        //           // if(value[k+1] && value[k+1].status=="clean"){
+        //           //   value.splice(k+1,1);// Удаляем пустую заявку
+        //           // };
+    
+        //           if(value[k-1] && value[k-1].status=="clean" && value[k+1] && value[k+1].status=="clean"){//если есть пустые с обеих сторон
+        //             if(value[k-1] && value[k-1].status=="clean"){
+        //               item3.start_time_h=value[k-1].start_time_h;
+        //               item3.start_time_m=value[k-1].start_time_m;
+        //               value[k-1]=pushItem.leftItem;
+        //             };
+        //               value[k]=pushItem.mainVal;
+    
+        //             if(value[k+1] && value[k+1].status=="clean"){
+        //               value[k+1]=pushItem.rightItem;
+        //             };
+    
+        //             if(value[k+1] && value[k+1].duration==0){
+        //               value.splice(k+1,1);// Удаляем пустую заявку k+1
+        //             };
+    
+        //             if(value[k-1] && value[k-1].duration==0){
+        //               value.splice(k-1,1);// Удаляем пустую заявку k-1
+        //             };
+    
+        //           }else{
+        //             if(value[k-1] && value[k-1].status=="clean"){//если есть пустая с лева
+        //               item3.start_time_h=value[k-1].start_time_h;
+        //               item3.start_time_m=value[k-1].start_time_m;
+        //               value[k-1]=pushItem.leftItem;
+        //               value[k]=pushItem.mainVal;
+        //               value.splice(k+1,0,pushItem.rightItem);
+        //               if(value[k-1] && value[k-1].duration==0){
+        //                 value.splice(k-1,1);// Удаляем пустую заявку k-1
+        //               };
+    
+        //             }else{
+        //               if(value[k+1] && value[k+1].status=="clean"){ //если есть пустая с права
+        //                 value[k]=pushItem.mainVal;
+        //                 value[k+1]=pushItem.rightItem;
+        //                 value.splice(k,0,pushItem.leftItem);
+                      
+        //                 if(value[k+2] && value[k+2].duration==0){
+        //                   value.splice(k+2,1);// Удаляем пустую заявку k+1
+        //                 };
+        //               };
+        //             };
+        //           }
+        //         // };
+        //       // }
+        //     }
+        //   });
+        // });
+      
+          
+      }
 
-  $scope.serviceSumNew= function(index){
+    $scope.serviceSumNew= function(index){
     
     console.log("click serviceSum");
     $scope.nItem.duration=0;
@@ -1746,7 +1743,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     
   };
 
-  $scope.newItem =function(t,b,date,m){
+    $scope.newItem =function(t,b,date,m){
     
     $scope.nItem=$rootScope.timeMoveBoxes[t][b];
     $scope.nItem.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
@@ -1837,46 +1834,47 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
       }
     };
     
-  };
+  };  
 
-  $scope.doNewItem = function() {
+    $scope.doNewItem = function() {
 
-    var item =$scope.nItem;   
-    item.status="queue";
-    // item.duration=$scope.new_time;
-    // item.begin_h=$scope.dateTime.hours;
-    // item.begin_m=$scope.dateTime.minutes;
-    item.date=$scope.currentWProfile.currentDate;
-    var endTime=$scope.minuteAddToTime(item.duration,item.begin_h, item.begin_m);
-    item.end_h=endTime.hour;
-    item.end_m=endTime.minute;
-    // item.box=$scope.dateTime.box;
-    // item.user_phone=$scope.newOrderData.phone;
-    // item.user_car_number=$scope.newOrderData.car_number;
-    item.wProfileId=$scope.currentWProfile.id;
-    // item.price=$scope.new_price;
-    // item.services=$scope.order.services;
-    item.car_type=$scope.car_type;
-    Bids.create(item, function(items) { 
-          // $rootScope.userCars.push(car);
-          console.log("items:",items);
-
-
-          var t='t'+items.begin_h;
-          if(items.begin_h<10){t='t0'+items.begin_h;};
-          var b='b'+ items.box;
-          
-          $rootScope.showItems();
-        },function(err){
-          console.log("err:",err);
-          // mainView.router.loadPage({pageName: 'index'});
+        var item =$scope.nItem;   
+        item.status="queue";
+        // item.duration=$scope.new_time;
+        // item.begin_h=$scope.dateTime.hours;
+        // item.begin_m=$scope.dateTime.minutes;
+        item.date=$scope.currentWProfile.currentDate;
+        var endTime=$scope.minuteAddToTime(item.duration,item.begin_h, item.begin_m);
+        item.end_h=endTime.hour;
+        item.end_m=endTime.minute;
+        // item.box=$scope.dateTime.box;
+        // item.user_phone=$scope.newOrderData.phone;
+        // item.user_car_number=$scope.newOrderData.car_number;
+        item.wProfileId=$scope.currentWProfile.id;
+        // item.price=$scope.new_price;
+        // item.services=$scope.order.services;
+        item.car_type=$scope.car_type;
+        Bids.create(item, function(items) { 
+              // $rootScope.userCars.push(car);
+              console.log("items:",items);
+    
+    
+              var t='t'+items.begin_h;
+              if(items.begin_h<10){t='t0'+items.begin_h;};
+              var b='b'+ items.box;
+              
+              $rootScope.showItems();
+            },function(err){
+              console.log("err:",err);
+              // mainView.router.loadPage({pageName: 'index'});
         });
-     $rootScope.showItems();    
-     mainView.router.back();
-      console.log(item);
-  };
+        
+        $rootScope.showItems();    
+        mainView.router.back();
+        console.log(item);
+    };
   
-  $scope.deleteItem = function(t,b,id){
+    $scope.deleteItem = function(t,b,id){
     console.log(id);
       Bids.deleteById({ id: id })
         .$promise
@@ -1887,11 +1885,85 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
       console.log($rootScope.BoxTable[t][b]);
     };
 
-  $scope.boxItemClick = function(status,t,b,id) {
-    
-   myApp.pickerModal('.'+status);
+    $scope.checkWasherMans = function(index){
+        
+        if($scope.washerMans[index].isChecked==true){
+            var i=$scope.iItem.services.indexOf($scope.washerMans[index]);
+            $scope.iItem.washermans.splice(i,1);
+            $scope.washerMans[index].isChecked=false;
+        }else{
+            $scope.washerMans[index].index=index;
+            $scope.iItem.washermans.push($scope.washerMans[index]);
+            $scope.washerMans[index].isChecked=true;
+        };   
+        
+        $scope.isWasherManChecked = function(index){
+            if($scope.washerMans[index].isChecked){
+                return "icon-checked-filled"
+            }else{
+                return ""
+            };
+        };
+    };
 
-   $scope.delete = function() {
+    $scope.goItemToBox = function (t,b,id){
+      
+        $scope.iItem=$scope.BoxTable[t][b];
+        $scope.iItem.washermans=[];
+           
+        $scope.washerMans={};
+        // $rootScope.showWasherMans = function(){
+            
+        WasherMans.find({filter:{where:{'wProfileId':$rootScope.currentWProfile.id}}},
+            function(response){
+                console.log("nWasherMans response:", response);
+                $scope.washerMans=response;
+                mainView.router.load( {pageName: 'washer_in_box_bid'});
+            },
+            function(error){
+                console.log("WasherMan create error:");
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+            }
+        );
+        // };
+  };
+    
+    $scope.doGoItemToBox = function(){
+        
+        console.log("doGoItemToBox:",$scope.iItem);
+        myApp.showIndicator();
+        
+        Bids.findById({ id: $scope.iItem.id },
+          function(response){
+            console.log('response',response);
+            
+    
+            $scope.editingItem=$scope.iItem;
+            $scope.editingItem.status="in_box";
+            $scope.editingItem
+              .$save()
+              .then(function() {
+                $scope.showItems();
+                mainView.router.back();
+              });
+              
+            console.log("editing item:",$scope.editingItem);
+            myApp.hideIndicator();
+          },
+          function(err){
+            console.log('error',err);
+            myApp.hideIndicator();
+          }).$promise;
+    }; 
+
+    $scope.boxItemClick = function(status,t,b,id) {
+     
+    myApp.pickerModal('.'+status);
+
+    $scope.delete = function() {
      console.log(id);
       $scope.deleteItem(t,b,id);
       $scope.closeModal();
@@ -1910,6 +1982,11 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
 
     $scope.edit = function() {
       $scope.editItem(t,b,id);
+      $scope.closeModal();
+    };
+    
+    $scope.toBox = function() {
+      $scope.goItemToBox(t,b,id);
       $scope.closeModal();
     };
 
