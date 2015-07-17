@@ -1872,6 +1872,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
           // mainView.router.loadPage({pageName: 'index'});
         });
      $rootScope.showItems();    
+     mainView.router.back();
       console.log(item);
   };
   

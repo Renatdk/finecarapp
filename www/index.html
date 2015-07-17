@@ -1305,6 +1305,24 @@
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="nItem.user_car_number" placeholder="Номер авто">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="number" ng-model="nItem.user_phone" placeholder="Телефон" >
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
                             <div class="buttons-row" id="car_type">
                               <a href="#"   ng-class="getClass('passenger')" ng-click="carType('passenger')" class="button button-round">Легковая</a>
                               <a href="#"   ng-class="getClass('pikup')" ng-click="carType('pikup')" class="button button-round">Пикап</a>
@@ -1347,24 +1365,6 @@
                       </li>
                       <li>
                         <div class="item-content">
-                          <div class="item-inner"> 
-                            <div class="item-input">
-                              <input type="text" ng-model="nItem.user_car_number" placeholder="Номер авто">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner"> 
-                            <div class="item-input">
-                              <input type="text" ng-model="nItem.user_phone" placeholder="Телефон">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
                           <div class="item-inner">
                             <div class="item-title">Время начала: {{nItem.begin_h}} {{nItem.begin_m}}</div>
                           </div>
@@ -1390,7 +1390,9 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="doNewItem()" class="button active back link">Создать</a>
+                              <br/>
+                              <a href="#"  ng-click="doNewItem()" class="button button-big button-fill">Создать</a>
+                              <br/>
                             </div>
                           </div>
                         </div>
@@ -1405,6 +1407,24 @@
               <div class="page-content">
                   <div class="list-block media-list">
                     <ul >
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="eItem.user_car_number" placeholder="Номер авто">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="number" string-to-number ng-model="eItem.user_phone" placeholder="Телефон">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
@@ -1445,24 +1465,6 @@
                         <div class="item-content">
                           <div class="item-inner">
                             <div class="item-title">Длительность: {{eItem.duration}}мин <small>(max: {{eItem.maxDuration}}мин)</small></div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner"> 
-                            <div class="item-input">
-                              <input type="text" ng-model="eItem.user_car_number" placeholder="Номер авто">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner"> 
-                            <div class="item-input">
-                              <input type="text" ng-model="eItem.user_phone" placeholder="Телефон">
-                            </div>
                           </div>
                         </div>
                       </li>
