@@ -56,22 +56,22 @@
        <div class="content-block-title">Меню FineCar</div>
         <div class="list-block">
           <ul ng-controller="washerMenuController">
-            <li><a href="#washer_home" class="close-panel item-link item-content">
+            <li ng-if='currentWProfile'><a href="#washer_home" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Боксы</div>
                 </div></a></li>
-            <li><a href="#washer_bids" class="close-panel item-link item-content">
+            <li ng-if='currentWProfile'><a href="#washer_bids" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-list"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Заявки</div>
                 </div></a></li>
-            <li><a href="#" ng-click="showService()" class="close-panel item-link item-content">
+            <li ng-if='currentWProfile'><a href="#" ng-click="showService()" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Услуги</div>
                 </div></a></li>
-            <li><a href="#washermans_edit" class="close-panel item-link item-content">
+            <li ng-if='currentWProfile'><a href="#" ng-click="showWasherMans()" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-name"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Мойщики</div>
@@ -1902,164 +1902,148 @@
             </div>
           </div>
 
-
-          <!-- Washermans edit Page-->
-          <div data-page="washermans_edit" class="page cached">
-            <div class="page-content">
-              <div class="content-block">
-                <a href="#washerman_add" class="button">+Добавить мойщика</a>
-              </div>
-              <div class="content-block-title">Список мойщиков</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-divider">Активные</div>
-                  </li>
-                  <li><a href="#washerman_edit" class="item-link item-content">
-                      <div class="item-inner"> 
-                        <div class="item-title">Петр Иванов</div>
-                      </div></a></li>
-                  <li><a href="#washerman_edit" class="item-link item-content">
-                      <div class="item-inner"> 
-                        <div class="item-title">Джон До</div>
-                      </div></a></li>
-                  <li>
-                    <div class="item-divider">Блокированные</div>
-                  </li>
-                  <li><a href="#washerman_edit" class="item-link item-content">
-                      <div class="item-inner"> 
-                        <div class="item-title">Сидор Сидоров</div>
-                      </div></a></li>
-                  <li><a href="#washerman_edit" class="item-link item-content">
-                      <div class="item-inner"> 
-                        <div class="item-title">Жанна Смит</div>
-                      </div></a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- Washerman add Page -->
-          <div data-page="washerman_add" class="page cached">
-            <div class="page-content">
-              <div class="content-block-title">Введите данные мойщика</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Имя">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Отчество">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Фамилия">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="tel" placeholder="Мобильный телефон">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Добавить</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>    
-            </div>
-          </div>
-          <!-- Washerman edit Page -->
-          <div data-page="washerman_edit" class="page cached">
-            <div class="page-content">
-              <div class="content-block-title">Введите данные мойщика</div>
-              <div class="list-block">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Имя" value="Сидор">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Отчество" value="Сидорович">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-name"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" placeholder="Фамилия" value="Сидоров">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-tel"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="tel" placeholder="Мобильный телефон" value="87771112233">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button active back link">Сохранить</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div> 
-              <div class="content-block">
-                <div class="buttons-row">
-                  <a href="#" class="button button-round">Блокировать</a>
-                  <a href="#" class="button button-round">Удалить</a>
+          <div ng-controller="washerMansController">
+            <!-- Washermans edit Page-->
+            <div data-page="washermans_edit" class="page cached">
+              <div class="page-content">
+                <div class="content-block">
+                  <a href="#" ng-click="newWasherMan()" class="button">+Добавить мойщика</a>
                 </div>
-              </div>   
+                <div class="content-block-title">Список мойщиков</div>
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-divider">Активные</div>
+                    </li>
+                    <li class="swipeout" class="swipeout" ng-repeat="washerMan in washerMans" ng-if="washerMan.active">
+                      <a href="#" ng-click="editWasherMan(washerMan)" class="swipeout-content swipeout-content item-link item-content">
+                        <div class="item-inner"> 
+                          <div class="item-title">{{washerMan.name}} {{washerMan.second_name}}</div>
+                        </div>
+                      </a>
+                      <div class="swipeout-actions-left">
+                        <a href="#" ng-click="blockWasherMan(washerMan)" class="bg-pink">Блокировать</a>
+                      </div>
+                      <div class="swipeout-actions-right">
+                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="swipeout-delete">Удалить</a>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-divider">Блокированные</div>
+                    </li>
+                    <li class="swipeout" class="swipeout" ng-repeat="washerMan in washerMans" ng-if="washerMan.active==false">
+                      <a href="#" ng-click="editWasherMan(washerMan)" class="swipeout-content swipeout-content item-link item-content">
+                        <div class="item-inner"> 
+                          <div class="item-title">{{washerMan.name}} {{washerMan.second_name}}</div>
+                        </div>
+                      </a>
+                      <div class="swipeout-actions-left">
+                        <a href="#" ng-click="unblockWasherMan(washerMan)" class="bg-lightgreen">Активировать</a>
+                      </div>
+                      <div class="swipeout-actions-right">
+                        <a href="#" ng-click="deleteWasherMan(washerMan)" class="swipeout-delete">Удалить</a>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- Washerman add Page -->
+            <div data-page="washerman_add" class="page cached">
+              <div class="page-content">
+                <div class="content-block-title">Введите данные мойщика</div>
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="nWasherMan.name" placeholder="Имя">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="nWasherMan.second_name" placeholder="Фамилия">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="tel" ng-model="nWasherMan.phone" placeholder="Мобильный телефон">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <a href="#" ng-click="doNewWasherMan()" class="button active">Добавить</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>    
+              </div>
+            </div>
+            <!-- Washerman edit Page -->
+            <div data-page="washerman_edit" class="page cached">
+              <div class="page-content">
+                <div class="content-block-title">Данные мойщика</div>
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" placeholder="Имя" ng-model="eWasherMan.name">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-name"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" placeholder="Фамилия" ng-model="eWasherMan.second_name">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-tel"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="tel" placeholder="Мобильный телефон" ng-model="eWasherMan.phone">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <a href="#" ng-click="doEditWasherMan()" class="button active">Сохранить</a>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div> 
+              </div>
             </div>
           </div>
         </div>

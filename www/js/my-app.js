@@ -1081,7 +1081,7 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
 fineCarApp.controller('washerMenuController', function($scope, WasherProfile, Services, $rootScope, WasherServices){
 });
 
-fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, $interval, washerLogin, Washers, Bids, BoxesStatus, WasherServices) {
+fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers, Bids, BoxesStatus, WasherServices) {
   
     
   $scope.getTimeLineClass = function(path) {
@@ -1915,4 +1915,153 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
 
   };
   
+});
+
+fineCarApp.controller('washerMansController', function($scope, $rootScope, WasherMans){
+    
+    $scope.washerMans={};
+    
+    $rootScope.showWasherMans = function(){
+        
+        WasherMans.find({filter:{where:{'wProfileId':$rootScope.currentWProfile.id}}},
+            function(response){
+                console.log("nWasherMans response:", response);
+                $scope.washerMans=response;
+                mainView.router.load({pageName: 'washermans_edit'});
+            },
+            function(error){
+                console.log("WasherMan create error:");
+                myApp.addNotification({
+                title: 'FineCar',
+                message: "Ошибка: "+error.data.error.message
+            });
+            }
+        );
+    };
+    
+    $scope.newWasherMan = function(){
+        $scope.nWasherMan = {};
+        mainView.router.load({pageName: 'washerman_add'});
+    };
+    
+    $scope.doNewWasherMan = function(){
+        
+        myApp.showIndicator();
+        
+        $scope.nWasherMan.wProfileId=$rootScope.currentWProfile.id;
+        $scope.nWasherMan.active=true;
+        
+        WasherMans.create($scope.nWasherMan,
+            function(response){
+                console.log("nWasherMan response:", response);
+                $scope.showWasherMans();
+                mainView.router.back();
+                myApp.hideIndicator();
+            },
+            function(error){
+                console.log("WasherMan create error:", error, $scope.nWasherMan);
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+                myApp.hideIndicator();
+            }
+        );
+        
+    };
+    
+    $scope.editWasherMan = function(washerMan){
+        $scope.eWasherMan=washerMan;
+        mainView.router.load({pageName: 'washerman_edit'});
+    };
+    
+    $scope.doEditWasherMan = function(){
+        
+        myApp.showIndicator();
+        
+        WasherMans.findById({id:$scope.eWasherMan.id},
+            function(response){
+                $scope.rWaserMan=$scope.eWasherMan;
+                
+            $scope.rWaserMan
+                .$save()
+                .then(function() {
+                    mainView.router.back();
+                    myApp.hideIndicator();
+                });    
+            },
+            function(error){
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+                myApp.hideIndicator();
+            } 
+        );
+    };
+    
+    $scope.blockWasherMan = function(washerMan){
+        
+        myApp.showIndicator();
+        
+        WasherMans.findById({id:washerMan.id},
+            function(response){
+                $scope.rWaserMan=response;
+                $scope.rWaserMan.active=false;
+                
+            $scope.rWaserMan
+                .$save()
+                .then(function() {
+                    $rootScope.showWasherMans();
+                    myApp.hideIndicator();
+                });    
+            },
+            function(error){
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+                myApp.hideIndicator();
+            } 
+        );
+    };
+    
+    $scope.unblockWasherMan = function(washerMan){
+       
+        myApp.showIndicator();
+        
+        WasherMans.findById({id:washerMan.id},
+            function(response){
+                $scope.rWaserMan=response;
+                $scope.rWaserMan.active=true;
+                
+            $scope.rWaserMan
+                .$save()
+                .then(function() {
+                    $rootScope.showWasherMans();
+                    myApp.hideIndicator();
+                });    
+            },
+            function(error){
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+                myApp.hideIndicator();
+            } 
+        );
+    };
+    
+    $scope.deleteWasherMan = function(washerMan){
+        
+        myApp.showIndicator();
+        
+        WasherMans.deleteById({ id: washerMan.id })
+            .$promise
+            .then(function() { 
+                console.log('deleted'); 
+                myApp.hideIndicator();
+            });
+    };
+    
 });
