@@ -224,7 +224,7 @@ table.time_box tr td:active{
   text-align: center;
   color:#1e1e1e;
   margin-top: -1px;
-  border:1px solid #333;
+  /*border:1px solid #333;*/
   /*border-bottom: 1px solid #222426;*/
 }
 
@@ -233,7 +233,7 @@ table.time_box tr td:active{
   text-align: center;
   color:#1e1e1e;
   margin-top: -1px;
-  border:1px solid #333;
+  /*border:1px solid #333;*/
   opacity: 0.5;
   /*border-bottom: 1px solid #222426;*/
 }
@@ -245,7 +245,7 @@ table.time_box tr td:active{
   text-align: center;
   color:#1e1e1e;
   margin-top: -1px;
-  border:1px solid #333;
+  /*border:1px solid #333;*/
   z-index:92;
   /*border-bottom: 1px solid #222426;*/
 }
@@ -256,7 +256,7 @@ table.time_box tr td:active{
   text-align: center;
   color:#1e1e1e;
   margin-top: -1px;
-  border:1px solid #333;
+  /*border:1px solid #333;*/
   /*border-bottom: 1px solid #222426;*/
 }
 
