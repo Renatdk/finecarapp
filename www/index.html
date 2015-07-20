@@ -61,11 +61,11 @@
                 <div class="item-inner"> 
                   <div class="item-title">Боксы</div>
                 </div></a></li>
-            <li ng-if='currentWProfile'><a href="#washer_bids" class="close-panel item-link item-content">
-                <div class="item-media"><i class="icon icon-form-list"></i></div>
-                <div class="item-inner"> 
-                  <div class="item-title">Заявки</div>
-                </div></a></li>
+            <!--<li ng-if='currentWProfile'><a href="#" ng-click="showBidList()" class="close-panel item-link item-content">-->
+            <!--    <div class="item-media"><i class="icon icon-form-list"></i></div>-->
+            <!--    <div class="item-inner"> -->
+            <!--      <div class="item-title">Заявки</div>-->
+            <!--    </div></a></li>-->
             <li ng-if='currentWProfile'><a href="#" ng-click="showService()" class="close-panel item-link item-content">
                 <div class="item-media"><i class="icon icon-form-garage"></i></div>
                 <div class="item-inner"> 
@@ -80,6 +80,11 @@
                 <div class="item-media"><i class="icon icon-form-name"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Профайл</div>
+                </div></a></li>
+            <li><a href="#index" class="item-link item-content close-panel">
+                <div class="item-media"><i class="icon icon-exit"></i></div>
+                <div class="item-inner"> 
+                  <div class="item-title">Выход</div>
                 </div></a></li>
         </ul>
       </div>
@@ -1249,14 +1254,31 @@
                 </div>  
                 
                 <!-- picker modal for canceled box -->
-                <div class="actions-modal picker-modal ">
+                <div class="actions-modal picker-modal user_bid">
+                  <div class="actions-modal-group">
+                    <span class="actions-modal-label">F987OPM</span>
+                    <div class="actions-modal-button" ng-click="toBox()" >В бокс</div>
+                    <div class="actions-modal-button" ng-click="move()" >Переместить</div>
+                    <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
+                  </div>
+                </div>  
+                
+                <!-- picker modal for canceled box -->
+                <div class="actions-modal picker-modal in_box">
                   <div class="actions-modal-group">
                     <span class="actions-modal-label" >F456ASD</span>
                   </div>
                   <div class="actions-modal-group">
-                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
                     <div class="actions-modal-button" ng-click="move()" >Переместить</div>
                     <div class="actions-modal-button" ng-click="edit()" >Редактировать</div>
+                  </div>
+                  <div class="actions-modal-group">
+                    <div class="actions-modal-button" ng-click="finish()" >Завершить</div>
+                    <div class="actions-modal-button" ng-click="delete()" >Удалить</div>
                   </div>
                   <div class="actions-modal-group">
                     <div class="actions-modal-button color-red" ng-click="closeModal()">Отмена</div>
@@ -1650,7 +1672,7 @@
             </div>
           </div>
           <!-- Washer bids Page-->
-          <div data-page="washer_bids" class="page cached">
+          <div data-page="washer_bids" class="page cached" ng-controller="bidsListController">
             <div class="page-content">
               <div class="content-block-title">Новые заявки</div>
               <div class="list-block">
@@ -1676,11 +1698,11 @@
               <div class="content-block-title">Подтвержденные заявки</div>
               <div class="list-block">
                 <ul>
-                  <li>
+                  <li ng-repeat="bid in bidList">
                     <div class="item-content">
                       <div class="item-media"><i class="icon icon-form-garage"></i></div>
                       <div class="item-inner"> 
-                        <a href="#send_tiket" class="button">Бокс 1 15:00 Nissan Skyline</a>
+                        <a href="#send_tiket" class="button">Бокс {{bid.box}} {{bid.begin_h}}:{{bid.begin_m}} {{bid.user_car}}</a>
                       </div>
                     </div>
                   </li>
@@ -2134,6 +2156,7 @@
     <script type="text/javascript" src="dist/js/angular.min.js"></script>
     <script type="text/javascript" src="dist/js/angular-resource/angular-resource.min.js"></script>
     <script type="text/javascript" src="dist/js/mqttws31.js"></script>
+    <!--<script type="text/javascript" src="dist/js/socket.io.js"></script>-->
     <script type="text/javascript" src="cordova.js"></script>
     <script src="http://maps.api.2gis.ru/2.0/loader.js" data-id="dgLoader"></script>
     <!-- Path to your app js-->

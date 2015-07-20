@@ -1092,6 +1092,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
         // Create a client instance
         var mqttProfileId="profileId"+Math.random()*1000000;
         client = new Paho.MQTT.Client("test.mosquitto.org", 8080,  mqttProfileId);
+        // client = new Paho.MQTT.Client("mosquitto-renatdk.c9.io", 1884,  mqttProfileId);
         
         // set callback handlers
         client.onConnectionLost = onConnectionLost;
@@ -2086,6 +2087,34 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
           }).$promise;
     }; 
 
+    $scope.finishBid = function(t,b,id){
+        
+        $scope.fItem=$scope.BoxTable[t][b];
+        console.log("finished:",$scope.fItem);
+        myApp.showIndicator();
+        
+        Bids.findById({ id: $scope.fItem.id },
+          function(response){
+            console.log('response',response);
+            
+    
+            $scope.finishedItem=$scope.fItem;
+            $scope.finishedItem.status="finish";
+            $scope.finishedItem
+              .$save()
+              .then(function() {
+                // $scope.showItems();
+              });
+              
+            console.log("finished item:",$scope.editingItem);
+            myApp.hideIndicator();
+          },
+          function(err){
+            console.log('error',err);
+            myApp.hideIndicator();
+          }).$promise;
+    }; 
+    
     $scope.boxItemClick = function(status,t,b,id) {
      
     myApp.pickerModal('.'+status);
@@ -2116,9 +2145,13 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
       $scope.goItemToBox(t,b,id);
       $scope.closeModal();
     };
+    
+    $scope.finish = function() {
+      $scope.finishBid(t,b,id);
+      $scope.closeModal();
+    };
 
   };
-  
 });
 
 fineCarApp.controller('washerMansController', function($scope, $rootScope, WasherMans){
@@ -2269,3 +2302,20 @@ fineCarApp.controller('washerMansController', function($scope, $rootScope, Washe
     };
     
 });
+
+fineCarApp.controller('bidsListController', function($scope, $rootScope, Bids){
+    
+    $scope.newBidList = {};
+    
+    $scope.bidList = {};
+    
+    $rootScope.showBidList = function (){
+        
+        Bids.find({filter:{where:{wProfileId:$rootScope.currentWProfile.id}}},
+            function(response){$scope.bidList=response; mainView.router.load({pageName:"washer_bids"})},
+            function(error){console.log("bid find error:",error)}
+        );
+        
+    };
+});
+

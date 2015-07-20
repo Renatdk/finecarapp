@@ -267,7 +267,12 @@ table.time_box tr td:active{
   margin-top: -1px;
 }
 
-
+.finish_item{
+  background-color: #444;
+  text-align: center;
+  color:#1e1e1e;
+  margin-top: -1px;
+}
 
 .h5{height: 19px}
 .h10{height: 19px}
