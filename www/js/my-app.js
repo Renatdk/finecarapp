@@ -610,7 +610,131 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
       // });
     
     }, function(err) {
-      myApp.alert(err);
+    //  myApp.alert(err);
+      
+      DG.then(function() {
+                var map;
+
+                map = DG.map('map', {
+                    center: [54.98, 82.89],
+                    zoom: 13
+                });
+
+                map.locate({setView: true, watch: true})
+                    .on('locationfound', function(e) {
+                        DG.marker([e.latitude, e.longitude]).addTo(map);
+                            $scope.lat  = e.latitude; UserBid.mlat=e.latitude;
+                            $scope.long = e.longitude; UserBid.mlong=e.longitude;
+                    })
+                    .on('locationerror', function(e) {
+                        console.log(e);
+                        alert("Location access denied.");
+                    });
+            });
+      
+    //   $scope.lat  = position.coords.latitude; UserBid.mlat=position.coords.latitude;
+    //   $scope.long = position.coords.longitude; UserBid.mlong=position.coords.longitude;
+      
+      $scope.geoObject="Координаты определены..."
+      
+      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
+        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
+      });
+        
+        $scope.washers=[];
+        
+        WasherProfile.find({filter: { where: {City: $rootScope.currentUser.city}}}, 
+            function(WasherProfiles) { 
+
+                angular.forEach(WasherProfiles, function(value, key) {
+                    value.services=[];
+                    value.km=getDastance.distance(value.coordinates.lat,value.coordinates.lng,$scope.lat,$scope.long);
+        
+                    WasherServices.find({filter: { where: {wProfileId: value.id}}}, function(wServices) { 
+                        var price = 0;
+                        var time = 0;
+                        var names = "";
+                        var count = 0;
+                        angular.forEach(UserBid.services, function(val, k) {
+                            angular.forEach(wServices, function(wVal, wK) {
+                              if(val.id==wVal.serviceId){
+                                value.services.push(wVal);
+            
+                                if(UserBid.body_type=="passenger"){price += wVal.price1};
+                                if(UserBid.body_type=="pikup"){price += wVal.price2};
+                                if(UserBid.body_type=="miniven"){price += wVal.price3};
+                                
+                                time += wVal.duration;
+                                names += " "+wVal.name;
+                                count +=1;
+                              };
+                            });
+                            value.price=price;
+                            value.time=time;
+                            value.names=names;
+                            value.count=count;
+                        });
+                        
+                        BoxesStatus
+                            .findOne({filter:{where:{wProfileId:value.id, date:moment().startOf('day')}}},
+                                function(response){
+                                    console.log("response boxStatus:", response);
+                                    // angular.forEach(response.data,function(BSval, BSke){
+                                    for(var index in response.data) { 
+                                        var BSval=response.data[index];
+                                        console.log("BSval:",BSval);
+                                        if(BSval.b0.time){
+                                            if(parseInt(BSval.b0.time.substring(0,2))>=moment().hours()){
+                                                    
+                                                console.log("BSval",BSval);
+                                                
+                                                for(var index in BSval) { 
+                                                    var attr = BSval[index];
+                                                    if(attr.status=="clean" && attr.duration>value.time){
+                                                        if(attr.begin_h==moment().hours() && attr.begin_m<moment().minutes()){
+                                                            attr.begin_m=moment().minutes();  
+                                                        };
+                                                        value.boxesStatus=attr;
+                                                    };
+                                                    console.log("attr:",attr);
+                                                };
+                                                
+                                                if(value.boxesStatus){
+                                                    break;
+                                                };
+                                            };    
+                                        };
+                                         
+                                    };
+                                },
+                                function(err){console.log("err:",err)}
+                            );
+                        
+                        if(price>0){
+                            $scope.washers.push(value);
+                        };
+                        
+                        console.log("wServices:", wServices);
+                        myApp.hideIndicator();
+                        
+                    },function(err){
+                            console.log("err:",err);
+                    });
+                    
+                    
+                    
+                    
+                });
+
+                console.log("$scope.washers:",$scope.washers);
+
+            },
+            function(err){
+                console.log("err:",err);
+            }
+        );
+
+      
       myApp.hideIndicator();
     });
   };
