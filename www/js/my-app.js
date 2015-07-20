@@ -492,6 +492,8 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
  $scope.geoObject="Определение местоположения...";
 
   $rootScope.showWashers = function(){
+     
+      
     myApp.showIndicator();
     var posOptions = {timeout: 10000, enableHighAccuracy: false};
     $cordovaGeolocation
@@ -608,7 +610,8 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
       // });
     
     }, function(err) {
-      // error
+      myApp.alert(err);
+      myApp.hideIndicator();
     });
   };
 
