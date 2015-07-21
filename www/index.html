@@ -134,6 +134,15 @@
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Список услуг</div>
           </div>
+          
+          
+          <!-- Navbar inner for Bid Time choice page-->
+          <div data-page="city_choice" class="navbar-inner cached">
+            <div class="left sliding">
+              <a href="#" class="back link"> 
+                <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Выбор Города</div>
+          </div>
           <!-- Navbar inner for Bid Time choice page-->
           <div data-page="bid_time_choice" class="navbar-inner cached">
             <div class="left sliding">
@@ -593,65 +602,126 @@
             </div>
           </div>
           
-          <!-- Washer choice Page -->
-          <div data-page="washer_choice" class="page cached" ng-controller="choiceWasherController">
-            <div class="page-content">
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <a  href="#" class="button button-round">{{geoObject}}</a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="content-block-title">Выберите Автомойку</div>
-              <div class="list-block media-list">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="buttons-row" id="sort_washers">
-                          <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-round">км</a>
-                          <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-round">цена</a>
-                          <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-round">время</a>
+          
+          
+          
+        <!-- Washer choice controller -->
+        <div ng-controller="choiceWasherController">
+            <div data-page="washer_choice" class="page cached" >
+              <div class="page-content">
+                <div class="list-block media-list">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <a  href="#city_choice" class="button button-round">{{geoObject}}</a>
                         </div>
                       </div>
-                    </div>
-                  </li>
-                  <li ng-repeat="washer in washers | orderBy:sorts" ng-click="getParams(washer)" ng-if="washer.boxesStatus">
-                    <a href="#time_choice" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title-row">
-                        <div class="item-title orange">{{washer.Name}}</div>
-                        <div class="item-after">{{washer.price}}тг </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="content-block-title">Выберите Автомойку</div>
+                <div class="list-block media-list">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <div class="buttons-row" id="sort_washers">
+                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-round">км</a>
+                            <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-round">цена</a>
+                            <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-round">время</a>
+                          </div>
+                        </div>
                       </div>
-                      <div class="item-subtitle">{{washer.Street}} {{washer.Home}} - {{washer.km}} км</div>
-                      <div class="item-text"> Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}}) </div>
-                    </div></a></li>
-                </ul>
-              </div>
-              <div class="list-block accordion-list">
-                <ul>
-                  <li class="accordion-item" ng-repeat="washer in washers | orderBy:sorts" ng-if="washer.boxesStatus">
-                    <a href="#" class="item-link item-content">
-                    <div class="item-inner">
-                      <div class="item-title "><span class="orange">{{washer.Name}}</span>,<small> {{washer.km}} км</small></div>
-                      <div class="item-after">{{washer.price}}тг</div>
-                    </div></a>
-                    <div class="accordion-item-content">
-                      <div class="content-block">
-                        <p>{{washer.Street}} {{washer.Home}} - {{washer.km}} км.</p>
-                        <p>Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}})</p>
+                    </li>
+                    <li ng-repeat="washer in washers | orderBy:sorts" ng-click="getParams(washer)" ng-if="washer.boxesStatus">
+                      <a href="#time_choice" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title-row">
+                          <div class="item-title orange">{{washer.Name}}</div>
+                          <div class="item-after">{{washer.price}}тг </div>
+                        </div>
+                        <div class="item-subtitle">{{washer.Street}} {{washer.Home}} - {{washer.km}} км</div>
+                        <div class="item-text"> Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}}) </div>
+                      </div></a></li>
+                  </ul>
+                </div>
+                <div class="list-block accordion-list">
+                  <ul>
+                    <li class="accordion-item" ng-repeat="washer in washers | orderBy:sorts" ng-if="washer.boxesStatus">
+                      <a href="#" class="item-link item-content">
+                      <div class="item-inner">
+                        <div class="item-title "><span class="orange">{{washer.Name}}</span>,<small> {{washer.km}} км</small></div>
+                        <div class="item-after">{{washer.price}}тг</div>
+                      </div></a>
+                      <div class="accordion-item-content">
+                        <div class="content-block">
+                          <p>{{washer.Street}} {{washer.Home}} - {{washer.km}} км.</p>
+                          <p>Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}})</p>
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div> 
-          </div>
+                    </li>
+                  </ul>
+                </div>
+              </div> 
+            </div>  
+            
+            <div data-page="city_choice" class="page cached" >
+              <div class="page-content">
+                <div class="content-block-title">Выберите город</div>
+                <div class="list-block media-list">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <a  href="#" ng-click="showCityMap('Astana')" class="button button-round">Астана</a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <a  href="#" ng-click="showCityMap('Almaty')" class="button button-round">Алматы</a>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <a  href="#" ng-click="showCityMap('Oscemen')" class="button button-round">Усть-Каменогорск</a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div> 
+            </div>   
+            
+            <div data-page="map_place_choice" class="page cached" >
+              <div class="page-content">
+                
+                <div class="content-block-title">Выберите Ваше местопложение</div>
+                <div class="list-block media-list">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-inner"> 
+                          <a  href="#" ng-click="setPlace()" class="button button-round">Указать</a>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div id="mapuser">
+                  
+                </div>
+              </div> 
+            </div>   
+            
+        </div>
+          
+          
+          
           <!-- Time choice Page -->
           <div data-page="time_choice" class="page cached" ng-controller="choiceTimeController">
             <div class="page-content">  
@@ -1632,7 +1702,7 @@
               </div>
             </div>
 
-          </div>
+          </div>ё
 
           <!-- Washer single box Page-->
           <div data-page="washer_single_box" class="page cached">

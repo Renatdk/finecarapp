@@ -81,8 +81,6 @@ i.tabbar-demo-icon-4 {
   color: orange;
 }
 
-
-
 .queue_bkg{
   background-color: orange;
   text-align: center;
@@ -136,6 +134,7 @@ i.tabbar-demo-icon-4 {
   text-align: center;
   border-bottom: 1px solid #222426;
 }
+
 .black_bkg{
   background-color: #999; 
   margin-left: 1px;
@@ -193,7 +192,7 @@ table.time_box tr td:active{
   background-color:#333;
   padding:3px;
   border-radius:3px;
-  margin-left:1px;
+  /*margin-left:1px;*/
 }
 
 .box_item{
@@ -323,4 +322,11 @@ table.time_box tr td:active{
 #mapwasher {
             width: 100%;
             height: 300px;
-        }
+
+}
+
+#mapuser{
+          width:  100%;
+          height: 100%;
+          
+}

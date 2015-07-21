@@ -739,11 +739,42 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
     });
   };
 
-  $scope.getParams=function(obj){
+    $scope.getParams=function(obj){
       UserBid.washer=obj;
       console.log(UserBid);
       $rootScope.getBoxesStatus();    
     }; 
+    
+    $scope.showCityMap=function(city){
+        mainView.router.load({pageName:"map_place_choice"});
+        
+        
+
+        DG.then(function () {
+            var map={};
+            
+            map = DG.map('mapuser', {
+                center: [49.94299040336361, 82.62276649475099],
+                zoom: 13,
+            });
+            
+            marker=DG.marker([49.94299040336361, 82.62276649475099],{
+              draggable: true
+            }).addTo(map);
+                
+            marker.on('drag', function(e) {
+              var lat = e.target._latlng.lat,
+                  lng = e.target._latlng.lng;
+              
+              $$("input#lat").val(lat);
+              $$("input#long").val(lng);
+              
+              console.log(lat,lng);
+
+            }); 
+        });
+        
+    }
 
 });
 
