@@ -143,19 +143,118 @@ fineCarApp.controller('userRegistrationController', function($scope, FUser,$root
 
 });
 
-fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars, washerLogin) {
+fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile) {
   
   $scope.loginData={};
-  $scope.loginData.email="renatd.k@gmail.com";
+  $scope.loginData.email="renat_999@list.ru";
   $scope.loginData.password="123456";
 
-  $scope.Login=function(){
-    $rootScope.userLogin($scope.loginData.email,$scope.loginData.password);
-  };
+   $scope.init = function(){
+        if(localStorage.getItem("Interface")=="User"){
+            
+            FUser.findById({id:localStorage.getItem("$LoopBack$currentUserId")},
+                function(response){
+                    console.log("user:",response);
+                    $rootScope.currentUser = {
+                      id:response.id,
+                      username:  response.username,
+                      email:  response.email,
+                      city:  response.city,
+                      phone:  response.phone
+                    };
+                    
+                    Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
+                      $rootScope.userCars = cars;
+                      console.log("cars:",cars);
+                    },function(err){
+                      console.log("err:",err);
+                    });
+                    
+                    $rootScope.showUserBids();
+        
+                    mainView.router.load({pageName: 'home'});
+                    myApp.hideIndicator();
+                },
+                function(error){console.log(error)}
+                )
+            
+            // $rootScope.userLogin( localStorage.getItem("currentUser.email"), localStorage.getItem("currentUser.password"));
+            
+        };
+        
+        if(localStorage.getItem("Interface")=="Washer"){
+            Washers.findById({id:localStorage.getItem("$LoopBack$currentUserId")},
+                function(response){
+                    $rootScope.currentWasher = {
+                      id: response.id,
+                      username:  response.username,
+                      email:  response.email,
+                      photo:  response.photo,
+                    };
+            
+                    WasherProfile.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(profiles) { 
+                      $rootScope.profiles = profiles;
+                      console.log("profiles:", profiles);
+                    },function(err){
+                      console.log("err:",err);
+                    });
+                    
+                    mainView.router.load({pageName: 'choice_profile'});
+                    myApp.hideIndicator();   
+                },
+                function(error){
+                    console.log(error);
+                }
+            )
+        };
+    };
+    
+    
+    $scope.Login=function(){
+        $rootScope.userLogin($scope.loginData.email,$scope.loginData.password);
+    };
 
-  $scope.wLogin=function(){
-    washerLogin($scope.loginData.email,$scope.loginData.password);
-  };
+    $rootScope.goToUserHome=function(){
+        
+        FUser.login({email: $scope.loginData.email, password: $scope.loginData.password},
+              function(response){
+                $rootScope.currentUser = {
+                  id: response.user.id,
+                  tokenId: response.id,
+                  username:  response.user.username,
+                  email:  response.user.email,
+                  city:  response.user.city,
+                  phone:  response.user.phone
+                };
+                
+                Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
+                  $rootScope.userCars = cars;
+                  console.log("cars:",cars);
+                },function(err){
+                  console.log("err:",err);
+                });
+        
+                localStorage.setItem("Interface", "User");
+                
+                console.log($rootScope.currentUser);
+                console.log(response);
+                $rootScope.showUserBids();
+                
+                mainView.router.load({pageName: 'home'});
+                console.log("click goToWasherHome");
+            },
+            function(error){
+                console.log(error);
+            }
+        );
+    };
+
+    $rootScope.goToWasherHome=function(){
+        mainView.router.load({pageName: 'choice_profile'});  
+        console.log("click goToWasherHome");
+    };
+  
+  
   
   $rootScope.userLogin=function(e,p){
     myApp.showIndicator();
@@ -170,7 +269,7 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
           city:  response.user.city,
           phone:  response.user.phone
         };
-
+        
         Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
           $rootScope.userCars = cars;
           console.log("cars:",cars);
@@ -178,20 +277,42 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
           console.log("err:",err);
         });
 
-
+        localStorage.setItem("Interface", "User");
+        
         console.log($rootScope.currentUser);
         console.log(response);
         $rootScope.showUserBids();
+        washerLogin(e,p,response);
+        // if(){}
+        // mainView.router.load({pageName: 'choice_profile'});
         mainView.router.load({pageName: 'home'});
         myApp.hideIndicator();
       },
 
-      function(response){
-        myApp.alert('Неверный Email или Пароль!');
-        console.log(response);
+      function(error){
+        // myApp.alert('Неверный Email или Пароль!');
+        console.log(error);
+        washerLogin(e,p);
         myApp.hideIndicator();
       });
   };
+  
+    $rootScope.exitUser =function(){
+        localStorage.removeItem("userInterface");
+        localStorage.removeItem("$LoopBack$accessTokenId");
+        localStorage.removeItem("$LoopBack$currentUserId");
+        
+        localStorage.removeItem("Interface");
+    };
+    
+    $rootScope.exitWasher =function(){
+        localStorage.removeItem("washerInterface");
+        localStorage.removeItem("$LoopBack$accessTokenId");
+        localStorage.removeItem("$LoopBack$currentUserId");
+        
+        localStorage.removeItem("Interface");
+    };
+    
 
 });
 
@@ -506,12 +627,14 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
       $scope.geoObject="Координаты определены..."
       
       $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
-        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
+        $scope.geoCity=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+        
       });
         
         $scope.washers=[];
         
-        WasherProfile.find({filter: { where: {City: $rootScope.currentUser.city}}}, 
+        WasherProfile.find({filter: { where: {City: $scope.geoCity}}}, 
             function(WasherProfiles) { 
 
                 angular.forEach(WasherProfiles, function(value, key) {
@@ -610,46 +733,89 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
       // });
     
     }, function(err) {
-    //  myApp.alert(err);
+        $scope.geoObject="Местоположение не определено"
+        mainView.router.load({pageName:"city_choice"});
       
-      DG.then(function() {
-                var map;
+      myApp.hideIndicator();
+    });
+  };
 
-                map = DG.map('map', {
-                    center: [54.98, 82.89],
-                    zoom: 13
-                });
+    $scope.getParams=function(obj){
+      UserBid.washer=obj;
+      console.log(UserBid);
+      $rootScope.getBoxesStatus();    
+    }; 
+    
+    $scope.showCityMap=function(city){
+        mainView.router.load({pageName:"map_place_choice"});
+        
+        
 
-                map.locate({setView: true, watch: true})
-                    .on('locationfound', function(e) {
-                        DG.marker([e.latitude, e.longitude]).addTo(map);
-                            $scope.lat  = e.latitude; UserBid.mlat=e.latitude;
-                            $scope.long = e.longitude; UserBid.mlong=e.longitude;
-                    })
-                    .on('locationerror', function(e) {
-                        console.log(e);
-                        alert("Location access denied.");
-                    });
+        DG.then(function () {
+            var map={};
+            
+            map = DG.map('mapuser', {
+                center: [49.94299040336361, 82.62276649475099],
+                zoom: 13,
             });
+            
+            marker=DG.marker([49.94299040336361, 82.62276649475099],{
+              draggable: true
+            }).addTo(map);
+                
+            marker.on('drag', function(e) {
+              var lat = e.target._latlng.lat,
+                  lng = e.target._latlng.lng;
+              
+            //   $$("input#lat").val(lat);
+            //   $$("input#long").val(lng);
+              
+              $rootScope.lat=lat;
+              $rootScope.lng=lng;
+              
+              console.log(lat,lng);
+
+            }); 
+        });
+        
+    };
+    
+    $scope.setUserPlace = function(){
+        console.log("click on setUserPlace");
+    };
+    
+    $rootScope.showWashersFromPlace = function(){
+        $scope.lat  = $rootScope.lat;
+        $scope.long = $rootScope.lng;
       
-    //   $scope.lat  = position.coords.latitude; UserBid.mlat=position.coords.latitude;
-    //   $scope.long = position.coords.longitude; UserBid.mlong=position.coords.longitude;
-      
-      $scope.geoObject="Координаты определены..."
-      
-      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
-        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.name;  
-      });
+      $scope.geoObject="Координаты определены...";
+      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$rootScope.lng+','+$rootScope.lat).success(function(data){
+
+        $scope.geoCity=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+        $scope.geoObject=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+        
+        
+        console.log("data",data);
+      }).then(
+                 function(){
+                    console.log( $scope.geoObject,$rootScope.lng+','+$rootScope.lat)
+                     
+                 }
+              );
+        
+        
         
         $scope.washers=[];
         
-        WasherProfile.find({filter: { where: {City: $rootScope.currentUser.city}}}, 
+        
+        
+        WasherProfile.find({filter: { where: {City: $scope.geoCity}}}, 
             function(WasherProfiles) { 
 
                 angular.forEach(WasherProfiles, function(value, key) {
                     value.services=[];
                     value.km=getDastance.distance(value.coordinates.lat,value.coordinates.lng,$scope.lat,$scope.long);
-        
+                    
                     WasherServices.find({filter: { where: {wProfileId: value.id}}}, function(wServices) { 
                         var price = 0;
                         var time = 0;
@@ -727,54 +893,17 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
                 });
 
                 console.log("$scope.washers:",$scope.washers);
-
+                mainView.router.load({pageName:"washer_choice"});   
             },
             function(err){
                 console.log("err:",err);
             }
         );
-
-      
-      myApp.hideIndicator();
-    });
-  };
-
-    $scope.getParams=function(obj){
-      UserBid.washer=obj;
-      console.log(UserBid);
-      $rootScope.getBoxesStatus();    
-    }; 
+     
+     
+    };
     
-    $scope.showCityMap=function(city){
-        mainView.router.load({pageName:"map_place_choice"});
-        
-        
-
-        DG.then(function () {
-            var map={};
-            
-            map = DG.map('mapuser', {
-                center: [49.94299040336361, 82.62276649475099],
-                zoom: 13,
-            });
-            
-            marker=DG.marker([49.94299040336361, 82.62276649475099],{
-              draggable: true
-            }).addTo(map);
-                
-            marker.on('drag', function(e) {
-              var lat = e.target._latlng.lat,
-                  lng = e.target._latlng.lng;
-              
-              $$("input#lat").val(lat);
-              $$("input#long").val(lng);
-              
-              console.log(lat,lng);
-
-            }); 
-        });
-        
-    }
+    
 
 });
 

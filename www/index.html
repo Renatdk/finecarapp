@@ -43,7 +43,7 @@
                 <div class="item-inner"> 
                   <div class="item-title">Отзывы</div>
                 </div></a></li>
-             <li><a href="#index" class="item-link item-content close-panel">
+             <li><a href="#index" ng-click="exitUser()" class="item-link item-content close-panel" ng-controller="indexController">
                 <div class="item-media"><i class="icon icon-exit"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Выход</div>
@@ -81,7 +81,7 @@
                 <div class="item-inner"> 
                   <div class="item-title">Профайл</div>
                 </div></a></li>
-            <li><a href="#index" class="item-link item-content close-panel">
+            <li><a href="#index" ng-click="exitWasher()" class="item-link item-content close-panel" ng-controller="indexController">
                 <div class="item-media"><i class="icon icon-exit"></i></div>
                 <div class="item-inner"> 
                   <div class="item-title">Выход</div>
@@ -184,8 +184,14 @@
           </div>
           <!-- Navbar inner for Washer choice page-->
           <div data-page="washer_choice" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" data-reload="true" data-ignore-cache="true" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="left sliding"><a href="#choice_service" data-reload="true" data-ignore-cache="true" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
             <div class="center sliding">Выбор Автомойки</div>
+          </div>
+           <!-- Navbar inner for Washer choice page-->
+          <div data-page="map_place_choice" class="navbar-inner cached" ng-controller="choiceWasherController">
+            <div class="left sliding"><a href="#" data-reload="true" data-ignore-cache="true" class="back link"> <i class="icon icon-back"></i> <span> Назад</span></a></div>
+            <div class="center sliding">Ваше местополложение</div>
+            <div class="right"><a href="#" ng-click="showWashersFromPlace()" > Указать</a></div>
           </div>
           <!-- Navbar inner for Send tiket page-->
           <div data-page="send_tiket" class="navbar-inner cached">
@@ -285,132 +291,152 @@
 
         <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
         <div class="pages navbar-through toolbar-through">
-          <!-- Index Page-->
-          <div data-page="index" class="page" ng-controller="indexController">
-            <!-- Scrollable page content-->
-            <div class="page-content">
-              <div class="content-block-title">Добро пожаловать!</div>
-              <div class="content-block">
-                <div class="content-block-inner">
-                  <p>FineCar поможет легко и быстро помыть Ваш автомобиль!</p>
-                  <p>Все автомойки Вашего города в одном приложении.</p>
+            <div ng-controller="indexController"> 
+              <!-- Index Page-->
+              <div data-page="index" ng-init="init()" class="page" >
+                <!-- Scrollable page content-->
+                <div class="page-content">
+                  <div class="content-block-title">Добро пожаловать!</div>
+                  <div class="content-block">
+                    <div class="content-block-inner">
+                      <p>FineCar поможет легко и быстро помыть Ваш автомобиль!</p>
+                      <p>Все автомойки Вашего города в одном приложении.</p>
+                    </div>
+                  </div>
+                  <div class="content-block-title">Вход в систему</div>
+                  <div class="list-block inset">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="text" ng-model="loginData.email" placeholder="Email">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <input type="password" ng-model="loginData.password" placeholder="Пароль">
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                                <a href="#" ng-click="Login()" class="button">Войти</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="content-block-title">Регистрация</div>
+                  <div class="list-block inset">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#user_registration" class="button">Как водитель</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#washer_registration" class="button">Как автомойка</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-              <div class="content-block-title">Вход в систему</div>
-              <div class="list-block inset">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="text" ng-model="loginData.email" placeholder="Email">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <input type="password" ng-model="loginData.password" placeholder="Пароль">
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <div class="buttons-row">
-                            <a href="#" ng-click="Login()" class="button">Водитель</a>
-                            <a href="#" ng-click="wLogin()" class="button">Автомойка</a>
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#" class="button">Восстановить пароль</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div class="content-block-title">Регистрация</div>
-              <div class="list-block inset">
-                <ul>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#user_registration" class="button">Как водитель</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-inner"> 
-                        <div class="item-input">
-                          <a href="#washer_registration" class="button">Как автомойка</a>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- Home Page-->
-          <div data-page="home" class="page cached" ng-controller="homeController">
-            <div class="page-content">
-              <div class="content-block-title">Помыть авто</div>
-              <div class="list-block">
-                <ul>
-                  <li ng-repeat="car in userCars"  class="swipeout">
-                    <a href="#choice_service" class="item-link item-content swipeout-content" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams(car)">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner">
-                      <div class="item-title orange">{{car.car_name}} - {{car.car_number}}</div>
-                      </div>
-                    </a>
-                    <div class="swipeout-actions-right">
-                      <a href="#" ng-click="deleteCar(car)" class="swipeout-delete" >Удалить</a>
-                    </div>
-                  <li>
-                    <div class="item-content">
-                      <div class="item-media"><i class="icon icon-form-car"></i></div>
-                      <div class="item-inner"> 
-                        <a href="#auto_registration" class="button">+ Добавить авто</a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
-              <div  class="list-block">
-                <ul>
-                  <li ng-repeat="bid in UserBids track by $index"  class="swipeout">
-                    <a href="#" ng-click="getBid(bid)"  class="item-link item-content swipeout-content">
-                      <div class="item-media"><i class="icon icon-form-garage"></i></div>
-                      <div class="item-inner"> 
-                        <div class="item-title orange">{{bid.user_car}} ({{bid.dateF}}) {{bid.begin_h}}:{{bid.begin_m}} </div>
-                      </div>
-                    </a>
-                    <div class="swipeout-actions-right">
-                      <a href="#" ng-click="homeBidFailure(bid.id)" class="swipeout-delete" >Отказаться</a>
-                      <!--<a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите отказаться от заявки?" data-confirm-title="Отказ?">Отказаться</a>-->
-                    </div>
-                  </li>
+            
+            <!-- Home Page-->
+              <div data-page="choiceProfileType" class="page cached" >
+                <div class="page-content">
+                  <div class="content-block-title">Войти как</div>
+                  <div class="list-block">
+                      
+                    <ul>
+                        <li>
+                            <a href="#hone" ng-click="goToUserHome()"  class="item-link item-content">
+                                <div class="item-inner">
+                                    <div class="item-title">Водитель</div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="goToWasherHome()" class="item-link item-content">
+                                <div class="item-inner">
+                                    <div  class="item-title">Автомойка</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                  </div>
                   
-                </ul>
+                </div>
               </div>
             </div>
+            
+            <div ng-controller="homeController">
+              <!-- Home Page-->
+              <div data-page="home" class="page cached" >
+                <div class="page-content">
+                  <div class="content-block-title">Помыть авто</div>
+                  <div class="list-block">
+                    <ul>
+                      <li ng-repeat="car in userCars"  class="swipeout">
+                        <a href="#choice_service" class="item-link item-content swipeout-content" name="{{car.car_name}}" number="{{car.car_number}}" ng-click="getParams(car)">
+                          <div class="item-media"><i class="icon icon-form-car"></i></div>
+                          <div class="item-inner">
+                          <div class="item-title orange">{{car.car_name}} - {{car.car_number}}</div>
+                          </div>
+                        </a>
+                        <div class="swipeout-actions-right">
+                          <a href="#" ng-click="deleteCar(car)" class="swipeout-delete" >Удалить</a>
+                        </div>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-media"><i class="icon icon-form-car"></i></div>
+                          <div class="item-inner"> 
+                            <a href="#auto_registration" class="button">+ Добавить авто</a>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div ng-if="UserBids.bids!=[]" class="content-block-title">Ваши заявки</div>
+                  <div  class="list-block">
+                    <ul>
+                      <li ng-repeat="bid in UserBids track by $index"  class="swipeout">
+                        <a href="#" ng-click="getBid(bid)"  class="item-link item-content swipeout-content">
+                          <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                          <div class="item-inner"> 
+                            <div class="item-title orange">{{bid.user_car}} ({{bid.dateF}}) {{bid.begin_h}}:{{bid.begin_m}} </div>
+                          </div>
+                        </a>
+                        <div class="swipeout-actions-right">
+                          <a href="#" ng-click="homeBidFailure(bid.id)" class="swipeout-delete" >Отказаться</a>
+                          <!--<a href="#" class="swipeout-delete" data-confirm="Вы уверены что хотите отказаться от заявки?" data-confirm-title="Отказ?">Отказаться</a>-->
+                        </div>
+                      </li>
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
           </div>
 
 
@@ -697,21 +723,12 @@
               </div> 
             </div>   
             
+            
             <div data-page="map_place_choice" class="page cached" >
               <div class="page-content">
                 
-                <div class="content-block-title">Выберите Ваше местопложение</div>
-                <div class="list-block media-list">
-                  <ul>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner"> 
-                          <a  href="#" ng-click="setPlace()" class="button button-round">Указать</a>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                <!--<div class="content-block-title">Выберите Ваше местопложение</div>-->
+                
                 <div id="mapuser">
                   
                 </div>

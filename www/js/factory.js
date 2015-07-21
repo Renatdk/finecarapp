@@ -16,7 +16,7 @@ angular.module('fineCarApp.factory',['lbServices'])
   };
 })
 .factory('washerLogin', function(Washers, $rootScope, WasherProfile) {
-  return function(e,p){
+  return function(e,p,user){
     myApp.showIndicator();
 
     Washers.login({email: e, password: p},
@@ -35,14 +35,22 @@ angular.module('fineCarApp.factory',['lbServices'])
         },function(err){
           console.log("err:",err);
         });
-
+        
+        if(user){
+          mainView.router.load({pageName: 'choiceProfileType'});  
+        }else{
+          mainView.router.load({pageName: 'choice_profile'});  
+        };
+        
+        localStorage.setItem("Interface", "Washer");
         console.log(response);
-        mainView.router.load({pageName: 'choice_profile'});
         myApp.hideIndicator();
       },
 
       function(response){
-        myApp.alert('Неверный Email или Пароль!');
+        if(!user){
+          myApp.alert('Неверный Email или Пароль!');  
+        };
         console.log(response);
         myApp.hideIndicator();
       });
