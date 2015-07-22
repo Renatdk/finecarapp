@@ -527,6 +527,10 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
     };
 
     $scope.openAddService = function(){
+        $scope.newServiceName="";
+        $scope.new_price=0;
+        $scope.new_time=0;
+        $scope.order = { services: [] };    
         Services.find().$promise.then(function(response){
             console.log(response);
             $scope.services=response;
@@ -535,23 +539,25 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
     };
     
 
-    $scope.checkbox=[];
+    
     $scope.order = {
        services: []
     };
     $scope.serviceSum= function(index){
-        console.log(index, $scope.services[index], $scope.checkbox[index]);
+        console.log(index, $scope.services[index]);
       $scope.new_price=0;
       $scope.new_time=0;
       $scope.title_sum="";
       $scope.serviceIds=[];
       var i=0;
-      if($scope.checkbox[index]==false){
+      if($scope.services[index].isChecked==true){
         var i=$scope.order.services.indexOf($scope.services[index]);
         $scope.order.services.splice(i,1);
-        console.log("remove service");
+        $scope.services[index].isChecked=false;
       }else{
+        $scope.services[index].index=index;
         $scope.order.services.push($scope.services[index]);
+        $scope.services[index].isChecked=true;
       };
 
       angular.forEach($scope.order.services, function(value, key) {
@@ -583,13 +589,6 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
         console.log(err);  
         myApp.hideIndicator();
       });
-      
-      
-        $scope.checkbox=[];
-        $scope.order = {
-           services: []
-        };
-      
     };
 
     $scope.deleteUserService = function(service){
@@ -610,7 +609,7 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
   };
   $scope.getClass = function(path) {
     if ($scope.sorts == path) {
-      return "active"
+      return "button-fill"
     } else {
       return ""
     }

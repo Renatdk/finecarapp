@@ -633,25 +633,25 @@
                     </div></li>
                   </ul>
                 </div>
-                <div class="list-block accordion-list">
-                  <ul>
-                    <li class="accordion-item" ng-repeat="service in userServices">
-                      <a href="#" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title "><span class="orange">{{service.name}}</span><small> {{service.serviceIds.length}} позиц.</small></div>
-                        <div class="item-after">~{{service.price}}тг</div>
-                      </div></a>
-                      <div class="accordion-item-content">
-                        <div class="content-block">
-                          <p>Длительность: {{service.time}} минут</p>
-                          <ol>
-                            <li ng-repeat="service_item in service.serviceIds">{{service_item.description}}</li>
-                          </ol>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                <!--<div class="list-block accordion-list">-->
+                <!--  <ul>-->
+                <!--    <li class="accordion-item" ng-repeat="service in userServices">-->
+                <!--      <a href="#" class="item-link item-content">-->
+                <!--      <div class="item-inner">-->
+                <!--        <div class="item-title "><span class="orange">{{service.name}}</span><small> {{service.serviceIds.length}} позиц.</small></div>-->
+                <!--        <div class="item-after">~{{service.price}}тг</div>-->
+                <!--      </div></a>-->
+                <!--      <div class="accordion-item-content">-->
+                <!--        <div class="content-block">-->
+                <!--          <p>Длительность: {{service.time}} минут</p>-->
+                <!--          <ol>-->
+                <!--            <li ng-repeat="service_item in service.serviceIds">{{service_item.description}}</li>-->
+                <!--          </ol>-->
+                <!--        </div>-->
+                <!--      </div>-->
+                <!--    </li>-->
+                <!--  </ul>-->
+                <!--</div>-->
               </div>
             </div>
             <!-- Shape service Page -->
@@ -661,9 +661,9 @@
                 <form id="my-form2">
                   <div class="list-block media-list">
                     <ul >
-                      <li ng-repeat="service in services" >
+                      <li ng-repeat="service in services"  ng-click="serviceSum($index)">
                         <label class="label-checkbox item-content" >
-                          <input type="checkbox" ng-model="checkbox[$index]" ng-change="serviceSum($index)">
+                          <input type="checkbox" >
                           <div class="item-media"><i class="icon icon-form-checkbox" ></i></div>
                           <div class="item-inner"  >
                             <div class="item-title-row">
@@ -743,9 +743,9 @@
                       <div class="item-content">
                         <div class="item-inner"> 
                           <div class="buttons-row" id="sort_washers">
-                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-round">км</a>
-                            <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-round">цена</a>
-                            <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-round">время</a>
+                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-raised">км</a>
+                            <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-raised">цена</a>
+                            <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-raised">время</a>
                           </div>
                         </div>
                       </div>
@@ -762,23 +762,23 @@
                       </div></a></li>
                   </ul>
                 </div>
-                <div class="list-block accordion-list">
-                  <ul>
-                    <li class="accordion-item" ng-repeat="washer in washers | orderBy:sorts" ng-if="washer.boxesStatus">
-                      <a href="#" class="item-link item-content">
-                      <div class="item-inner">
-                        <div class="item-title "><span class="orange">{{washer.Name}}</span>,<small> {{washer.km}} км</small></div>
-                        <div class="item-after">{{washer.price}}тг</div>
-                      </div></a>
-                      <div class="accordion-item-content">
-                        <div class="content-block">
-                          <p>{{washer.Street}} {{washer.Home}} - {{washer.km}} км.</p>
-                          <p>Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}})</p>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                <!--<div class="list-block accordion-list">-->
+                <!--  <ul>-->
+                <!--    <li class="accordion-item" ng-repeat="washer in washers | orderBy:sorts" ng-if="washer.boxesStatus">-->
+                <!--      <a href="#" class="item-link item-content">-->
+                <!--      <div class="item-inner">-->
+                <!--        <div class="item-title "><span class="orange">{{washer.Name}}</span>,<small> {{washer.km}} км</small></div>-->
+                <!--        <div class="item-after">{{washer.price}}тг</div>-->
+                <!--      </div></a>-->
+                <!--      <div class="accordion-item-content">-->
+                <!--        <div class="content-block">-->
+                <!--          <p>{{washer.Street}} {{washer.Home}} - {{washer.km}} км.</p>-->
+                <!--          <p>Время: {{washer.boxesStatus.begin_h}}:{{washer.boxesStatus.begin_m}}. Всего {{washer.count}} поз. ({{washer.names}})</p>-->
+                <!--        </div>-->
+                <!--      </div>-->
+                <!--    </li>-->
+                <!--  </ul>-->
+                <!--</div>-->
               </div> 
             </div>  
             
