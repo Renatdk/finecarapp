@@ -50,7 +50,9 @@ angular.module('fineCarApp.factory',['lbServices'])
       function(response){
         if(!user){
           myApp.alert('Неверный Email или Пароль!');  
-        };
+        }else{
+            $rootScope.goToUserHome();
+        }
         console.log(response);
         myApp.hideIndicator();
       });

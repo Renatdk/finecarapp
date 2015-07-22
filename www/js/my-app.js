@@ -283,7 +283,7 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
 
     FUser.login({email: e, password: p},
       function(response){
-        
+        console.log("user logedin");
         washerLogin(e,p,response);
       },
 
@@ -530,28 +530,28 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
         Services.find().$promise.then(function(response){
             console.log(response);
             $scope.services=response;
+            mainView.router.load({pageName:"shape_service"});
         });  
     };
     
 
-
+    $scope.checkbox=[];
     $scope.order = {
        services: []
     };
     $scope.serviceSum= function(index){
+        console.log(index, $scope.services[index], $scope.checkbox[index]);
       $scope.new_price=0;
       $scope.new_time=0;
       $scope.title_sum="";
       $scope.serviceIds=[];
       var i=0;
-      if($scope.services[index].isChecked==true){
+      if($scope.checkbox[index]==false){
         var i=$scope.order.services.indexOf($scope.services[index]);
         $scope.order.services.splice(i,1);
-        $scope.services[index].isChecked=false;
+        console.log("remove service");
       }else{
-        $scope.services[index].index=index;
         $scope.order.services.push($scope.services[index]);
-        $scope.services[index].isChecked=true;
       };
 
       angular.forEach($scope.order.services, function(value, key) {
@@ -583,6 +583,13 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
         console.log(err);  
         myApp.hideIndicator();
       });
+      
+      
+        $scope.checkbox=[];
+        $scope.order = {
+           services: []
+        };
+      
     };
 
     $scope.deleteUserService = function(service){
