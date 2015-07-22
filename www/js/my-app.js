@@ -2,7 +2,11 @@
 
 var myApp = new Framework7({
     animateNavBackIcon:true,
-
+    
+    modalTitle: 'FineCar',
+    // Enable Material theme
+    material: true,
+    
     template7Pages: true, //enable Template7 rendering for pages
     precompileTemplates: true
 
