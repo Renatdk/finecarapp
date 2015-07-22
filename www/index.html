@@ -90,10 +90,7 @@
     <link rel="stylesheet" href="dist/css/framework7.material.colors.min.css">
     <link rel="stylesheet" href="dist/css/framework7.icons.css">
     <!-- Path to your custom app styles-->
-    
-    
-    
-    
+
     <link rel="stylesheet" href="css/my-app.css">
   </head>
   <body  class="layout-dark theme-orange">
@@ -266,8 +263,11 @@
           </div>
           <!-- Navbar inner for Choice service page-->
           <div data-page="choice_service" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link" > <i class="icon icon-back"></i></a></div>
+            <!--<div class="left sliding"><a href="#" class="back link" > <i class="icon icon-back"></i></a></div>-->
             <div class="center sliding">Выбор услуг</div>
+            <div class="right">
+              <a href="#" data-panel="right" class="link icon-only open-panel"> <i class="icon icon-bars"></i></a>
+            </div>
           </div>
           <!-- Navbar inner for Shape service page-->
           <div data-page="shape_service" class="navbar-inner cached">
@@ -2330,7 +2330,7 @@
     </div>
 
     <!-- Path to Framework7 Library JS-->
-    <script type="text/javascript" src="dist/js/framework7.min.js"></script>
+    <script type="text/javascript" src="dist/js/framework7.js"></script>
     <script type="text/javascript" src="dist/js/moment.js"></script>
     <script type="text/javascript" src="dist/js/angular.min.js"></script>
     <script type="text/javascript" src="dist/js/angular-resource/angular-resource.min.js"></script>

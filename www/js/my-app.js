@@ -8,7 +8,8 @@ var myApp = new Framework7({
     material: true,
     
     template7Pages: true, //enable Template7 rendering for pages
-    precompileTemplates: true
+    precompileTemplates: true,
+    pushState: true
 
   });
 
@@ -23,7 +24,8 @@ var mainView = myApp.addView('.view-main', {
     // Enable dynamic Navbar
     dynamicNavbar: true,
     // Enable Dom Cache so we can use all inline pages
-    domCache: true
+    domCache: true,
+
 });
 
 moment.locale('ru');

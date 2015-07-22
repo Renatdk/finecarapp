@@ -343,3 +343,34 @@ table.time_box tr td:active{
                 height: 100%;
                 background:rgba(255,255,255,0.5);
         }
+        
+/*.navbar-on-left{*/
+/*  opacity:0;*/
+/*  display:none;*/
+/*  visibility:hidden;*/
+/*}*/
+
+.page-content{
+  margin-top:50px;
+}
+
+.navbar-on-left .left,
+.navbar-on-left .right,
+.navbar-on-left .center,
+.navbar-on-left .subnavbar,
+.navbar-on-left .fading {
+  opacity: 0;
+}
+.navbar-on-left .sliding {
+  opacity: 0;
+}
+.navbar-on-left .subnavbar.sliding {
+  opacity: 1;
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+}
+
+.navbar-on-left .subnavbar {
+  pointer-events: none;
+}
+
