@@ -146,8 +146,6 @@ fineCarApp.controller('userRegistrationController', function($scope, FUser,$root
 fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile) {
   
   $scope.loginData={};
-  $scope.loginData.email="renat_999@list.ru";
-  $scope.loginData.password="123456";
 
    $scope.init = function(){
         if(localStorage.getItem("Interface")=="User"){
@@ -174,39 +172,57 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
         
                     mainView.router.load({pageName: 'home'});
                     myApp.hideIndicator();
+                    
+                    myApp.onPageAfterAnimation('home', function (page) {
+                         $$('#load-block').css({
+                             display: 'none'
+                        });
+                    });
+                   
                 },
                 function(error){console.log(error)}
                 )
             
             // $rootScope.userLogin( localStorage.getItem("currentUser.email"), localStorage.getItem("currentUser.password"));
             
-        };
-        
-        if(localStorage.getItem("Interface")=="Washer"){
-            Washers.findById({id:localStorage.getItem("$LoopBack$currentUserId")},
-                function(response){
-                    $rootScope.currentWasher = {
-                      id: response.id,
-                      username:  response.username,
-                      email:  response.email,
-                      photo:  response.photo,
-                    };
-            
-                    WasherProfile.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(profiles) { 
-                      $rootScope.profiles = profiles;
-                      console.log("profiles:", profiles);
-                    },function(err){
-                      console.log("err:",err);
-                    });
-                    
-                    mainView.router.load({pageName: 'choice_profile'});
-                    myApp.hideIndicator();   
-                },
-                function(error){
-                    console.log(error);
-                }
-            )
-        };
+        }else{
+            if(localStorage.getItem("Interface")=="Washer"){
+                Washers.findById({id:localStorage.getItem("$LoopBack$currentUserId")},
+                    function(response){
+                        $rootScope.currentWasher = {
+                          id: response.id,
+                          username:  response.username,
+                          email:  response.email,
+                          photo:  response.photo,
+                        };
+                
+                        WasherProfile.find({filter: { where: {washerId: $rootScope.currentWasher.id}}}, function(profiles) { 
+                          $rootScope.profiles = profiles;
+                          console.log("profiles:", profiles);
+                        },function(err){
+                          console.log("err:",err);
+                        });
+                        
+                        mainView.router.load({pageName: 'choice_profile'});
+                        myApp.hideIndicator(); 
+                        myApp.onPageAfterAnimation('choice_profile', function (page) {
+                             $$('#load-block').css({
+                                 display: 'none'
+                            });
+                        });
+                    },
+                    function(error){
+                        console.log(error);
+                    }
+                )
+            }else{
+                // myApp.onPageAfterAnimation('index', function (page) {
+                         $$('#load-block').css({
+                             display: 'none'
+                        });
+                    // });
+            }     
+        }
     };
     
     
@@ -261,32 +277,8 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
 
     FUser.login({email: e, password: p},
       function(response){
-        $rootScope.currentUser = {
-          id: response.user.id,
-          tokenId: response.id,
-          username:  response.user.username,
-          email:  response.user.email,
-          city:  response.user.city,
-          phone:  response.user.phone
-        };
         
-        Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
-          $rootScope.userCars = cars;
-          console.log("cars:",cars);
-        },function(err){
-          console.log("err:",err);
-        });
-
-        localStorage.setItem("Interface", "User");
-        
-        console.log($rootScope.currentUser);
-        console.log(response);
-        $rootScope.showUserBids();
         washerLogin(e,p,response);
-        // if(){}
-        // mainView.router.load({pageName: 'choice_profile'});
-        mainView.router.load({pageName: 'home'});
-        myApp.hideIndicator();
       },
 
       function(error){

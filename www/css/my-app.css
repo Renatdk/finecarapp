@@ -330,3 +330,16 @@ table.time_box tr td:active{
           height: 100%;
           
 }
+
+.load-block{
+                position:fixed;
+                padding:0;
+                margin:0;
+            
+                top:0;
+                left:0;
+            
+                width: 100%;
+                height: 100%;
+                background:rgba(255,255,255,0.5);
+        }
