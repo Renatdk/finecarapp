@@ -30,6 +30,26 @@ var mainView = myApp.addView('.view-main', {
 
 moment.locale('ru');
 
+if(!navigator.onLine){
+    myApp.alert("Нет доступка к Интернет! Подключитесь к сети и перезапустите приложение!");
+}
+
+
+// if($('#theid').css('display') != 'none'){ 
+//   setInterval(sec, 15000);
+// } else { 
+//   $('#theid').hide('slow'); 
+// }
+    
+
+
+// function sec() {
+//   alert("прошла секунда");
+//   location.reload();
+// }
+
+
+
 
 
 // myApp.onPageInit('choice_service', function (page) {
@@ -541,7 +561,7 @@ fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $root
 });
 
 // create the controller and inject Angular's $scope
-fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $http, UserBid, Services, ComplexServices) {
+fineCarApp.controller('choiceServiceController', function($filter, $scope,$rootScope, $http, UserBid, Services, ComplexServices) {
     
     // $http.get('json/user/choice_service.json').success(function(data){
     //   $scope.userServices=data.services;  
@@ -585,14 +605,25 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
       $scope.title_sum="";
       $scope.serviceIds=[];
       var i=0;
+      
       if($scope.services[index].isChecked==true){
         var i=$scope.order.services.indexOf($scope.services[index]);
         $scope.order.services.splice(i,1);
         $scope.services[index].isChecked=false;
+        
+        
+        
       }else{
         $scope.services[index].index=index;
         $scope.order.services.push($scope.services[index]);
         $scope.services[index].isChecked=true;
+        
+        // if($scope.services[index].group){
+        //     var filtered=$scope.services.filter(function (el) {
+        //                       return el.group == $scope.services[index].group ;
+        //                     });
+        //     console.log('filtered',filtered);
+        // }
       };
 
       angular.forEach($scope.order.services, function(value, key) {
