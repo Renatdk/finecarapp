@@ -162,6 +162,26 @@ i.tabbar-demo-icon-4 {
 .orange_border{
    border: solid 1px orange;
 }
+table.calendar tr td{
+  border:solid 1px #333;
+}
+
+table.calendar{
+  width:100%;
+  border-collapse: collapse; 
+  text-align:center;
+}
+
+
+
+table.calendar tr td.colored{
+  background-color:orange;
+}
+
+
+
+
+
 
 table.time_box{
   width: 100%;

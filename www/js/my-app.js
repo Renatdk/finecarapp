@@ -1204,24 +1204,65 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
   $scope.newProfile={};
 
   $scope.addWasherProfile = function(){
-    $scope.newProfile.openH="00";
-    $scope.newProfile.closeH="24";
+        $scope.newProfile.openH="00";
+        $scope.newProfile.closeH="24";
+        $scope.newProfile.boxCount=1;
 
-    var posOptions = {timeout: 100000, enableHighAccuracy: false};
-    $cordovaGeolocation
-    .getCurrentPosition(posOptions)
-    .then(function (position) {
-      $scope.lat  = position.coords.latitude;
-      $scope.long = position.coords.longitude;
-      $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
-        $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
-        $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
-      });
-    }, function(err) {
-      // error
-    });
+        var posOptions = {timeout: 100000, enableHighAccuracy: false};
+        $cordovaGeolocation
+        .getCurrentPosition(posOptions)
+        .then(function (position) {
+          $scope.lat  = position.coords.latitude;
+          $scope.long = position.coords.longitude;
+          $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
+            $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+            $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+          });
+        }, function(err) {
+          // error
+        });
+        
+        var week = ['пн','вт','ср','чт','пт','сб','вс'];
+        var calendarTable = {};
+        
+        
+        for(var t=0; t<=24; t++){
+            
+            if(t<10){t="0"+t;}
+            calendarTable['t'+t]={};
+              
+            for(var d=0; d<=7; d++){
+                
+                calendarTable['t'+t]['d'+d]={};
+                
+                if(d==0){
+                    calendarTable['t'+t]['d'+d].duration=t+'-'+(parseInt(t)+1)+":00";
+                }
+                
+                // if(d>0 && t==0){
+                //     calendarTable['t'+t]['d'+d].calendarHeader=week[d-1];
+                // };
+            };
+        };
+
+        console.log('calendarTable:', calendarTable);
+        $scope.calendarTable=calendarTable;
   };
 
+    $scope.calendarColorClass = function(t,d){
+        
+        if(!$scope.calendarTable[t][d]){
+            $scope.calendarTable[t][d].class="";
+        };
+        
+        if($scope.calendarTable[t][d].class==""){
+           $scope.calendarTable[t][d].class="colored";
+        }else{
+            $scope.calendarTable[t][d].class="";
+        };
+        console.log("colored click",$scope.calendarTable[t][d]);
+    };
+    
   $scope.showMap = function(){
 
     var map;
@@ -1278,6 +1319,8 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
     mainView.router.back();
   };
 
+
+  
   $scope.addProfile = function (){
     console.log($scope.newProfile);
     $scope.newProfile.washerId=$rootScope.currentWasher.id;
