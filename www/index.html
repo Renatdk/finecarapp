@@ -400,7 +400,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="loginData.email" placeholder="Email">
+                              <input type="email" ng-model="loginData.email" placeholder="Email">
                             </div>
                           </div>
                         </div>
@@ -561,10 +561,10 @@
                       <p><div ng-repeat="service in userBid.washer.services">{{service}}</div>Сумма: {{userBid.price}}тг.</p>
                       <p>{{userBid.user_car}} - {{userBid.user_car_number}}</p>
                       <p>{{userBid.dateF}} - {{userBid.begin_h}}:{{userBid.begin_m}}</p>
-                      <p class="orange">Статус: Не подтвержен</p>
-                      <div class="buttons-row"><a href="#home" ng-click="bidFailure(userBid.id)"  class="button button-round">Отказаться</a><a href="#" ng-click="showTimeLine()" class="button button-round">Изменить время</a></div>
+                      <p class="orange">Статус: Подтвержен</p>
+                      <div class="buttons-row"><a href="#home" ng-click="bidFailure(userBid.id)"  class="button button-raised">Отказаться</a><a href="#" ng-click="showTimeLine()" class="button button-raised">Изменить время</a></div>
                       <br/>
-                      <a href="#home" ng-click="showUserBids()"  class="button button-round">На главную</a>
+                      <a href="#home" ng-click="showUserBids()"  class="button button-raised">На главную</a>
                     </div>
                   </div>
                 </div>
@@ -693,20 +693,20 @@
                           </div>
                         </div>
                       </li>
+                      <!--<li>-->
+                      <!--  <div class="item-content">-->
+                      <!--    <div class="item-inner"> -->
+                      <!--      <div class="item-input">-->
+                      <!--        <input type="text" ng-model="newServiceName" placeholder="Введите наименование услуг">-->
+                      <!--      </div>-->
+                      <!--    </div>-->
+                      <!--  </div>-->
+                      <!--</li>-->
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="text" ng-model="newServiceName" placeholder="Введите наименование услуг">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner"> 
-                            <div class="item-input">
-                              <a href="#"  ng-click="addService()" class="button button-raised back link">Сформировать</a>
+                              <a href="#"  ng-click="addService()" class="button button-raised">Сформировать</a>
                             </div>
                           </div>
                         </div>
@@ -743,7 +743,7 @@
                       <div class="item-content">
                         <div class="item-inner"> 
                           <div class="buttons-row" id="sort_washers">
-                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-raised">км</a>
+                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button yyd">км</a>
                             <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-raised">цена</a>
                             <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-raised">время</a>
                           </div>
@@ -980,7 +980,7 @@
                     <div class="item-content">
                       <div class="item-inner"> 
                         <div class="item-input">
-                          <a href="#" ng-click="registration()" class="button active">Зарегестрироваться</a>
+                          <a href="#" ng-click="registration()" class="button button-raised">Зарегестрироваться</a>
                         </div>
                       </div>
                     </div>
@@ -1088,7 +1088,7 @@
                         <div class="item-media"><i class="icon icon-form-building"></i></div>
                         <div class="item-inner"> 
                           <div class="item-input">
-                            <p><a href="#map_washer" ng-click="showMap()" class="button">Указать координаты</a></p>
+                            <p><a href="#" ng-click="showMap()" class="button">Указать координаты</a></p>
                             <input type="hidden" ng-model="newProfile.coordinates" placeholder="Координаты автомойки">
                           </div>
                         </div>
@@ -1192,7 +1192,7 @@
              <!-- Choice Washer profile Page -->
             <div data-page="choice_profile" class="page cached" >
               <div class="page-content">
-                <div class="content-block-title">Профили</div>
+                <div class="content-block-title">Автомойки</div>
                 <div class="list-block">
                   <ul>
                     <li ng-repeat="profile in profiles"  class="swipeout" ng-click="setCurrentWProfile(profile)">
@@ -1209,7 +1209,7 @@
                       <div class="item-content">
                         <div class="item-media"><i class="icon icon-form-garage"></i></div>
                         <div class="item-inner"> 
-                          <a href="#add_washer_profile" ng-click="addWasherProfile()"  class="button">+ Создать профайл</a>
+                          <a href="#add_washer_profile" ng-click="addWasherProfile()"  class="button">+ Создать автомойку</a>
                         </div>
                       </div>
                     </li>
@@ -1349,11 +1349,11 @@
                   
                   <div class="content-block">
                     <div class="buttons-row">
-                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button" ng-if="$index>2">{{d.name}}</a>
+                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button button-raised" ng-if="$index>2">{{d.name}}</a>
                     </div>
                     <br/>
                     <div class="buttons-row">
-                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button" ng-if="$index<3">{{d.name}}</a>
+                      <a  ng-repeat="d in dateLine" href="#" ng-click="setCurrentDate(d)" ng-class="getTimeLineClass(d)" class="button button-raised" ng-if="$index<3">{{d.name}}</a>
                     </div>
                   </div>
                   <div class="orange_border" >
@@ -2330,6 +2330,7 @@
     <!-- Path to Framework7 Library JS-->
     <script type="text/javascript" src="dist/js/framework7.js"></script>
     <script type="text/javascript" src="dist/js/moment.js"></script>
+    <script type="text/javascript" src="dist/js/moment-timezone-with-data.js"></script>
     <script type="text/javascript" src="dist/js/angular.min.js"></script>
     <script type="text/javascript" src="dist/js/angular-resource/angular-resource.min.js"></script>
     <script type="text/javascript" src="dist/js/mqttws31.js"></script>

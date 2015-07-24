@@ -49,7 +49,8 @@ angular.module('fineCarApp.factory',['lbServices'])
 
       function(response){
         if(!user){
-          myApp.alert('Неверный Email или Пароль!');  
+          // myApp.alert('Неверный Email или Пароль!');  
+          myApp.alert(response.data.error.message);
         }else{
             $rootScope.goToUserHome();
         }

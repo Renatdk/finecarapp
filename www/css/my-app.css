@@ -387,3 +387,14 @@ table.time_box tr td:active{
   pointer-events: none;
 }
 
+.modal.modal-in{
+  background-color:#333;
+}
+
+.modal.modal-in .modal-inner .modal-title{
+  color:orange;
+}
+
+.modal.modal-in .modal-inner .modal-text{
+  color:white;
+}

@@ -130,13 +130,13 @@ fineCarApp.config(function(LoopBackResourceProvider) {
 
 
 fineCarApp.controller('userRegistrationController', function($scope, FUser,$rootScope) {
-  $scope.registerData={};
+  $rootScope.registerData={};
 
   $scope.registration=function(){
     myApp.showIndicator();
-    FUser.create($scope.registerData,
+    FUser.create($rootScope.registerData,
       function(response){
-        $scope.userLogin( $scope.registerData.email, $scope.registerData.password);
+        $rootScope.goToUserHome($rootScope.registerData.email,$rootScope.registerData.password);
         console.log(response);
       },
       function(response){
@@ -236,7 +236,12 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
         $rootScope.userLogin($scope.loginData.email,$scope.loginData.password);
     };
 
-    $rootScope.goToUserHome=function(){
+    $rootScope.goToUserHome=function(e,p){
+        if(e){
+            $scope.loginData={};
+            $scope.loginData.email=e;
+            $scope.loginData.password=p;
+        }
         
         FUser.login({email: $scope.loginData.email, password: $scope.loginData.password},
               function(response){
@@ -264,9 +269,12 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
                 
                 mainView.router.load({pageName: 'home'});
                 console.log("click goToWasherHome");
+                  myApp.hideIndicator();
             },
             function(error){
-                console.log(error);
+                myApp.alert(error.data.error.message);
+                myApp.hideIndicator();
+                // console.log(error);
             }
         );
     };
@@ -290,6 +298,7 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
       function(error){
         // myApp.alert('Неверный Email или Пароль!');
         console.log(error);
+        // myApp.alert(error.data.error.message);
         washerLogin(e,p);
         myApp.hideIndicator();
       });
@@ -334,6 +343,10 @@ fineCarApp.controller('homeController', function($scope, $http, $rootScope, User
               $rootScope.UserBids = bids;
               angular.forEach(bids,function(value, key) {
                   value.dateF=moment(value.date).format("D MMM");
+                  if(parseInt(value.begin_m)<10){
+                        value.begin_m="0"+value.begin_m;  
+                  };
+                  
               });
               console.log("bids:",bids);
               mainView.router.load({pageName: 'home'});
@@ -382,17 +395,38 @@ fineCarApp.controller('bidController', function($scope, $rootScope, $http, UserB
     $rootScope.getBid=function(bid){
       $rootScope.userBid=bid;
       myApp.showIndicator();
-      WasherProfile.findById({id:bid.wProfileId},
+      
+      Bids.findById({id:bid.id},
         function(response){
-            $rootScope.userBid.washer=response;
-            mainView.router.loadPage({pageName: 'bid'});
-            myApp.hideIndicator();
-            console.log($rootScope.userBid);
+            // $rootScope.userBid.washer=response;
+            // mainView.router.loadPage({pageName: 'bid'});
+            // myApp.hideIndicator();
+            
+            console.log("BId:",response);
+            $rootScope.userBid=response;
+            $rootScope.userBid.dateF=moment(response.date).format("D MMM");
+            if(parseInt($rootScope.userBid.begin_m)<10){
+                        $rootScope.userBid.begin_m="0"+$rootScope.userBid.begin_m;  
+                  };
+            WasherProfile.findById({id:bid.wProfileId},
+                function(response){
+                    $rootScope.userBid.washer=response;
+                    mainView.router.loadPage({pageName: 'bid'});
+                    myApp.hideIndicator();
+                    console.log("$rootScope.userBid:",$rootScope.userBid);
+                },
+                function(err){
+                    console.log(err);
+                     myApp.hideIndicator();    
+                }
+            );
         },
         function(err){
-            console.log(err);
-             myApp.hideIndicator();    
+            console.log("BId error:",err);
+            //  myApp.hideIndicator();    
         });
+      
+      
     };
     
     $scope.showMap=function(){
@@ -496,12 +530,13 @@ fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $root
       Cars.create(car, function(cars) { 
           $rootScope.userCars.push(car);
           console.log("cars:",cars);
+          mainView.router.back();
         },function(err){
           console.log("err:",err);
-          mainView.router.loadPage({pageName: 'index'});
+          mainView.router.back();
         });
       console.log(car);
-      mainView.router.back();
+      
     }
 });
 
@@ -572,23 +607,28 @@ fineCarApp.controller('choiceServiceController', function($scope,$rootScope, $ht
     };
 
     $scope.addService= function(index){
-      if(!$scope.newServiceName){$scope.newServiceName="Mega+"};
-      var newService={};
-      newService.name=$scope.newServiceName;
-      newService.description=$scope.title_sum;
-      newService.time=$scope.new_time;
-      newService.price=$scope.new_price;
-      newService.serviceIds=$scope.serviceIds;
+        myApp.prompt('Введите наименование комплекса услуг:', function (value) {
 
-      myApp.showIndicator();
-      ComplexServices.create(newService).$promise.then(function(response){
-        $scope.userServices.push(newService);
-        console.log("response:", response);
-        myApp.hideIndicator();
-      },function(err){
-        console.log(err);  
-        myApp.hideIndicator();
-      });
+            $scope.newServiceName=value;
+            var newService={};
+            newService.name=$scope.newServiceName;
+            newService.description=$scope.title_sum;
+            newService.time=$scope.new_time;
+            newService.price=$scope.new_price;
+            newService.serviceIds=$scope.serviceIds;
+        
+            myApp.showIndicator();
+            ComplexServices.create(newService).$promise.then(function(response){
+                $scope.userServices.push(newService);
+                console.log("response:", response);
+                myApp.hideIndicator();
+                mainView.router.back();
+            },function(err){
+                myApp.alert(err.data.error.message);  
+                myApp.hideIndicator();
+                mainView.router.back();
+            });
+        });
     };
 
     $scope.deleteUserService = function(service){
@@ -813,7 +853,7 @@ fineCarApp.controller('choiceWasherController', function($scope, $rootScope, $ht
         
         
         
-        WasherProfile.find({filter: { where: {City: $scope.geoCity}}}, 
+        WasherProfile.find({ where: {City: $scope.geoCity}}, 
             function(WasherProfiles) { 
 
                 angular.forEach(WasherProfiles, function(value, key) {
@@ -1154,17 +1194,33 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
   $scope.showMap = function(){
 
     var map;
-
+   mainView.router.load({pageName:"map_washer"});
     DG.then(function () {
-        map = DG.map('mapwasher', {
-            center: [$scope.lat, $scope.long],
-            zoom: 16,
-        });
         
-        marker=DG.marker([$scope.lat, $scope.long],{
-          draggable: true
-        }).addTo(map);
+        map = DG.map('mapwasher', {
+                            center: [$scope.lat, $scope.long],
+                            zoom: 16,
+                        });
+        
+        
+        // map.locate({setView: true, watch: true})
+        //             .on('locationfound', function(e) {
+        //                 $scope.lat=e.latitude;
+        //                 $scope.lng=e.longitude;
+        //                 marker=DG.marker([e.latitude, e.longitude],{draggable: true}).addTo(map);
+                        
 
+        //                 }); 
+                        
+        //             })
+        //             .on('locationerror', function(e) {
+        //                 console.log(e);
+        //                 alert("Location access denied.");
+        //             });
+
+        marker=DG.marker([$scope.lat, $scope.long],{draggable: true}).addTo(map);
+                        
+                           
         marker.on('drag', function(e) {
           var lat = e.target._latlng.lat,
               lng = e.target._latlng.lng;
@@ -1174,7 +1230,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
           
           console.log(e.target._latlng.lat,e.target._latlng.lng);
           console.log($scope.newProfile.lat,$scope.newProfile.long);
-        }); 
+        });    
     });
       
   };
@@ -1193,8 +1249,9 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
   $scope.addProfile = function (){
     console.log($scope.newProfile);
+    $scope.newProfile.washerId=$rootScope.currentWasher.id;
     WasherProfile.create($scope.newProfile, function(response) { 
-        $scope.profiles.push($scope.newProfile);
+        $scope.profiles.push(response);
         console.log("response:",response);
       },function(err){
         console.log("err:",err);
@@ -1216,7 +1273,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
              
     
     moment.locale('ru'); 
-    var today=moment().startOf('day');
+    var today=moment().startOf('day').tz('Asia/Almaty');
     
     $rootScope.currentWProfile.currentDate=today;
     
@@ -1378,7 +1435,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     
     $scope.getTimeLineClass = function(path) {
         if (moment($rootScope.currentWProfile.currentDate).format("D MMM") == path.name) {
-          return "active"
+          return "button-fill"
         } else {
           return ""
         }
@@ -1428,7 +1485,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
         for(var i=0;i<7;i++ ){                                                                                                                          
           var date={};
           
-          date.date=moment().add(i, 'days').startOf('day');
+          date.date=moment().add(i, 'days').startOf('day').tz("Asia/Almaty");
           date.name=moment().add(i, 'days').format("D MMM"); 
           if(moment($rootScope.currentWProfile.currentDate).format("D MMM")==date.name){console.log(date.name)};
           $scope.dateLine.push(date);      
