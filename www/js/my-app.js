@@ -1902,7 +1902,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
         };
         $scope.getClass = function(path) {
           if ($scope.car_type == path) {
-            return "active"
+            return "button-fill"
           } else {
             return ""
           }
@@ -2177,7 +2177,7 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     };
     $scope.getClass = function(path) {
       if ($scope.car_type == path) {
-        return "active"
+        return "button-fill"
       } else {
         return ""
       }
