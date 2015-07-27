@@ -46,6 +46,14 @@ module.exports = [
         "clobbers": [
             "device"
         ]
+    },
+    {
+        "file": "plugins/de.appplant.cordova.plugin.background-mode/www/background-mode.js",
+        "id": "de.appplant.cordova.plugin.background-mode.BackgroundMode",
+        "clobbers": [
+            "cordova.plugins.backgroundMode",
+            "plugin.backgroundMode"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -55,7 +63,8 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "1.0.1-dev",
     "cordova-plugin-camera": "1.2.0",
     "com.phonegap.plugins.PushPlugin": "2.5.0",
-    "cordova-plugin-device": "1.0.2-dev"
+    "cordova-plugin-device": "1.0.2-dev",
+    "de.appplant.cordova.plugin.background-mode": "0.6.4"
 }
 // BOTTOM OF METADATA
 });

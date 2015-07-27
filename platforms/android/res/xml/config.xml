@@ -11,6 +11,9 @@
     <feature name="PushPlugin">
         <param name="android-package" value="com.plugin.gcm.PushPlugin" />
     </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
     <allow-intent href="market:*" />
     <name>FineCar</name>
     <description>
@@ -27,7 +30,8 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <feature name="Device">
-        <param name="android-package" value="org.apache.cordova.device.Device" />
+    <feature name="BackgroundMode">
+        <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundMode" />
     </feature>
+    <preference name="KeepRunning" value="true" />
 </widget>
