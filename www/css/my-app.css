@@ -179,6 +179,27 @@ table.calendar tr td.colored{
 }
 
 
+.ex-colored{
+  float:left;
+  width:20px;
+  height:20px;
+  background-color:orange;
+  margin:5px;
+}
+
+.ex-uncolored{
+  float:left;
+  width:18px;
+  height:18px;
+  /*background-color:orange;*/
+  border: solid 1px #333;
+  margin:5px;
+}
+
+.colored-text{
+  float:left;
+  margin:5px;
+}
 
 
 

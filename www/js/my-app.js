@@ -9,7 +9,7 @@ var myApp = new Framework7({
     
     template7Pages: true, //enable Template7 rendering for pages
     precompileTemplates: true,
-    pushState: true
+    // pushState: true
 
   });
 
@@ -1236,12 +1236,23 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
                 calendarTable['t'+t]['d'+d]={};
                 
                 if(d==0){
-                    calendarTable['t'+t]['d'+d].duration=t+'-'+(parseInt(t)+1)+":00";
+                    if(t<9){
+                        calendarTable['t'+t]['d'+d].duration=t+'-'+'0'+(parseInt(t)+1)+":00";
+                    }else{
+                        calendarTable['t'+t]['d'+d].duration=t+'-'+(parseInt(t)+1)+":00";    
+                    }
+                    
+                };
+                if(d>0 && 6>d){
+                    if(t>8 && 13>t){
+                        calendarTable['t'+t]['d'+d].class="colored";
+                    } 
+                    
+                    if(t>13 && 18>t){
+                        calendarTable['t'+t]['d'+d].class="colored";
+                    }
+                    
                 }
-                
-                // if(d>0 && t==0){
-                //     calendarTable['t'+t]['d'+d].calendarHeader=week[d-1];
-                // };
             };
         };
 
@@ -1250,17 +1261,67 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
   };
 
     $scope.calendarColorClass = function(t,d){
+        if(d)
         
-        if(!$scope.calendarTable[t][d]){
-            $scope.calendarTable[t][d].class="";
-        };
-        
-        if($scope.calendarTable[t][d].class==""){
+        if($scope.calendarTable[t][d].class!="colored"){
            $scope.calendarTable[t][d].class="colored";
         }else{
             $scope.calendarTable[t][d].class="";
         };
         console.log("colored click",$scope.calendarTable[t][d]);
+    };
+    
+    $scope.allInTime = function(t){
+        console.log("$scope.calendarTable[t]",$scope.calendarTable[t]);
+        
+        var count=0;
+         for(var d=1; d<=7; d++){
+            if($scope.calendarTable[t]['d'+d].class=='colored'){
+                count++;     
+            }; 
+         };
+        
+        
+        if(count<7){
+            for(var d=1; d<=7; d++){
+                $scope.calendarTable[t]['d'+d].class='colored';
+            };
+        }else{
+            for(var d=1; d<=7; d++){
+                $scope.calendarTable[t]['d'+d].class='';
+            };
+        }
+    };
+    
+    $scope.allInDay = function(d){
+        
+        var count=0;
+        
+        for(var t=0; t<=24; t++){
+            
+            if(t<10){t="0"+t;}
+            
+            console.log("t",t);
+            
+            if($scope.calendarTable['t'+t][d].class=='colored'){
+                count++;
+            };
+            
+            if(t<10){t=parseInt(t)};            
+        };
+        
+        for(var t=0; t<=24; t++){
+            
+            if(t<10){t="0"+t;}
+            
+            if(count<24){
+                $scope.calendarTable['t'+t][d].class='colored';
+            }else{
+                $scope.calendarTable['t'+t][d].class='';
+            };
+     
+            if(t<10){t=parseInt(t)};            
+        };
     };
     
   $scope.showMap = function(){
