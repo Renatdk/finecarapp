@@ -40,7 +40,7 @@ var pushNotification;
 document.addEventListener("deviceready", function(){
     pushNotification = window.plugins.pushNotification;
     
-    $$("#app-status-ul").append('<li>registering ' + device.platform + '</li>');
+    $$("#app-status-ul").append('<li>registering ' + device.platform + device.uuid + '</li>');
     if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
         pushNotification.register(
         successHandler,
@@ -76,24 +76,23 @@ document.addEventListener("deviceready", function(){
     
     // Background mode 
     
-        // Android customization
-        cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
-        // Enable background mode
-        cordova.plugins.backgroundMode.enable();
+        // // Android customization
+        // cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
+        // // Enable background mode
+        // cordova.plugins.backgroundMode.enable();
     
-        // Called when background mode has been activated
-        cordova.plugins.backgroundMode.onactivate = function () {
-            setTimeout(function () {
-                // Modify the currently displayed notification
-                cordova.plugins.backgroundMode.configure({
-                    text:'Running in background for more than 5s now.'
-                });
-            }, 5000);
-        }
-});
-
-// handle GCM notifications for Android
-            function onNotification(e) {
+        // // Called when background mode has been activated
+        // cordova.plugins.backgroundMode.onactivate = function () {
+        //     setTimeout(function () {
+        //         // Modify the currently displayed notification
+        //         cordova.plugins.backgroundMode.configure({
+        //             text:'Running in background for more than 5s now.'
+        //         });
+        //     }, 5000);
+        // }
+        
+        
+        function onNotification(e) {
                 $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
                 
                 switch( e.event )
@@ -162,6 +161,13 @@ document.addEventListener("deviceready", function(){
                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
             }
 
+        
+        
+        
+});
+
+// handle GCM notifications for Android
+            
 // if($('#theid').css('display') != 'none'){ 
 //   setInterval(sec, 15000);
 // } else { 
