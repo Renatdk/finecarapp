@@ -65,7 +65,7 @@ if(!navigator.onLine){
       $$("#app-status-ul").append('<li>registering ' + device.platform + '</li>');
         	if (device.platform == 'android' || device.platform == 'Android' ||
                     device.platform == 'amazon-fireos' ) {
-	pushNotification.register(successHandler, errorHandler, {"senderID":"123456789101","ecb":"onNotification"});		// required!
+	pushNotification.register(successHandler, errorHandler, {"senderID":"730696176510","ecb":"onNotification"});		// required!
 			} else {
             	pushNotification.register(tokenHandler, errorHandler, {"badge":"true","sound":"true","alert":"true","ecb":"onNotificationAPN"});	// required!
         	}
