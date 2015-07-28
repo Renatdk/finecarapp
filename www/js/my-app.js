@@ -35,6 +35,7 @@ if(!navigator.onLine){
 }
 
     // Push Notification begin
+myApp.onPageInit('index', function (page) {
     
     var pushNotification;
     
@@ -171,20 +172,7 @@ if(!navigator.onLine){
 
     // Push Notification end
     
-
-// myApp.onPageInit('choice_service', function (page) {
-//     myApp.showIndicator();
-//     user_SCL=page.query;
-//     console.log(page.query);
-//     var homeTemplate = $$(page.container).html();
-//     var compiledHomeTemplate = Template7.compile(homeTemplate);
-
-//     $$.getJSON('json/user_package_of_services.json', function (json) {
-//       var html=compiledHomeTemplate(json);      
-//        $$(page.container).html(html);
-//       myApp.hideIndicator();
-//     }); 
-// });   
+});   
 // myApp.onPageInit('home', function (page) {
 //     myApp.showIndicator();
 //     console.log("home");
