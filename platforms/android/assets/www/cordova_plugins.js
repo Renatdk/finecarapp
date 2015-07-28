@@ -55,7 +55,7 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "1.0.1-dev",
     "cordova-plugin-camera": "1.2.0",
     "com.phonegap.plugins.PushPlugin": "2.5.0",
-    "cordova-plugin-device": "1.0.2-dev"
+    "cordova-plugin-device": "1.0.1"
 }
 // BOTTOM OF METADATA
 });
