@@ -246,68 +246,68 @@ angular.module('fineCarApp.factory',['lbServices'])
 }])
 
 
-.factory('socket', function(LoopBackAuth){
-    //Creating connection with server
-    var socket = io.connect('http://backfinecar-renatdk.c9.io');
+// .factory('socket', function(LoopBackAuth){
+//     //Creating connection with server
+//     var socket = io.connect('http://backfinecar-renatdk.c9.io');
  
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
+//     socket.on('news', function (data) {
+//       console.log(data);
+//       socket.emit('my other event', { my: 'data' });
+//     });
  
-    //This part is only for login users for authenticated socket connection between client and server.
-    //If you are not using login page in you website then you should remove rest piece of code..
-    // var id = LoopBackAuth.accessTokenId;
-    // var userId = LoopBackAuth.currentUserId;
-    // socket.on('connect', function(){
-    //     socket.send('hi');
-    //     socket.emit('authentication', {id: id, userId: userId });
-    //     socket.on('authenticated', function() {
-    //         // use the socket as usual
-    //         console.log('User is authenticated');
-    //     });
-    // });
-  return socket;
+//     //This part is only for login users for authenticated socket connection between client and server.
+//     //If you are not using login page in you website then you should remove rest piece of code..
+//     // var id = LoopBackAuth.accessTokenId;
+//     // var userId = LoopBackAuth.currentUserId;
+//     // socket.on('connect', function(){
+//     //     socket.send('hi');
+//     //     socket.emit('authentication', {id: id, userId: userId });
+//     //     socket.on('authenticated', function() {
+//     //         // use the socket as usual
+//     //         console.log('User is authenticated');
+//     //     });
+//     // });
+//   return socket;
      
-})
+// })
 
-.factory('PubSub', function (socket) {
-    var container =  [];
-    return {
-        subscribe: function(options, callback){
-            if(options){
-                var collectionName = options.collectionName;
-                var modelId = options.modelId;
-                var method = options.method;
-                if(method === 'POST'){
-                    var name = '/' + collectionName + '/' + method;
-                    socket.on(name, callback);
-                    console.log("all subscribe");
-                }
-                else{
-                    var name = '/' + collectionName + '/' + modelId + '/' + method;
-                    socket.on(name, callback);
-                    console.log("subscribe without options");
-                }
-                //Push the container..
-                this.pushContainer(name);
-            }else{
-                throw 'Error: Option must be an object';
-            }
-        }, //end subscribe
+// .factory('PubSub', function (socket) {
+//     var container =  [];
+//     return {
+//         subscribe: function(options, callback){
+//             if(options){
+//                 var collectionName = options.collectionName;
+//                 var modelId = options.modelId;
+//                 var method = options.method;
+//                 if(method === 'POST'){
+//                     var name = '/' + collectionName + '/' + method;
+//                     socket.on(name, callback);
+//                     console.log("all subscribe");
+//                 }
+//                 else{
+//                     var name = '/' + collectionName + '/' + modelId + '/' + method;
+//                     socket.on(name, callback);
+//                     console.log("subscribe without options");
+//                 }
+//                 //Push the container..
+//                 this.pushContainer(name);
+//             }else{
+//                 throw 'Error: Option must be an object';
+//             }
+//         }, //end subscribe
  
-        pushContainer : function(subscriptionName){
-            container.push(subscriptionName);
-        },
+//         pushContainer : function(subscriptionName){
+//             container.push(subscriptionName);
+//         },
  
-        //Unsubscribe all containers..
-        unSubscribeAll: function(){
-            for(var i=0; i<container.length; i++){
-                socket.removeAllListeners(container[i]);   
-            }
-            //Now reset the container..
-            container = [];
-        }
+//         //Unsubscribe all containers..
+//         unSubscribeAll: function(){
+//             for(var i=0; i<container.length; i++){
+//                 socket.removeAllListeners(container[i]);   
+//             }
+//             //Now reset the container..
+//             container = [];
+//         }
  
-    };
-});
+//     };
+// });

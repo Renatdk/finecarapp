@@ -35,131 +35,7 @@ if(!navigator.onLine){
 }
 
 
-// var pushNotification;
-
-
-
-document.addEventListener("deviceready", function(){
-        cordova.plugins.notification.local.schedule({
-                id: 1,
-                text: 'My first notification',
-                sound: isAndroid ? 'file://sound.mp3' : 'file://beep.caf',
-                every: 'day',
-                firstAt: next_monday,
-                data: { key:'value' }
-        });
-    });
-    
-    // Background mode 
-    
-        // // Android customization
-        // cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
-        // // Enable background mode
-        // cordova.plugins.backgroundMode.enable();
-    
-        // // Called when background mode has been activated
-        // cordova.plugins.backgroundMode.onactivate = function () {
-        //     setTimeout(function () {
-        //         // Modify the currently displayed notification
-        //         cordova.plugins.backgroundMode.configure({
-        //             text:'Running in background for more than 5s now.'
-        //         });
-        //     }, 5000);
-        // }
-        
-        
-//         function onNotification(e) {
-//                 $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
-                
-//                 switch( e.event )
-//                 {
-//                     case 'registered':
-// 					if ( e.regid.length > 0 )
-// 					{
-// 						$("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
-// 						// Your GCM push server needs to know the regID before it can push to this device
-// 						// here is where you might want to send it the regID for later use.
-// 						console.log("regID = " + e.regid);
-// 					}
-//                     break;
-                    
-//                     case 'message':
-//                     	// if this flag is set, this notification happened while we were in the foreground.
-//                     	// you might want to play a sound to get the user's attention, throw up a dialog, etc.
-//                     	if (e.foreground)
-//                     	{
-// 							$("#app-status-ul").append('<li>--INLINE NOTIFICATION--' + '</li>');
-						      
-// 						        // on Android soundname is outside the payload. 
-// 					                // On Amazon FireOS all custom attributes are contained within payload
-// 					                var soundfile = e.soundname || e.payload.sound;
-// 					                // if the notification contains a soundname, play it.
-// 					                // playing a sound also requires the org.apache.cordova.media plugin
-// 					                var my_media = new Media("/android_asset/www/"+ soundfile);
-// 							my_media.play();
-// 						}
-// 						else
-// 						{	// otherwise we were launched because the user touched a notification in the notification tray.
-// 							if (e.coldstart)
-// 								$("#app-status-ul").append('<li>--COLDSTART NOTIFICATION--' + '</li>');
-// 							else
-// 							$("#app-status-ul").append('<li>--BACKGROUND NOTIFICATION--' + '</li>');
-// 						}
-							
-// 						$("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
-//                         //android only
-// 						$("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
-//                         //amazon-fireos only
-//                         $("#app-status-ul").append('<li>MESSAGE -> TIMESTAMP: ' + e.payload.timeStamp + '</li>');
-//                     break;
-                    
-//                     case 'error':
-// 						$("#app-status-ul").append('<li>ERROR -> MSG:' + e.msg + '</li>');
-//                     break;
-                    
-//                     default:
-// 						$("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
-//                     break;
-//                 }
-//             }
-            
-//             function tokenHandler (result) {
-//                 $("#app-status-ul").append('<li>token: '+ result +'</li>');
-//                 // Your iOS push server needs to know the token before it can push to this device
-//                 // here is where you might want to send it the token for later use.
-//             }
-			
-//             function successHandler (result) {
-//                 $("#app-status-ul").append('<li>success:'+ result +'</li>');
-//             }
-            
-//             function errorHandler (error) {
-//                 $("#app-status-ul").append('<li>error:'+ error +'</li>');
-//             }
-
-        
-        
-        
-// });
-
-// handle GCM notifications for Android
-            
-// if($('#theid').css('display') != 'none'){ 
-//   setInterval(sec, 15000);
-// } else { 
-//   $('#theid').hide('slow'); 
-// }
-    
-
-
-// function sec() {
-//   alert("прошла секунда");
-//   location.reload();
-// }
-
-
-
-
+ 
 
 // myApp.onPageInit('choice_service', function (page) {
 //     myApp.showIndicator();
@@ -278,7 +154,7 @@ fineCarApp.controller('userRegistrationController', function($scope, FUser,$root
 
 });
 
-fineCarApp.controller('indexController', function(socket, $scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile, PubSub) {
+fineCarApp.controller('indexController', function( $scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile) {
   
   $scope.loginData={};
 
@@ -394,8 +270,7 @@ fineCarApp.controller('indexController', function(socket, $scope, FUser, $rootSc
                   console.log("err:",err);
                 });
                 
-                socket.emit('my other event', { user: 'login!' });
-                
+
                 localStorage.setItem("Interface", "User");
                 
                 console.log($rootScope.currentUser);
@@ -446,7 +321,7 @@ fineCarApp.controller('indexController', function(socket, $scope, FUser, $rootSc
         
         localStorage.removeItem("Interface");
         
-        PubSub.unSubscribeAll();
+      
     };
     
     $rootScope.exitWasher =function(){
@@ -456,7 +331,6 @@ fineCarApp.controller('indexController', function(socket, $scope, FUser, $rootSc
         
         localStorage.removeItem("Interface");
         
-        PubSub.unSubscribeAll();
     };
     
 
@@ -667,7 +541,7 @@ fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $root
       car.car_number=$scope.addCartData.number;
       car.body_type=$scope.addCartData.body_type;
       Cars.create(car, function(cars) { 
-          $rootScope.userCars.push(car);
+          $rootScope.userCars.push(cars);
           console.log("cars:",cars);
           mainView.router.back();
         },function(err){
