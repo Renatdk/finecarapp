@@ -35,61 +35,37 @@ if(!navigator.onLine){
 }
 
 
-var pushNotification;
+// var pushNotification;
 
-// document.addEventListener("deviceready", function(){
-//     pushNotification = window.plugins.pushNotification;
+
+
+document.addEventListener("deviceready", function(){
+        cordova.plugins.notification.local.schedule({
+                id: 1,
+                text: 'My first notification',
+                sound: isAndroid ? 'file://sound.mp3' : 'file://beep.caf',
+                every: 'day',
+                firstAt: next_monday,
+                data: { key:'value' }
+        });
+    });
     
-//     $$("#app-status-ul").append('<li>registering ' + device.platform + device.uuid + '</li>');
-//     if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
-//         pushNotification.register(
-//         successHandler,
-//         errorHandler,
-//         {
-//             "senderID":"730696176510",
-//             "ecb":"onNotification"
-//         });
-//     } else if ( device.platform == 'blackberry10'){
-//         pushNotification.register(
-//         successHandler,
-//         errorHandler,
-//         {
-//             invokeTargetId : "replace_with_invoke_target_id",
-//             appId: "replace_with_app_id",
-//             ppgUrl:"replace_with_ppg_url", //remove for BES pushes
-//             ecb: "pushNotificationHandler",
-//             simChangeCallback: replace_with_simChange_callback,
-//             pushTransportReadyCallback: replace_with_pushTransportReady_callback,
-//             launchApplicationOnPush: true
-//         });
-//     } else {
-//         pushNotification.register(
-//         tokenHandler,
-//         errorHandler,
-//         {
-//             "badge":"true",
-//             "sound":"true",
-//             "alert":"true",
-//             "ecb":"onNotificationAPN"
-//         });
-//     };
+    // Background mode 
     
-//     // Background mode 
+        // // Android customization
+        // cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
+        // // Enable background mode
+        // cordova.plugins.backgroundMode.enable();
     
-//         // // Android customization
-//         // cordova.plugins.backgroundMode.setDefaults({ text:'Doing heavy tasks.'});
-//         // // Enable background mode
-//         // cordova.plugins.backgroundMode.enable();
-    
-//         // // Called when background mode has been activated
-//         // cordova.plugins.backgroundMode.onactivate = function () {
-//         //     setTimeout(function () {
-//         //         // Modify the currently displayed notification
-//         //         cordova.plugins.backgroundMode.configure({
-//         //             text:'Running in background for more than 5s now.'
-//         //         });
-//         //     }, 5000);
-//         // }
+        // // Called when background mode has been activated
+        // cordova.plugins.backgroundMode.onactivate = function () {
+        //     setTimeout(function () {
+        //         // Modify the currently displayed notification
+        //         cordova.plugins.backgroundMode.configure({
+        //             text:'Running in background for more than 5s now.'
+        //         });
+        //     }, 5000);
+        // }
         
         
 //         function onNotification(e) {
@@ -302,11 +278,12 @@ fineCarApp.controller('userRegistrationController', function($scope, FUser,$root
 
 });
 
-fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile) {
+fineCarApp.controller('indexController', function(socket, $scope, FUser, $rootScope, Cars, washerLogin, Bids, Washers, WasherProfile, PubSub) {
   
   $scope.loginData={};
 
    $scope.init = function(){
+       
         if(localStorage.getItem("Interface")=="User"){
             
             FUser.findById({id:localStorage.getItem("$LoopBack$currentUserId")},
@@ -397,7 +374,7 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
         }
         
         FUser.login({email: $scope.loginData.email, password: $scope.loginData.password},
-              function(response){
+            function(response){
                 $rootScope.currentUser = {
                   id: response.user.id,
                   tokenId: response.id,
@@ -407,13 +384,18 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
                   phone:  response.user.phone
                 };
                 
+
                 Cars.find({filter: { where: {driverId: $rootScope.currentUser.id}}}, function(cars) { 
-                  $rootScope.userCars = cars;
-                  console.log("cars:",cars);
+                    
+                    $rootScope.userCars = cars;
+                    console.log("cars:",cars);
+                    
                 },function(err){
                   console.log("err:",err);
                 });
-        
+                
+                socket.emit('my other event', { user: 'login!' });
+                
                 localStorage.setItem("Interface", "User");
                 
                 console.log($rootScope.currentUser);
@@ -463,6 +445,8 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
         localStorage.removeItem("$LoopBack$currentUserId");
         
         localStorage.removeItem("Interface");
+        
+        PubSub.unSubscribeAll();
     };
     
     $rootScope.exitWasher =function(){
@@ -471,6 +455,8 @@ fineCarApp.controller('indexController', function($scope, FUser, $rootScope, Car
         localStorage.removeItem("$LoopBack$currentUserId");
         
         localStorage.removeItem("Interface");
+        
+        PubSub.unSubscribeAll();
     };
     
 
