@@ -37,8 +37,8 @@ if(!navigator.onLine){
     // Push Notification begin
     
     var pushNotification;
-            
-    function onDeviceReady() {
+    
+    document.addEventListener('deviceready', function () {
         $("#app-status-ul").append('<li>deviceready event received</li>');
         
 		document.addEventListener("backbutton", function(e)
@@ -75,7 +75,7 @@ if(!navigator.onLine){
 			txt+="Error description: " + err.message + "\n\n"; 
 			alert(txt); 
 		} 
-    }
+    }, true); 
     
     // handle APNS notifications for iOS
     function onNotificationAPN(e) {
@@ -167,7 +167,7 @@ if(!navigator.onLine){
         $("#app-status-ul").append('<li>error:'+ error +'</li>');
     }
     
-	document.addEventListener('deviceready', onDeviceReady, true); 
+	
 
     // Push Notification end
     
