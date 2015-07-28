@@ -36,7 +36,8 @@ if(!navigator.onLine){
 
 
     // Push Notification begin
-myApp.onPageInit('index', function (page) {
+
+// $( document ).ready(function() {
     
     var pushNotification;
     console.log("aaa");
@@ -79,6 +80,7 @@ myApp.onPageInit('index', function (page) {
 		} 
     // }, true); 
     
+// }); 
     // handle APNS notifications for iOS
     function onNotificationAPN(e) {
         if (e.alert) {
@@ -172,8 +174,7 @@ myApp.onPageInit('index', function (page) {
 	
 
     // Push Notification end
-    
-});   
+  
 // myApp.onPageInit('home', function (page) {
 //     myApp.showIndicator();
 //     console.log("home");
