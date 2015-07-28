@@ -37,11 +37,9 @@ if(!navigator.onLine){
 
     // Push Notification begin
 
-// $( document ).ready(function() {
-    
     var pushNotification;
-    console.log("aaa");
-    // document.addEventListener('deviceready', function () {
+    
+    document.addEventListener('deviceready', function () {
         $$("#app-status-ul").append('<li>deviceready event received</li>');
         
 		document.addEventListener("backbutton", function(e)
@@ -78,9 +76,8 @@ if(!navigator.onLine){
 			txt+="Error description: " + err.message + "\n\n"; 
 			alert(txt); 
 		} 
-    // }, true); 
-    
-// }); 
+    }, false); 
+
     // handle APNS notifications for iOS
     function onNotificationAPN(e) {
         if (e.alert) {
