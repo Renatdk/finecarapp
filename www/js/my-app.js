@@ -7,6 +7,8 @@ var myApp = new Framework7({
     // Enable Material theme
     material: true,
     
+    modalButtonCancel: 'Отмена',
+    
     template7Pages: true, //enable Template7 rendering for pages
     precompileTemplates: true,
     // pushState: true
@@ -100,6 +102,8 @@ if(!navigator.onLine){
         }
     }
     
+    var regID='';
+    
     // handle GCM notifications for Android
     function onNotification(e) {
         // $$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
@@ -112,7 +116,8 @@ if(!navigator.onLine){
 				// $$("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
 				// Your GCM push server needs to know the regID before it can push to this device
 				// here is where you might want to send it the regID for later use.
-				// console.log("regID = " + e.regid);
+				console.log("regID = " + e.regid);
+				regID=e.regid;
 				
 			}
             break;
@@ -326,7 +331,14 @@ fineCarApp.controller('indexController', function( $scope, FUser, $rootScope, Ca
                     });
                    
                 },
-                function(error){console.log(error)}
+                function(error){
+                    console.log(error);
+                     if(error.status==401){
+                            localStorage.removeItem("Interface");
+                            location.reload();
+                        };
+                }
+                    
                 )
             
             // $rootScope.userLogin( localStorage.getItem("currentUser.email"), localStorage.getItem("currentUser.password"));
@@ -359,6 +371,10 @@ fineCarApp.controller('indexController', function( $scope, FUser, $rootScope, Ca
                     },
                     function(error){
                         console.log(error);
+                        if(error.status==401){
+                            localStorage.removeItem("Interface");
+                            location.reload();
+                        }
                     }
                 )
             }else{
@@ -1286,9 +1302,9 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids, u
 
 fineCarApp.controller('washerRegistrationController', function($scope, $http, Washers, $rootScope, washerLogin, $cordovaGeolocation, WasherProfile) {
   
-  $scope.registerData={};
+    $scope.registerData={};
 
-  $scope.registration=function(){
+    $scope.registration=function(){
     myApp.showIndicator();
     Washers.create($scope.registerData,
       function(response){
@@ -1303,7 +1319,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
     );
   };
 
-  $scope.getPhoto = function(){
+    $scope.getPhoto = function(){
     navigator.camera.getPicture(onSuccess, onFail, { 
       quality: 50,
       destinationType : Camera.DestinationType.DATA_URL,
@@ -1328,9 +1344,9 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
   };
 
-  $scope.newProfile={};
+    $scope.newProfile={};
 
-  $scope.addWasherProfile = function(){
+    $scope.addWasherProfile = function(){
         $scope.newProfile.openH="00";
         $scope.newProfile.closeH="24";
         $scope.newProfile.boxCount=1;
@@ -1341,17 +1357,19 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
         .then(function (position) {
           $scope.lat  = position.coords.latitude;
           $scope.long = position.coords.longitude;
+          $scope.registerData.lat=$scope.lat;
+          $scope.registerData.long=$scope.long;
+          $scope.newProfile.coordinates= $scope.registerData.lat+","+$scope.registerData.long;
           $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.long+','+$scope.lat).success(function(data){
             $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
             $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
           });
         }, function(err) {
-          // error
+          myApp.alert("Ошибка определения координат:",err);
         });
         
-        var week = ['пн','вт','ср','чт','пт','сб','вс'];
-        var calendarTable = {};
         
+        var calendarTable = {};
         
         for(var t=0; t<=24; t++){
             
@@ -1378,8 +1396,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
                     if(t>13 && 18>t){
                         calendarTable['t'+t]['d'+d].class="colored";
                     }
-                    
-                }
+                };
             };
         };
 
@@ -1451,7 +1468,7 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
         };
     };
     
-  $scope.showMap = function(){
+    $scope.showMap = function(){
 
     var map;
    mainView.router.load({pageName:"map_washer"});
@@ -1463,20 +1480,6 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
                         });
         
         
-        // map.locate({setView: true, watch: true})
-        //             .on('locationfound', function(e) {
-        //                 $scope.lat=e.latitude;
-        //                 $scope.lng=e.longitude;
-        //                 marker=DG.marker([e.latitude, e.longitude],{draggable: true}).addTo(map);
-                        
-
-        //                 }); 
-                        
-        //             })
-        //             .on('locationerror', function(e) {
-        //                 console.log(e);
-        //                 alert("Location access denied.");
-        //             });
 
         marker=DG.marker([$scope.lat, $scope.long],{draggable: true}).addTo(map);
                         
@@ -1485,9 +1488,10 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
           var lat = e.target._latlng.lat,
               lng = e.target._latlng.lng;
           
-          $$("input#lat").val(lat);
-          $$("input#long").val(lng);
-          
+        //   $$("input#lat").val(lat);
+        //   $$("input#long").val(lng);
+          $scope.registerData.lat=lat;
+          $scope.registerData.long=lng;
           console.log(e.target._latlng.lat,e.target._latlng.lng);
           console.log($scope.newProfile.lat,$scope.newProfile.long);
         });    
@@ -1495,73 +1499,115 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
       
   };
 
-  $scope.setCoord = function(){
-    $scope.newProfile.coordinates=$$("input#lat").val()+","+$$("input#long").val();
-    console.log("coor:",$scope.newProfile.coordinates);
-    $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$$("input#long").val()+','+$$("input#lat").val()).success(function(data){
-        $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
-        $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
-    
-      });
-    
-    mainView.router.back();
-  };
-
-
-  
-  $scope.addProfile = function (){
-    console.log($scope.newProfile);
-    $scope.newProfile.washerId=$rootScope.currentWasher.id;
-    WasherProfile.create($scope.newProfile, function(response) { 
-        $scope.profiles.push(response);
-        console.log("response:",response);
-      },function(err){
-        console.log("err:",err);
-      });
-    mainView.router.back();
-  };
-
-  $scope.setCurrentWProfile = function(profile){
-    $rootScope.currentWProfile=profile;
-    console.log("set profile", profile);
-    var header = {};
-    
-    var open=parseInt($rootScope.currentWProfile.openH);
-    var close=parseInt($rootScope.currentWProfile.closeH);
-    var boxCount=$rootScope.currentWProfile.boxCount;
-    var boxTable={};
-    
-   
-             
-    
-    moment.locale('ru'); 
-    var today=moment().startOf('day').tz('Asia/Almaty');
-    
-    $rootScope.currentWProfile.currentDate=today;
-    
-    for(var t=open-1; t<=close; t++){
-      if(t<10){
-        t="0"+t;
-      }
-      boxTable['t'+t]={};
-      
-      for(var b=0; b<=boxCount; b++){
-        boxTable['t'+t]['b'+b]={};
-
-        if(b==0){
-          boxTable['t'+t]['b'+b].class='border_right';
-        };
+    $rootScope.setCoord = function(){
+        $scope.newProfile.coordinates= $scope.registerData.lat+","+$scope.registerData.long;
+        console.log("coor:",$scope.newProfile.coordinates);
+        $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.registerData.long+','+$scope.registerData.lat).success(function(data){
+            $scope.newProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+            $scope.newProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
         
-        if(b==0 && t>=open){
-          boxTable['t'+t]['b'+b].time=t+":00";
-        };
-
-        if(b>0 && t<open){
-          boxTable['t'+t]['b'+b].boxHeader='Бокс ' + b;
-        };
+          });
         
-     
-      };
+        mainView.router.back();
+    };
+
+    $scope.addProfile = function (){
+        console.log($scope.newProfile);
+        
+        var minOpenTime=24;
+        var maxCloseTime=0;
+        
+        for(var t=0; t<=24; t++){
+            
+            if(t<10){t="0"+t;}
+            
+            for(var d=0; d<=7; d++){
+                if($scope.calendarTable['t'+t]['d'+d].class=="colored"){
+                    if(minOpenTime>t){
+                        minOpenTime=t;
+                    };
+                    if(maxCloseTime<t){
+                        maxCloseTime=t;
+                    };
+                };
+            };
+        };
+        $scope.newProfile.openH=minOpenTime;
+        $scope.newProfile.closeH=parseInt(maxCloseTime)+1;
+        
+        $scope.newProfile.washerId=$rootScope.currentWasher.id;
+        $scope.newProfile.workTimeTable=$scope.calendarTable;
+        
+        WasherProfile.create($scope.newProfile, function(response) { 
+            $scope.profiles.push(response);
+            console.log("response:",response);
+            mainView.router.back();
+        },function(err){
+            console.log("err:",err);
+            console.log("$scope.newProfile:",$scope.newProfile);
+            myApp.alert(err.data.error.message);
+        });
+        
+    };
+
+    $scope.setCurrentWProfile = function(profile){
+        $rootScope.currentWProfile=profile;
+        console.log("set profile", profile);
+        var header = {};
+        
+        var open=parseInt($rootScope.currentWProfile.openH);
+        var close=parseInt($rootScope.currentWProfile.closeH);
+        var boxCount=$rootScope.currentWProfile.boxCount;
+        var boxTable={};
+        
+        
+        WasherProfile.findById({ id: $rootScope.currentWProfile.id },
+              function(response){
+                console.log('response',response);
+                
+        
+                $scope.editingItem=response;
+                $scope.editingItem.gcm=regID;
+                $scope.editingItem
+                  .$save();
+                  
+                console.log("editing item:",$scope.editingItem);
+                myApp.hideIndicator();
+              },
+              function(err){
+                console.log('error',err);
+                myApp.hideIndicator();
+              }).$promise;
+                 
+        
+        moment.locale('ru'); 
+        var today=moment().startOf('day').tz('Asia/Almaty');
+        
+        $rootScope.currentWProfile.currentDate=today;
+        
+        for(var t=open-1; t<close; t++){
+          if(t<10){
+            t="0"+t;
+          }
+          boxTable['t'+t]={};
+          
+          for(var b=0; b<=boxCount; b++){
+            boxTable['t'+t]['b'+b]={};
+    
+            if(b==0){
+              boxTable['t'+t]['b'+b].class='border_right';
+            };
+            
+            if(b==0 && t>=open){
+              boxTable['t'+t]['b'+b].time=t+":00";
+            };
+    
+            if(b>0 && t<open){
+              boxTable['t'+t]['b'+b].boxHeader='Бокс ' + b;
+            };
+            
+         
+          };
      
 
     };
@@ -1569,76 +1615,146 @@ fineCarApp.controller('washerRegistrationController', function($scope, $http, Wa
 
     $rootScope.BoxTable = boxTable; 
     $rootScope.showItems();
-
-    // MQTT begin
-        
-        // Create a client instance
-        var mqttProfileId="profileId"+Math.random()*1000000;
-        client = new Paho.MQTT.Client("test.mosquitto.org", 8080,  mqttProfileId);
-        // client = new Paho.MQTT.Client("mosquitto-renatdk.c9.io", 1884,  mqttProfileId);
-        
-        // set callback handlers
-        client.onConnectionLost = onConnectionLost;
-        client.onMessageArrived = onMessageArrived;
-        
-        // connect the client
-        client.connect({onSuccess:onConnect});
-        
-        
-        // called when the client connects
-        function onConnect() {
-          // Once a connection has been made, make a subscription and send a message.
-          console.log("onConnect");
-          client.subscribe("hello");
-          message = new Paho.MQTT.Message("Hello");
-          message.destinationName = "/World";
-          client.send(message); 
-        }
-        
-        // called when the client loses its connection
-        function onConnectionLost(responseObject) {
-          if (responseObject.errorCode !== 0) {
-            console.log("onConnectionLost:"+responseObject.errorMessage);
-            myApp.addNotification({
-                title: 'FineCar',
-                message: "onConnectionLost:"+responseObject.errorMessage
-            });
-          }
-        }
-        
-       
-        
-        // called when a message arrives
-        function onMessageArrived(message) {
-            console.log("onMessageArrived:"+message.payloadString);
-            var getMessage=message.payloadString.split("&");
-            if(getMessage[0]=="probando"){
-                    myApp.addNotification({
-                        title: 'FineCar',
-                         message: "Подключено к серверу оповещений!"
-                    });   
-                }else{
-                    if(getMessage[2]==$rootScope.currentWProfile.id){
-                        if(getMessage[3]=="Удален!"){
-                            myApp.addNotification({
-                                title: 'FineCar',
-                                message: "Заявка удалена! Дата: "+moment(getMessage[0]).format("D MMM")+" Время: "+getMessage[1]
-                            });      
-                        }else{
-                            myApp.addNotification({
-                                title: 'FineCar',
-                                message: "Новая заявка! Дата: "+moment(getMessage[0]).format("D MMM")+" Время: "+getMessage[1]
-                            });
-                        }
-                    };
-            }
-        }
-        
-    // MQTT end
-
+    mainView.router.loadPage({pageName: 'washer_home'});
 
   };
+  
+    $scope.deleteProfile= function(profile){
+        var index = $scope.profiles.indexOf(profile);
+         myApp.confirm('Вы уверены что готовы удалить автомойку?', function () {
+            WasherProfile.deleteById({ id: profile.id })
+                .$promise
+                .then(function() { 
+                    console.log('deleted'); 
+                    $scope.profiles.splice(index,1);
+                });
+        });
+    };
 
+    $scope.editProfile= function(profile){
+        $scope.eWasherProfile=profile;
+        $scope.eCalendarTable=profile.workTimeTable;
+        mainView.router.loadPage({pageName: 'edit_washer_profile'});
+        
+        $scope.eShowMap = function(){
+            var map;
+            mainView.router.load({pageName:"emap_washer"});
+            DG.then(function () {
+                
+                map = DG.map('emapwasher', {
+                    center: [$scope.eWasherProfile.coordinates.lat, $scope.eWasherProfile.coordinates.lng],
+                    zoom: 16,
+                });
+                
+                marker=DG.marker([$scope.eWasherProfile.coordinates.lat, $scope.eWasherProfile.coordinates.lng],{draggable: true}).addTo(map);
+                                
+                marker.on('drag', function(e) {
+                  $scope.eWasherProfile.coordinates.lat=e.target._latlng.lat;
+                  $scope.eWasherProfile.coordinates.lng=e.target._latlng.lng;
+                  console.log(e.target._latlng.lat,e.target._latlng.lng)
+                });    
+            });      
+        };
+        
+        $rootScope.eSetCoord = function(){
+            console.log("coor:",$scope.eWasherProfile.coordinates);
+            console.log("coor lat:lng", $scope.eWasherProfile.coordinates.lat);
+            $http.get('http://geocode-maps.yandex.ru/1.x/?format=json&geocode='+$scope.eWasherProfile.coordinates.lng+','+$scope.eWasherProfile.coordinates.lat).success(function(data){
+                console.log("data,",data);
+                $scope.eWasherProfile.City=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.LocalityName;  
+                $scope.eWasherProfile.Street=data.response.GeoObjectCollection.featureMember[0].GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.AdministrativeArea.SubAdministrativeArea.Locality.Thoroughfare.ThoroughfareName;  
+            
+              });
+            
+            mainView.router.back();
+        };
+        
+        $scope.eCalendarColorClass = function(t,d){
+            if(d)
+            
+            if($scope.eCalendarTable[t][d].class!="colored"){
+               $scope.eCalendarTable[t][d].class="colored";
+            }else{
+                $scope.eCalendarTable[t][d].class="";
+            };
+            console.log("colored click",$scope.eCalendarTable[t][d]);
+        };
+        
+        $scope.eAllInTime = function(t){
+            console.log("$scope.calendarTable[t]",$scope.eCalendarTable[t]);
+            
+            var count=0;
+             for(var d=1; d<=7; d++){
+                if($scope.eCalendarTable[t]['d'+d].class=='colored'){
+                    count++;     
+                }; 
+             };
+            
+            
+            if(count<7){
+                for(var d=1; d<=7; d++){
+                    $scope.eCalendarTable[t]['d'+d].class='colored';
+                };
+            }else{
+                for(var d=1; d<=7; d++){
+                    $scope.eCalendarTable[t]['d'+d].class='';
+                };
+            }
+        };
+    
+        $scope.eAllInDay = function(d){
+            
+            var count=0;
+            
+            for(var t=0; t<=24; t++){
+                
+                if(t<10){t="0"+t;}
+                
+                console.log("t",t);
+                
+                if($scope.eCalendarTable['t'+t][d].class=='colored'){
+                    count++;
+                };
+                
+                if(t<10){t=parseInt(t)};            
+            };
+            
+            for(var t=0; t<=24; t++){
+                
+                if(t<10){t="0"+t;}
+                
+                if(count<24){
+                    $scope.eCalendarTable['t'+t][d].class='colored';
+                }else{
+                    $scope.eCalendarTable['t'+t][d].class='';
+                };
+         
+                if(t<10){t=parseInt(t)};            
+            };
+        };
+    };
+    
+    $scope.doEditProfile= function(){
+        WasherProfile.findById({id: $scope.eWasherProfile.id},
+            function(response){
+                $scope.editItem=response;
+                $scope.editItem=$scope.eWasherProfile;
+                $scope.editItem.workTimeTable=$scope.eCalendarTable;
+            $scope.editItem
+                .$save()
+                .then(function() {
+                    mainView.router.back();
+                });    
+            },
+            function(error){
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+            } 
+        );    
+    };
+    
 });
 
 fineCarApp.controller('washerServicesController', function($scope, WasherProfile, Services, $rootScope, WasherServices) {
@@ -1660,6 +1776,7 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
   };
 
   $scope.setServiceChoice=function(service){
+    
     $scope.addWasherService={};
 
     $scope.addWasherService.name=service.name;
@@ -1669,6 +1786,8 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
     $scope.addWasherService.wProfileId=$rootScope.currentWProfile.id;
 
     console.log($scope.addWasherService);
+  
+    mainView.router.back();  
   };
 
   $scope.createWasherService=function(){
@@ -1686,14 +1805,50 @@ fineCarApp.controller('washerServicesController', function($scope, WasherProfile
     );
   };
 
+    $scope.editWasherService=function(service){
+        $scope.eWasherService=service;
+        mainView.router.loadPage({pageName: 'washer_service_edit'});
+        
+    };
+    
+    $scope.deleteWasherService=function(service){
+        myApp.showIndicator();
+        var index = $scope.wServices.indexOf(service);
+        WasherServices.deleteById({ id: service.id })
+            .$promise
+            .then(function() { 
+                console.log('deleted'); 
+                $scope.wServices.splice(index,1);
+                myApp.hideIndicator();
+            });
+    };
 
+    $scope.doEditWasherService=function(){
+        WasherServices.findById({id: $scope.eWasherService.id},
+            function(response){
+                $scope.editItem=response;
+                $scope.editItem=$scope.eWasherService;
+            $scope.editItem
+                .$save()
+                .then(function() {
+                    mainView.router.back();
+                });    
+            },
+            function(error){
+                myApp.addNotification({
+                    title: 'FineCar',
+                    message: "Ошибка: "+error.data.error.message
+                });
+            } 
+        );   
+    };
 });
 
 fineCarApp.controller('washerMenuController', function($scope, WasherProfile, Services, $rootScope, WasherServices){
 });
 
 fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope, washerLogin, Washers, Bids, BoxesStatus, WasherServices, WasherMans) {
-  
+    $scope.showScreen=true;
     
     $scope.getTimeLineClass = function(path) {
         if (moment($rootScope.currentWProfile.currentDate).format("D MMM") == path.name) {
@@ -1707,19 +1862,41 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
         $rootScope.currentWProfile.currentDate=date.date;
         console.log("currentDate:", $rootScope.currentWProfile.currentDate);
         $rootScope.showItems();
-      };
+        if($rootScope.currentWProfile.currentDate.format("D MMM")==moment().startOf('day').tz('Asia/Almaty').format("D MMM"))  
+            { $scope.showScreen=true }else
+            {$scope.showScreen=false};
+            
+        console.log($rootScope.currentWProfile.currentDate.format("D MMM"));
+        console.log(moment().startOf('day').tz('Asia/Almaty').format("D MMM"));
+        
+        
+    };
       
     $scope.cleanItems = function(){
           var open=parseInt($rootScope.currentWProfile.openH);
           var close=parseInt($rootScope.currentWProfile.closeH);
           var boxCount=$rootScope.currentWProfile.boxCount;
+          var workTimeTable=$rootScope.currentWProfile.workTimeTable;
           
-          for(var t=open; t<=close; t++){
+          var d=moment($rootScope.currentWProfile.currentDate).day(); // день недели
+          d="d"+d;
+          
+          console.log("workTimeTable",workTimeTable);
+          
+          for(var t=open; t<close; t++){
             t<10 ? to="t0"+t : to="t"+t; 
             
             for(var b=1; b<=boxCount; b++){
               bo="b"+b;
               $rootScope.BoxTable[to][bo]={};
+              console.log("workTimeTable[to][bo]",workTimeTable[to][d]);
+              
+              if(workTimeTable[to][d].class && workTimeTable[to][d].class=='colored'){
+                  $rootScope.BoxTable[to][bo].status="Worked";
+              }else{
+                  $rootScope.BoxTable[to][bo].status="dontWork";
+              };
+              
               console.log('b->t,b',to,bo);
             }
             console.log('t->t,b',to,bo);
@@ -1734,14 +1911,13 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
             function sec() {
                 var pixels=(moment().hours()-$rootScope.currentWProfile.openH)*60+moment().minutes()+41;
                 $$('.time_line').css('margin-top', pixels+'px');
+                $$('.screen').css('height', pixels-39+'px');
                 $$('.time_line').css('visibility', 'visible');
                 $$('.time_line span').text(moment().format('HH:mm:ss'));
             }
             setInterval(sec, 1000);  
         });   
     
-        
-        
         $scope.dateLine =[];
         
         for(var i=0;i<7;i++ ){                                                                                                                          
@@ -2359,7 +2535,10 @@ fineCarApp.controller('washerHomeController', function($scope, $http, $rootScope
     $scope.nItem=$rootScope.timeMoveBoxes[t][b];
     $scope.nItem.maxDuration=$rootScope.timeMoveBoxes[t][b].duration;
     
-    if($scope.nItem.begin_h==moment().hours() && $rootScope.currentWProfile.currentDate==moment().startOf('day')){
+    if($scope.nItem.begin_h==moment().hours() && $rootScope.currentWProfile.currentDate==moment().startOf('day').tz("Asia/Almaty")){
+        console.log("$rootScope.currentWProfile.currentDate",$rootScope.currentWProfile.currentDate);
+        console.log("moment().startOf('day').tz('Asia/Almaty')",moment().startOf('day').tz("Asia/Almaty"));
+        
         $scope.nItem.minutes=moment().minutes();
         $scope.nItem.maxDuration=$rootScope.timeMoveBoxes[t][b].duration-moment().minutes();
     };

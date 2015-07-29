@@ -337,7 +337,7 @@
             <div class="center sliding">Пояснения по вводу</div>
           </div>
           <!-- Navbar inner for Washer service add page-->
-          <div data-page="washer_single_service_edit" class="navbar-inner cached">
+          <div data-page="washer_service_edit" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> </a></div>
             <div class="center sliding">Редактирование услуги</div>
           </div>
@@ -366,17 +366,30 @@
           <div class="center sliding">Перемещение заявки</div>
         </div>
         <!-- Navbar inner for Send tiket page-->
-        <div data-page="map_washer" class="navbar-inner cached">
+        <div data-page="map_washer" class="navbar-inner cached" ng-controller="washerRegistrationController">
           <div class="left sliding">
-              <a href="#" class="back link"> <i class="icon icon-back"></i> </a></div>
+              <a href="#" class="back link" ng-click="setCoord()"> <i class="icon icon-back"></i> </a></div>
           <div class="center sliding">Координаты автомойки</div>
         </div>
-
+        
         <!-- Navbar inner for Send tiket page-->
+        <div data-page="emap_washer" class="navbar-inner cached" ng-controller="washerRegistrationController">
+          <div class="left sliding">
+              <a href="#" class="back link" ng-click="eSetCoord()"> <i class="icon icon-back"></i> </a></div>
+          <div class="center sliding">Координаты автомойки</div>
+        </div>
+        <!-- Add washer profile-->
         <div data-page="add_washer_profile" class="navbar-inner cached">
           <div class="left sliding">
               <a href="#" class="back link"> <i class="icon icon-back"></i> </a></div>
-          <div class="center sliding">Новый профиль</div>
+          <div class="center sliding">Новая автомойка</div>
+        </div>
+        
+        <!-- Edit washer profile-->
+        <div data-page="edit_washer_profile" class="navbar-inner cached">
+          <div class="left sliding">
+              <a href="#" class="back link"> <i class="icon icon-back"></i> </a></div>
+          <div class="center sliding">Редактирование автомойки</div>
         </div>
 
         <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
@@ -401,7 +414,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="email" ng-model="loginData.email" placeholder="Email">
+                              <input type="email" ng-model="loginData.email" placeholder="Email" required>
                             </div>
                           </div>
                         </div>
@@ -410,7 +423,7 @@
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <input type="password" ng-model="loginData.password" placeholder="Пароль">
+                              <input type="password" ng-model="loginData.password" placeholder="Пароль" required>
                             </div>
                           </div>
                         </div>
@@ -1081,7 +1094,6 @@
             <!-- Add Washer profile Page -->
             <div data-page="add_washer_profile" class="page cached" >
               <div class="page-content">
-                <div class="content-block-title">Новый профил</div>
                 <div class="list-block">
                   <ul>
                     <li>
@@ -1169,52 +1181,52 @@
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title">Время открытия: {{newProfile.openH}}:00</div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                             <div class="range-slider">
-                              <i class="icon icon-form-clock"></i>
-                                00:00
+                    <!--<li>-->
+                    <!--    <div class="item-content">-->
+                    <!--      <div class="item-inner">-->
+                    <!--        <div class="item-title">Время открытия: {{newProfile.openH}}:00</div>-->
+                    <!--      </div>-->
+                    <!--    </div>-->
+                    <!--  </li>-->
+                    <!--  <li>-->
+                    <!--    <div class="item-content">-->
+                    <!--      <div class="item-inner">-->
+                    <!--         <div class="range-slider">-->
+                    <!--          <i class="icon icon-form-clock"></i>-->
+                    <!--            00:00-->
 
-                              <span class="right">
-                                24:00
-                                <i class="icon icon-clock-filled"></i>
-                              </span>
-                              <input ng-model="newProfile.openH" type="range" min="0" max="24" value="0" step="1">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title">Время закрытия: {{newProfile.closeH}}:00</div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                             <div class="range-slider">
-                              <i class="icon icon-form-clock"></i>
-                                00:00
+                    <!--          <span class="right">-->
+                    <!--            24:00-->
+                    <!--            <i class="icon icon-clock-filled"></i>-->
+                    <!--          </span>-->
+                    <!--          <input ng-model="newProfile.openH" type="range" min="0" max="24" value="0" step="1">-->
+                    <!--        </div>-->
+                    <!--      </div>-->
+                    <!--    </div>-->
+                    <!--  </li>-->
+                    <!--  <li>-->
+                    <!--    <div class="item-content">-->
+                    <!--      <div class="item-inner">-->
+                    <!--        <div class="item-title">Время закрытия: {{newProfile.closeH}}:00</div>-->
+                    <!--      </div>-->
+                    <!--    </div>-->
+                    <!--  </li>-->
+                    <!--  <li>-->
+                    <!--    <div class="item-content">-->
+                    <!--      <div class="item-inner">-->
+                    <!--         <div class="range-slider">-->
+                    <!--          <i class="icon icon-form-clock"></i>-->
+                    <!--            00:00-->
 
-                              <span class="right">
-                                24:00
-                                <i class="icon icon-clock-filled"></i>
-                              </span>
-                              <input ng-model="newProfile.closeH" type="range" min="0" max="24" value="0" step="1">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
+                    <!--          <span class="right">-->
+                    <!--            24:00-->
+                    <!--            <i class="icon icon-clock-filled"></i>-->
+                    <!--          </span>-->
+                    <!--          <input ng-model="newProfile.closeH" type="range" min="0" max="24" value="0" step="1">-->
+                    <!--        </div>-->
+                    <!--      </div>-->
+                    <!--    </div>-->
+                    <!--  </li>-->
                   </ul>
                 </div>
                 <div class="content-block-title">График работы на неделю</div>
@@ -1236,22 +1248,127 @@
                 </div>
               </div>
             </div>
-
+            
+            <!-- Edit Washer profile Page -->
+            <div data-page="edit_washer_profile" class="page cached" >
+              <div class="page-content">
+                <div class="list-block">
+                  <ul>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="eWasherProfile.Name" placeholder="Наименование автомойки">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-building"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <p><a href="#" ng-click="eShowMap()" class="button">Указать координаты</a></p>
+                            <input type="hidden" ng-model="eWasherProfile.coordinates" placeholder="Координаты автомойки">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-building"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="eWasherProfile.City" placeholder="Город">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-building"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="eWasherProfile.Street" placeholder="Улица">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div class="item-content">
+                        <div class="item-media"><i class="icon icon-form-building"></i></div>
+                        <div class="item-inner"> 
+                          <div class="item-input">
+                            <input type="text" ng-model="eWasherProfile.Home" placeholder="Укажие № здания">
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-garage"></i></div>
+                            <div class="item-inner not-empty-state">
+                                <div class="item-title label">Количество боксов:</div>
+                                <div class="item-input item-input-field not-empty-state">
+                                    <select ng-model="eWasherProfile.boxCount" class="not-empty-state">
+                                        <option value='1'>1</option>
+                                        <option value='2'>2</option>
+                                        <option value='3'>3</option>
+                                        <option value='4'>4</option>
+                                        <option value='5'>5</option>
+                                        <option value='6'>6</option>
+                                        <option value='7'>7</option>
+                                        <option value='8'>8</option>
+                                        <option value='9'>9</option>
+                                        <option value='10'>10</option>
+                                        <option value='11'>11</option>
+                                        <option value='12'>12</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="content-block-title">График работы на неделю</div>
+                 <div class="content-block">
+                        <div class="ex-colored"></div><div class="colored-text">Рабочее время</div> <div class="ex-uncolored"></div><div class="colored-text">Нерабочее время</div>
+                 </div>
+                 <div class="content-block">
+                    <table class="calendar">
+                         <tr><td> Часы \ Дни</td><td ng-click="eAllInDay('d1')">пн</td><td ng-click="eAllInDay('d2')">вт</td><td  ng-click="eAllInDay('d3')">ср</td><td ng-click="eAllInDay('d4')">чт</td><td ng-click="eAllInDay('d5')">пт</td><td ng-click="eAllInDay('d6')">сб</td><td ng-click="eAllInDay('d7')">вс</td></tr>
+                        <tr ng-repeat='(t, calendarRow) in eCalendarTable'>
+                            <td ng-if="$index==0" ng-repeat='(d, calendarItem) in calendarRow' ng-click="eAllInTime(t)" class="{{calendarItem.class}}" >{{calendarItem.duration}}</td>
+                            <td ng-if="$index>0" ng-repeat='(d, calendarItem) in calendarRow' ng-click="eCalendarColorClass(t,d)" class="{{calendarItem.class}}" ></td>
+                            
+                        </tr>
+                    </table>
+                </div>
+                <div class="content-block">
+                  <a href="#" ng-click="doEditProfile()" class="button button-big button-raised">Cохранить профайл</a>
+                </div>
+              </div>
+            </div>
+            
              <!-- Choice Washer profile Page -->
             <div data-page="choice_profile" class="page cached" >
               <div class="page-content">
                 <div class="content-block-title">Автомойки</div>
                 <div class="list-block">
                   <ul>
-                    <li ng-repeat="profile in profiles"  class="swipeout" ng-click="setCurrentWProfile(profile)">
-                      <a href="#washer_home" class="item-link item-content swipeout-content" ng-click="setProfile(profile)">
+                    <li ng-repeat="profile in profiles"  class="swipeout" >
+                      <a href="#" class="item-link item-content swipeout-content" ng-click="setCurrentWProfile(profile)">
                         <div class="item-media"><i class="icon icon-form-garage"></i></div>
                         <div class="item-inner">
                         <div class="item-title orange">{{profile.Name}}</div>
                         </div>
                       </a>
                       <div class="swipeout-actions-right">
-                        <a href="#" ng-click="deleteProfile(profile)" class="swipeout-delete" >Удалить</a>
+                        <a href="#" ng-click="deleteProfile(profile)" class="action1 bg-red">Удалить</a>
+                      </div>
+                      <div class="swipeout-actions-left">
+                        <a href="#" ng-click="editProfile(profile)" class="action1 bg-green">Редактировать</a>
                       </div>
                     <li>
                       <div class="item-content">
@@ -1269,45 +1386,52 @@
             <!-- Washer registration Page -->
             <div data-page="map_washer" class="page cached" >
               <div class="page-content">
-                <div class="content-block">
-                  <div class="content-block-title">Укажите автомойку на карте</div>
+                <!--<div class="content-block">-->
+                  <!--<div class="content-block-title">Укажите автомойку на карте</div>-->
                   <div id="mapwasher"></div>
-                  <div class="list-block">
-                    <ul>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title label">Долгота</div>
-                            <div class="item-input">
-                               <input type="text" id="lat" ng-model="registerData.lat" placeholder="Долгота">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title label">Широта</div>
-                            <div class="item-input">
-                                <input type="text" id="long" ng-model="registerData.long" placeholder="Шитора">
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="item-content">
-                          <div class="item-inner">
-                            <div class="item-title label"></div>
-                            <div class="item-input">
-                            <p><a ng-click="setCoord()" class="button">Сохранить</a></p>
+                  <!--<div class="list-block">-->
+                  <!--  <ul>-->
+                  <!--    <li>-->
+                  <!--      <div class="item-content">-->
+                  <!--        <div class="item-inner">-->
+                  <!--          <div class="item-title label">Долгота</div>-->
+                  <!--          <div class="item-input">-->
+                  <!--             <input type="text" id="lat" ng-model="registerData.lat" placeholder="Долгота">-->
+                  <!--          </div>-->
+                  <!--        </div>-->
+                  <!--      </div>-->
+                  <!--    </li>-->
+                  <!--    <li>-->
+                  <!--      <div class="item-content">-->
+                  <!--        <div class="item-inner">-->
+                  <!--          <div class="item-title label">Широта</div>-->
+                  <!--          <div class="item-input">-->
+                  <!--              <input type="text" id="long" ng-model="registerData.long" placeholder="Шитора">-->
+                  <!--          </div>-->
+                  <!--        </div>-->
+                  <!--      </div>-->
+                  <!--    </li>-->
+                  <!--    <li>-->
+                  <!--      <div class="item-content">-->
+                  <!--        <div class="item-inner">-->
+                  <!--          <div class="item-title label"></div>-->
+                  <!--          <div class="item-input">-->
+                  <!--          <p><a ng-click="setCoord()" class="button">Сохранить</a></p>-->
 
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    </ul> 
-                  </div>              
-                </div>
+                  <!--          </div>-->
+                  <!--        </div>-->
+                  <!--      </div>-->
+                  <!--    </li>-->
+                  <!--  </ul> -->
+                  <!--</div>              -->
+                <!--</div>-->
+              </div>
+            </div>
+            
+            <!-- Washer registration Page -->
+            <div data-page="emap_washer" class="page cached" >
+              <div class="page-content">
+                  <div id="emapwasher"></div>
               </div>
             </div>
           </div>
@@ -1355,7 +1479,7 @@
                         <div class="item-media"><i class="icon icon-form-car"></i></div>
                         <div class="item-inner"> 
                           <div class="item-input">
-                            <a href="#" class="item-link smart-select">
+                            <a href="#" class="item-link smart-select back link">
                               <select ng-model="addCartData.body_type" name="car_type">
                                 <option value="passenger" selected>Легковая</option>
                                 <option value="pikup">Внедорожник или пикап</option>
@@ -1406,7 +1530,11 @@
                   </div>
                   <div class="orange_border" >
                     <table class="time_box center">
-                      <div class="time_line"><span>{{time}}</span></div>
+                      <div ng-if="showScreen">
+                          <div class="screen"></div>
+                          <div class="time_line"><span>{{time}}</span></div>    
+                      </div>    
+                      
                       <tr ng-repeat="(t, box_row ) in BoxTable" ng-if="$index==0">
                         <td ng-repeat="(b,box_cell) in box_row track by $index" class="{{box_cell.class}}">
                           {{box_cell.boxHeader}}
@@ -1857,7 +1985,7 @@
               </div>
             </div>
 
-          </div>ё
+          </div>
 
           <!-- Washer single box Page-->
           <div data-page="washer_single_box" class="page cached">
@@ -1979,15 +2107,24 @@
                 <div class="content-block-title">Список услуг {{currentWProfile.Name}}</div>
                 <div class="list-block media-list">
                   <ul>
-                    <li><a href="#washer_single_service_edit" class="item-content" ng-repeat="service in wServices track by $index" >
-                        <div class="item-inner">
-                          <div class="item-title-row">
-                            <div class="item-title orange">{{service.name}}</div>
-                            <div class="item-after">{{service.price1}} {{service.price2}} {{service.price3}}</div>
-                          </div>
-                          <div class="item-subtitle">{{service.shotDescription}}</div>
-                          <div class="item-text">Длительность: {{service.duration}} минут</div>
-                        </div></a></li>
+                    <li class="swipeout" ng-repeat="service in wServices track by $index" >
+                        <a href="#" class="item-content swipeout-content"  ng-click="editWasherService(service)">
+                            <div class="item-inner ">
+                                <div class="item-title-row">
+                                    <div class="item-title orange">{{service.name}}</div>
+                                    <div class="item-after">{{service.price1}} {{service.price2}} {{service.price3}}</div>
+                                </div>
+                                <div class="item-subtitle">{{service.shotDescription}}</div>
+                                <div class="item-text">Длительность: {{service.duration}} минут</div>
+                            </div>
+                        </a>
+                        <div class="swipeout-actions-left">
+                            <a href="#" class="action1 bg-green" ng-click="editWasherService(service)">Редактировать</a>
+                        </div>
+                        <div class="swipeout-actions-right">
+                            <a href="#" class="action1 bg-red"  ng-click="deleteWasherService(service)">Удалить</a>
+                        </div>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -2055,10 +2192,11 @@
                 </div>    
               </div>
             </div>
+            
             <!-- Waser service add -> service list Page -->
             <div data-page="washer_service_add_list" class="page cached">
               <div class="page-content">
-                <div class="content-block-title">Выберите из списка</div>
+                <div class="content-block-title">Выберите услугу из списка</div>
                 <div class="list-block media-list">
                   <ul>
                     <li ng-repeat="service in services" ng-click="setServiceChoice(service)">
@@ -2073,17 +2211,17 @@
                         </div>
                       </label>
                     </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <p>
-                              <a href="#" class="button button-big  back link">Выбрать</a>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
+                    <!--<li>-->
+                    <!--  <div class="item-content">-->
+                    <!--    <div class="item-inner"> -->
+                    <!--      <div class="item-input">-->
+                    <!--        <p>-->
+                    <!--          <a href="#" class="button button-big  back link">Выбрать</a>-->
+                    <!--        </p>-->
+                    <!--      </div>-->
+                    <!--    </div>-->
+                    <!--  </div>-->
+                    <!--</li>-->
                   </ul>
                 </div> 
               </div>
@@ -2143,32 +2281,105 @@
               </div>
             </div>
             <!-- Waser service edit -> single service edit Page -->
-            <div data-page="washer_single_service_edit" class="page cached">
+            <!--<div data-page="washer_single_service_edit" class="page cached">-->
+            <!--  <div class="page-content">-->
+            <!--    <div class="content-block-title">Редактирование услуги</div>-->
+            <!--    <div class="list-block media-list">-->
+            <!--      <ul>-->
+            <!--        <li><a href="#washer_service_add_list" class="item-link"> -->
+            <!--          <label class="item-content">-->
+            <!--            <div class="item-inner">-->
+            <!--              <div class="item-title-row">-->
+            <!--                <div class="item-title orange">Кузов</div>-->
+            <!--              </div>-->
+            <!--              <div class="item-subtitle orange">Ручная мойка</div>-->
+            <!--              <div class="item-text">Ручная мойка кузова шампунем и протирака, коврики пороги</div>-->
+            <!--            </div>-->
+            <!--          </label></a>-->
+            <!--        </li>-->
+            <!--      </ul>-->
+            <!--    </div>-->
+            <!--    <div class="list-block">-->
+            <!--      <ul>-->
+            <!--        <li>-->
+            <!--          <div class="item-content">-->
+            <!--            <div class="item-inner"> -->
+            <!--              <div class="item-title label">Цена <a href="#washer_service_add_helper">1гр*</a></div>-->
+            <!--              <div class="item-input">-->
+            <!--                <input type="number"  placeholder="* *** тг" min="0" step="100" value="1000">-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--        </li>-->
+            <!--        <li>-->
+            <!--          <div class="item-content">-->
+            <!--            <div class="item-inner"> -->
+            <!--              <div class="item-title label">Цена <a href="#washer_service_add_helper">2гр*</a></div>-->
+            <!--              <div class="item-input">-->
+            <!--                <input type="number"  placeholder="0 000 тг" min="0" step="100" value="1200">-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--        </li>-->
+            <!--        <li>-->
+            <!--          <div class="item-content">-->
+            <!--            <div class="item-inner"> -->
+            <!--              <div class="item-title label">Цена <a href="#washer_service_add_helper">3гр*</a></div>-->
+            <!--              <div class="item-input">-->
+            <!--                <input type="number"  placeholder="* *** тг" min="0" step="100" value="1300">-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--        </li>-->
+            <!--        <li>-->
+            <!--          <div class="item-content">-->
+            <!--            <div class="item-inner"> -->
+            <!--              <div class="item-title label">Время <a href="#washer_service_add_helper">мин*</a></div>-->
+            <!--              <div class="item-input">-->
+            <!--                <input type="number"  placeholder="*** минут" min="0" step="100" value="30">-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--        </li>-->
+            <!--        <li>-->
+            <!--          <div class="item-content">-->
+            <!--            <div class="item-inner"> -->
+            <!--              <div class="item-input">-->
+            <!--                <a href="#" class="button active back link">Сохранить</a>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <!--          </div>-->
+            <!--        </li>-->
+            <!--      </ul>-->
+            <!--    </div>    -->
+            <!--    <div class="content-block">-->
+            <!--      <div class="buttons-row">-->
+            <!--        <a href="#" class="button button-round">Блокировать</a>-->
+            <!--        <a href="#" class="button button-round">Удалить</a>-->
+            <!--      </div>-->
+            <!--    </div>-->
+            <!--  </div>-->
+            <!--</div>-->
+            
+            <!-- Waser service edit Page -->
+            <div data-page="washer_service_edit" class="page cached">
               <div class="page-content">
-                <div class="content-block-title">Редактирование услуги</div>
-                <div class="list-block media-list">
-                  <ul>
-                    <li><a href="#washer_service_add_list" class="item-link"> 
-                      <label class="item-content">
-                        <div class="item-inner">
-                          <div class="item-title-row">
-                            <div class="item-title orange">Кузов</div>
-                          </div>
-                          <div class="item-subtitle orange">Ручная мойка</div>
-                          <div class="item-text">Ручная мойка кузова шампунем и протирака, коврики пороги</div>
-                        </div>
-                      </label></a>
-                    </li>
-                  </ul>
-                </div>
+                <div class="content-block-title">Услуга {{eWasherService.shotDescription}}</div>
                 <div class="list-block">
                   <ul>
-                    <li>
+                    <!--<li><a href="#" class="item-link"> -->
+                    <!--    <div class="item-content">-->
+                    <!--      <div class="item-inner"> -->
+                    <!--        <div class="item-title">Услуга {{eWasherService.shotDescription}}</div>-->
+                    <!--      </div>-->
+                    <!--    </div></a></li>-->
+                    <!--<li>-->
                       <div class="item-content">
                         <div class="item-inner"> 
-                          <div class="item-title label">Цена <a href="#washer_service_add_helper">1гр*</a></div>
+                          <div class="item-title label">Легковые авто, тг</div>
                           <div class="item-input">
-                            <input type="number"  placeholder="* *** тг" min="0" step="100" value="1000">
+                              
+                            <input type="number"  ng-model="eWasherService.price1"  placeholder="Цена за мойку легковых авто, тг." min="0" step="100">
                           </div>
                         </div>
                       </div>
@@ -2176,9 +2387,9 @@
                     <li>
                       <div class="item-content">
                         <div class="item-inner"> 
-                          <div class="item-title label">Цена <a href="#washer_service_add_helper">2гр*</a></div>
+                        <div class="item-title label">Внедорожники, пикапы, тг</div>
                           <div class="item-input">
-                            <input type="number"  placeholder="0 000 тг" min="0" step="100" value="1200">
+                            <input type="number" ng-model="eWasherService.price2" placeholder="Цена за мойку средних(внедорожник) авто, тг." min="0" step="100">
                           </div>
                         </div>
                       </div>
@@ -2186,9 +2397,9 @@
                     <li>
                       <div class="item-content">
                         <div class="item-inner"> 
-                          <div class="item-title label">Цена <a href="#washer_service_add_helper">3гр*</a></div>
+                          <div class="item-title label">Минивены, микроавтобусы, тг</div>
                           <div class="item-input">
-                            <input type="number"  placeholder="* *** тг" min="0" step="100" value="1300">
+                            <input type="number" ng-model="eWasherService.price3"  placeholder="Цена за мойку крупных(минивен) авто, тг." min="0" step="100">
                           </div>
                         </div>
                       </div>
@@ -2196,9 +2407,9 @@
                     <li>
                       <div class="item-content">
                         <div class="item-inner"> 
-                          <div class="item-title label">Время <a href="#washer_service_add_helper">мин*</a></div>
+                        <div class="item-title label">Длительность мойки, мин</div>
                           <div class="item-input">
-                            <input type="number"  placeholder="*** минут" min="0" step="100" value="30">
+                            <input type="number" ng-model="eWasherService.duration"  placeholder="Длительность мойки, минут." min="0" step="100">
                           </div>
                         </div>
                       </div>
@@ -2207,21 +2418,18 @@
                       <div class="item-content">
                         <div class="item-inner"> 
                           <div class="item-input">
-                            <a href="#" class="button active back link">Сохранить</a>
+                            <p>
+                              <a href="#" ng-click="doEditWasherService()" class="button button-big ">Сохранить</a>
+                            </p>
                           </div>
                         </div>
                       </div>
                     </li>
                   </ul>
                 </div>    
-                <div class="content-block">
-                  <div class="buttons-row">
-                    <a href="#" class="button button-round">Блокировать</a>
-                    <a href="#" class="button button-round">Удалить</a>
-                  </div>
-                </div>
               </div>
             </div>
+            
           </div>
 
           <div ng-controller="washerMansController">
@@ -2383,7 +2591,7 @@
     <script type="text/javascript" src="dist/js/angular-resource/angular-resource.min.js"></script>
     <script type="text/javascript" src="dist/js/mqttws31.js"></script>
     <script type="text/javascript" src="dist/js/PushNotification.js"></script>
-    <script type="text/javascript" src="dist/js/zepto.min.js"></script>
+    <!--<script type="text/javascript" src="dist/js/zepto.min.js"></script>-->
     <!--<script type="text/javascript" src="dist/js/socket.io.js"></script>-->
     <script type="text/javascript" src="cordova.js"></script>
     <script src="http://maps.api.2gis.ru/2.0/loader.js" data-id="dgLoader"></script>
