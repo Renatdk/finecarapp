@@ -714,6 +714,7 @@ fineCarApp.controller('choiceServiceController', function($filter, $scope,$rootS
         myApp.showIndicator();
          ComplexServices.find({filter: { where: {driverId: $rootScope.currentUser.id}}}).$promise.then(function(response){
         $rootScope.userServices=response;
+        mainView.router.load({pageName:"choice_service"});
         myApp.hideIndicator();
       });
     };
@@ -722,6 +723,12 @@ fineCarApp.controller('choiceServiceController', function($filter, $scope,$rootS
       UserBid.services=obj.serviceIds;
       $rootScope.showWashers();
       console.log(UserBid);
+    };
+    
+    $rootScope.checkServices = function(){
+        UserBid.services=$scope.serviceIds;
+        $rootScope.showWashers();
+        mainView.router.load({pageName:"washer_choice"});
     };
 
     $scope.openAddService = function(){
@@ -736,52 +743,74 @@ fineCarApp.controller('choiceServiceController', function($filter, $scope,$rootS
         });  
     };
     
-
-    
     $scope.order = {
        services: []
     };
+    
     $scope.serviceSum= function(index){
+        
         console.log(index, $scope.services[index]);
-      $scope.new_price=0;
-      $scope.new_time=0;
-      $scope.title_sum="";
-      $scope.serviceIds=[];
-      var i=0;
-      
-      if($scope.services[index].isChecked==true){
-        var i=$scope.order.services.indexOf($scope.services[index]);
-        $scope.order.services.splice(i,1);
-        $scope.services[index].isChecked=false;
+        $scope.new_price=0;
+        $scope.new_time=0;
+        $scope.title_sum="";
+        $scope.serviceIds=[];
+        var i=0;
+          
+        if($scope.services[index].isChecked==true){
+            var i=$scope.order.services.indexOf($scope.services[index]);
+            $scope.order.services.splice(i,1);
+            $scope.services[index].isChecked=false;
+            
+        }else{
+            $scope.services[index].index=index;
+            $scope.order.services.push($scope.services[index]);
+            $scope.services[index].isChecked=true;
+        };
+    
+        angular.forEach($scope.order.services, function(value, key) {
+            $scope.new_price +=parseFloat(value.price);
+            $scope.new_time +=parseFloat(value.time);  
+            $scope.title_sum +=value.name+"+"; 
+            $scope.serviceIds.push(value);
+        });
+    
+    
+        console.log( $scope.order.services);
+    };
+    
+    $scope.editServiceSum= function(index){
         
-        
-        
-      }else{
-        $scope.services[index].index=index;
-        $scope.order.services.push($scope.services[index]);
-        $scope.services[index].isChecked=true;
-        
-        // if($scope.services[index].group){
-        //     var filtered=$scope.services.filter(function (el) {
-        //                       return el.group == $scope.services[index].group ;
-        //                     });
-        //     console.log('filtered',filtered);
-        // }
-      };
-
-      angular.forEach($scope.order.services, function(value, key) {
-        $scope.new_price +=parseFloat(value.price);
-        $scope.new_time +=parseFloat(value.time);  
-        $scope.title_sum +=value.name+"+"; 
-        $scope.serviceIds.push(value);
-      });
-
-
-      console.log( $scope.order.services);
+        console.log(index, $scope.services[index]);
+        $scope.new_price=0;
+        $scope.new_time=0;
+        $scope.title_sum="";
+        $scope.serviceIds=[];
+        var i=0;
+          
+        if($scope.services[index].isChecked==true){
+            var i=$scope.order.services.indexOf($scope.services[index]);
+            $scope.order.services.splice(i,1);
+            $scope.services[index].isChecked=false;
+            
+        }else{
+            $scope.services[index].index=index;
+            $scope.order.services.push($scope.services[index]);
+            $scope.services[index].isChecked=true;
+        };
+    
+        angular.forEach($scope.order.services, function(value, key) {
+            $scope.new_price +=parseFloat(value.price);
+            $scope.new_time +=parseFloat(value.time);  
+            $scope.title_sum +=value.name+"+"; 
+            $scope.serviceIds.push(value);
+        });
+    
+    
+        console.log( $scope.order.services);
     };
 
     $scope.addService= function(index){
-        myApp.prompt('Введите наименование комплекса услуг:', function (value) {
+        myApp.prompt('Введите название шаблона комплекса услуг:', function (value) {
 
             $scope.newServiceName=value;
             var newService={};
@@ -810,7 +839,68 @@ fineCarApp.controller('choiceServiceController', function($filter, $scope,$rootS
         .$promise
         .then(function() { console.log('deleted'); });
     };
+    
+    $scope.editUserService = function(service){
+        console.log(service);   
+        
+        $scope.order = {
+           services: []
+        };
+        
+        Services.find().$promise.then(function(response){
+            console.log(response);
+            $scope.services=response;
+            
+            $scope.saveServiceId = service.id;
+            $scope.saveServiceName = service.name;
+            $scope.new_price = service.price;
+            $scope.new_time  =  service.time;
+            $scope.order.services = service.serviceIds;
+            $scope.title_sum = service.description;
+            
+            console.log($scope.new_price, $scope.new_time,  $scope.order.services );
 
+            for(var index in service.serviceIds){
+                var item = service.serviceIds[index];
+                
+                // $scope.order.services.push(item);
+                
+                for(var i in $scope.services){
+                    if($scope.services[i].id==item.id){
+                        $scope.services[i].isChecked=true;
+                    };    
+                };
+            };
+            
+            mainView.router.load({pageName:"edit_user_services"});
+        });  
+       
+    };
+
+    $scope.saveService =function(){
+        
+        myApp.showIndicator();
+        ComplexServices.findById({id:$scope.saveServiceId},function(response){
+            
+            $scope.item=response;
+            // saveService.name=$scope.saveServiceName;
+            $scope.item.description=$scope.title_sum;
+            $scope.item.time=$scope.new_time;
+            $scope.item.price=$scope.new_price;
+            $scope.item.serviceIds=$scope.serviceIds;
+    
+            $scope.item.$save().then(function(){
+                $rootScope.showServiceList();
+            });
+                    
+            myApp.hideIndicator();
+            $rootScope.showServiceList(); 
+            
+        },function(err){
+            myApp.alert(err.data.error.message);  
+            myApp.hideIndicator();
+        });
+    };
 
 });
 
@@ -1267,6 +1357,7 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids, u
     // sendBid.date=$scope.UserBid.day;
     
     
+    
     sendBid.price=UserBid.washer.price;
     sendBid.date=UserBid.date;
     sendBid.begin_h=parseInt(UserBid.item[UserBid.item.canDo].begin_h);
@@ -1284,6 +1375,7 @@ fineCarApp.controller('sendBidController', function($scope, UserBid, UserBids, u
     sendBid.wProfileId=UserBid.washer.id;
     sendBid.services=UserBid.washer.services;
     sendBid.car_type=UserBid.body_type;
+    sendBid.washer_gcm=UserBid.washer.gcm;
     
     Bids.create(sendBid, function(ub) { 
         //   userBids.push(ub);

@@ -265,12 +265,19 @@
           <div data-page="choice_service" class="navbar-inner cached">
             <div class="left sliding"><a href="#" class="back link" > <i class="icon icon-back"></i></a></div>
             <div class="center sliding">Выбор услуг</div>
-            
+          </div>
+          <!-- Navbar inner for Choice service page-->
+          <div data-page="edit_user_services" class="navbar-inner cached">
+            <div class="left sliding"><a href="#" class="back link" > <i class="icon icon-back"></i></a></div>
+            <div class="center sliding">Редактирование шаблона услуг</div>
           </div>
           <!-- Navbar inner for Shape service page-->
-          <div data-page="shape_service" class="navbar-inner cached">
-            <div class="left sliding"><a href="#" class="back link" data-reload="true" data-ignore-cache="true"> <i class="icon icon-back"></i> </a></div>
-            <div class="center sliding">Формирование услуг</div>
+          <div data-page="shape_service" class="navbar-inner cached"  ng-controller="choiceServiceController">
+            <div class="left sliding"><a href="#" class="back link"> <i class="icon icon-back"></i> </a></div>
+            <div class="center sliding">Выбор услуг</div>
+             <div class="right">
+              <a href="#" ng-click="checkServices()" class="link icon-only"><i class="icon icon-checkmark"></i></a>
+            </div>
           </div>
           <!-- Navbar inner for Washer choice page-->
           <div data-page="washer_choice" class="navbar-inner cached">
@@ -404,7 +411,7 @@
                     <div class="content-block-inner">
                       <p>FineCar поможет легко и быстро помыть Ваш автомобиль!</p>
                       <p>Все автомойки Вашего города в одном приложении.</p>
-                      <p id="app-status-ul">0.0.5</p>
+                      <!--<p id="app-status-ul">0.0.5</p>-->
                     </div>
                   </div>
                   <div class="content-block-title">Вход в систему</div>
@@ -625,11 +632,16 @@
             <!-- Choice service Page -->
             <div data-page="choice_service" class="page cached" >
               <div class="page-content">
-                <div class="content-block-title">Выберите комплекс услуг</div>
+                <div class="content-block">
+                    <p>
+                        <a href="#" ng-click="openAddService()" class="button button-raised">Выбрать услуги</a>
+                    </p>
+                </div>
+                <div class="content-block-title">Шаблоны комплексов услуг</div>
                 <div class="list-block media-list">
                   <ul>
-                    <li ng-repeat="service in userServices" ng-click="getParams(service)" class="swipeout">
-                      <a  href="#washer_choice" class="swipeout-content item-link item-content">
+                    <li ng-repeat="service in userServices" class="swipeout">
+                      <a  href="#washer_choice" ng-click="getParams(service)"  class="swipeout-content item-link item-content">
                       <div class="item-inner" >
                         <div class="item-title-row">
                           <div class="item-title orange">{{service.name}}</div>
@@ -641,10 +653,9 @@
                       <div class="swipeout-actions-right">
                         <a href="#" class="swipeout-delete" ng-click="deleteUserService(service)">Удалить</a>
                       </div>
-                    </li>                  
-                    <div class="item-inner">
-                      <a href="#" ng-click="openAddService()" class="button button-raised">+ Сформировать комплекс услуг</a>
-                    </div></li>
+                      <div class="swipeout-actions-left">
+                        <a href="#" class="action1 bg-green" ng-click="editUserService(service)">Редактировать</a>
+                      </div>
                   </ul>
                 </div>
                 <!--<div class="list-block accordion-list">-->
@@ -707,20 +718,76 @@
                           </div>
                         </div>
                       </li>
-                      <!--<li>-->
-                      <!--  <div class="item-content">-->
-                      <!--    <div class="item-inner"> -->
-                      <!--      <div class="item-input">-->
-                      <!--        <input type="text" ng-model="newServiceName" placeholder="Введите наименование услуг">-->
-                      <!--      </div>-->
-                      <!--    </div>-->
-                      <!--  </div>-->
-                      <!--</li>-->
                       <li>
                         <div class="item-content">
                           <div class="item-inner"> 
                             <div class="item-input">
-                              <a href="#"  ng-click="addService()" class="button button-raised">Сформировать</a>
+                              <a href="#"  ng-click="checkServices()" class="button button-raised">Далее</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#"  ng-click="addService()" class="button button-raised">Сохранить шаблон</a>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </form>     
+              </div>
+            </div>
+            <!-- edit service Page -->
+            <div data-page="edit_user_services" class="page cached">
+              <div class="page-content">
+                <div class="content-block-title">Выберите услуги</div>
+                <form id="my-form2">
+                  <div class="list-block media-list">
+                    <ul >
+                      <li ng-repeat="service in services"  ng-click="editServiceSum($index)">
+                        <label class="label-checkbox item-content" >
+                          <input type="checkbox" >
+                          <div class="item-media">
+                              <i ng-if="service.isChecked == true" class="icon icon-checked-filled" ></i>
+                              <i ng-if="service.isChecked != true" class="icon icon-checked" ></i>
+                          </div>
+                          <div class="item-inner"  >
+                            <div class="item-title-row">
+                              <div class="item-title orange">{{service.name}}</div>
+                              <div class="item-after">&#8776;{{service.price}}тг</div>
+                            </div>
+                            <div class="item-subtitle">Длительность: {{service.time}} минут</div>
+                            <div class="item-text">{{service.description}} </div>
+                          </div>
+                        </label>
+                      </li>
+                    </ul>
+                  </div> 
+                  <div class="list-block">
+                    <ul>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общая цена: {{new_price}} тг</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner">
+                            <div class="item-title">Общее время: {{new_time}} мин</div>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="item-content">
+                          <div class="item-inner"> 
+                            <div class="item-input">
+                              <a href="#"  ng-click="saveService()" class="button button-raised">Сохранить шаблон</a>
                             </div>
                           </div>
                         </div>
@@ -755,7 +822,7 @@
                       <div class="item-content">
                         <div class="item-inner"> 
                           <div class="buttons-row" id="sort_washers">
-                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button yyd">км</a>
+                            <a href="#"   ng-class="getClass('km')" ng-click="sort_by('km')" class="button button-raised">км</a>
                             <a href="#"   ng-class="getClass('price')" ng-click="sort_by('price')" class="button button-raised">цена</a>
                             <a href="#" ng-class="getClass('boxesStatus.begin_h')" ng-click="sort_by('boxesStatus.begin_h')" class=" button button-raised">время</a>
                           </div>

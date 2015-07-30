@@ -113,3 +113,13 @@ i.icon.icon-checked-filled {
   height: 29px;
   background-image: url("../img/i-form-checked-filled.png");
 }
+i.icon.icon-check {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-form-check.png");
+}
+i.icon.icon-checkmark {
+  width: 29px;
+  height: 29px;
+  background-image: url("../img/i-form-checkmark.png");
+}
