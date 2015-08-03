@@ -680,10 +680,42 @@ fineCarApp.controller('bidController', function($scope, $rootScope, $http, UserB
     
 });
 
-fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $rootScope) {
+fineCarApp.controller('addAutoController', function($scope, UserCar, Cars, $rootScope, MarkAuto, ModelAuto) {
 
     $scope.addCartData={};
-    $scope.addCartData.body_type="passenger";
+    $scope.addCartData.body_type="passenger";    
+     $scope.MarkAutos={};
+    $rootScope.checkMark = function(){
+        MarkAuto.find().$promise.then(function(response){
+            console.log(response);
+            $scope.MarkAutos=response;  
+            mainView.router.load({pageName:"checkMarkPage"});
+        });  
+    };
+    
+    $scope.doCheckMark = function(mark){
+        console.log(mark);
+        $scope.addCartData.mark=mark
+        $scope.addCartData.model={};
+        ModelAuto.find({filter:{where:{markId:mark.id}}},
+            function(response){
+                $scope.ModelkAutos=response;    
+                mainView.router.back();
+            },
+            function(err){myApp.alert(err.data.error.message);  });    
+    };
+    
+    $scope.checkModel = function(){
+        if($scope.ModelkAutos){
+            mainView.router.load({pageName:"checkModelPage"});
+        }    
+    };
+    $scope.doCheckModel = function(model){
+        console.log(model);
+        $scope.addCartData.model=model;
+        mainView.router.back();
+    };
+    
     
     $scope.doAddCar= function(){
       var car={};

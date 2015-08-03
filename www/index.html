@@ -1505,81 +1505,121 @@
           
 
           <!-- Auto registration Page -->
-          <div data-page="auto_registration" class="page cached" ng-controller="addAutoController"> 
-            <div class="page-content">
-              <div class="content-block-title">Введите данные</div>
-              <form >
-                <div class="list-block">
-                  <ul>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-car"></i></div>
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <input ng-change="addCartData.number=addCartData.number.toUpperCase();" ng-model="addCartData.number" type="text" placeholder="Гос номер">
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-car"></i></div>
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <input ng-model="addCartData.mark" type="text" placeholder="Марка авто">
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-car"></i></div>
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <input ng-model="addCartData.model" type="text" placeholder="Модель авто">
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-car"></i></div>
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <a href="#" class="item-link smart-select back link">
-                              <select ng-model="addCartData.body_type" name="car_type">
-                                <option value="passenger" selected>Легковая</option>
-                                <option value="pikup">Внедорожник или пикап</option>
-                                <option value="miniven">Минивен или микроавтобус</option>
-                              </select>
-                              <div class="item-content">
-                                <div class="item-inner">
-                                  <div class="item-title">Тип кузова</div>
-                                <div class="item-after">Легковая</div></div>
+          <div ng-controller="addAutoController">
+              <div data-page="auto_registration" class="page cached" > 
+                <div class="page-content">
+                  <div class="content-block-title">Введите данные</div>
+                  <form >
+                    <div class="list-block">
+                      <ul>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-car"></i></div>
+                            <div class="item-inner"> 
+                              <div class="item-input">
+                                <input ng-change="addCartData.number=addCartData.number.toUpperCase();" ng-model="addCartData.number" type="text" placeholder="Гос номер">
                               </div>
-                            </a>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </li>
-                    <li>
-                      <div class="item-content">
-                        <div class="item-inner"> 
-                          <div class="item-input">
-                            <br/>
-                            <a ng-click="doAddCar()"  class="button button-big button-raised" >Добавить</a>
-                            <br/>
+                        </li>
+                        <li ng-click="checkMark()">
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-car"></i></div>
+                            <div class="item-inner"> 
+                              <div class="item-input">
+                                <input type="text" value="{{addCartData.mark.name}}" placeholder="Марка авто">
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </li>
-                  </ul>
+                        </li>
+                        <li ng-click="checkModel()">
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-car"></i></div>
+                            <div class="item-inner"> 
+                              <div class="item-input">
+                                <input type="text" value="{{addCartData.model.name}}"  placeholder="Модель авто">
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-car"></i></div>
+                            <div class="item-inner"> 
+                              <div class="item-input">
+                                <a href="#" class="item-link smart-select back link">
+                                  <select ng-model="addCartData.body_type" name="car_type">
+                                    <option value="passenger" selected>Легковая</option>
+                                    <option value="pikup">Внедорожник или пикап</option>
+                                    <option value="miniven">Минивен или микроавтобус</option>
+                                  </select>
+                                  <div class="item-content">
+                                    <div class="item-inner">
+                                      <div class="item-title">Тип кузова</div>
+                                    <div class="item-after">Легковая</div></div>
+                                  </div>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="item-content">
+                            <div class="item-inner"> 
+                              <div class="item-input">
+                                <br/>
+                                <a ng-click="doAddCar()"  class="button button-big button-raised" >Добавить</a>
+                                <br/>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+    
+                  </form>    
                 </div>
-
-              </form>    
-            </div>
+              </div>
+              <div data-page="checkMarkPage" class="page cached" > 
+                <div class="page-content">
+                  <div class="content-block-title">Выберите марку</div>
+                    <div class="list-block">
+                      <ul>
+                        <li ng-repeat="mark in MarkAutos" ng-click="doCheckMark(mark)">
+                          <div class="item-content">
+                            <div class="item-media"><img src="http://{{mark.logo}}"  width="80"/></div>
+                            <div class="item-inner"> 
+                              <!--<div class="item-input">-->
+                                
+                                <div class="item-title label">{{mark.name}}</div>
+                              <!--</div>-->
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </form>    
+                </div>
+              </div>
+              <div data-page="checkModelPage" class="page cached" > 
+                <div class="page-content">
+                  <div class="content-block-title">Выберите модель</div>
+                    <div class="list-block">
+                      <ul>
+                        <li ng-repeat="model in ModelkAutos" ng-click="doCheckModel(model)">
+                          <div class="item-content">
+                            <div class="item-media"><img src="http://{{model.photo}}"  width="80"/></div>
+                            <div class="item-inner"> 
+                                <div class="item-title label">{{mark.name}} {{model.name}}</div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </form>    
+                </div>
+              </div>
           </div>
-          
           <!-- Washer home Boxes Page-->
           <div ng-controller="washerHomeController">
 
